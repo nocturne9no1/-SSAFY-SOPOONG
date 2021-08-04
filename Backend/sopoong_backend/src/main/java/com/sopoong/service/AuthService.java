@@ -31,11 +31,11 @@ public class AuthService {
 	@Transactional
 	public BaseMessage joinUser(SignupRequest requestUser) {
 		Map<String,Object> resultMap = new HashMap<>();
-		userRepository.save(userRepository.save(User.builder().userId(requestUser.getId()).
+		userRepository.save(User.builder().userId(requestUser.getId()).
 				userEmail(requestUser.getEmail())
 				.userPassword(passwordEncoder.encode(requestUser.getPassword())).
 				userNickname(requestUser.getNickname())// 최초.																									// 설정
-				.build()));
+				.build());
 		
 		resultMap.put("seccess", "회원가입 성공");
 		return new BaseMessage(HttpStatus.OK,resultMap); 

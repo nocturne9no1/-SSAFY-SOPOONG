@@ -34,7 +34,7 @@ public class UserController {
 	@ApiOperation(value = "프로필 가져오기")
 	public getProfileRequest getProfile(@RequestParam String id) {
 		
-		Optional<User> user= userRepo.findById(id);
+		Optional<User> user= userRepo.findByUserId(id);
 		getProfileRequest getUser= new getProfileRequest();
 		
 		getUser.setUserId(user.get().getUserId());
@@ -52,7 +52,7 @@ public class UserController {
 	@ApiOperation(value = "프로필 변경하기")
 	public Optional<User> changeProfile(@Valid @RequestBody changeProfileRequest request) {
 		
-		Optional<User> updateUser= userRepo.findById(request.getUserId());
+		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		updateUser.ifPresent(selectUser->{
 			selectUser.setImage(request.getImage());
@@ -86,7 +86,7 @@ public class UserController {
 	@ApiOperation(value = "알람 범위 변경하기")
 	public Optional<User> changeAlarm(@Valid @RequestBody changeAlarmRequest request) {
 		
-		Optional<User> updateUser= userRepo.findById(request.getUserId());
+		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		updateUser.ifPresent(selectUser->{
 			selectUser.setUserAlarm(request.getUserAlarm());
@@ -102,7 +102,7 @@ public class UserController {
 	@ApiOperation(value = "계정 공개범위 변경하기")
 	public Optional<User> changeVisible(@Valid @RequestBody changeVisibleRequest request) {
 		
-		Optional<User> updateUser= userRepo.findById(request.getUserId());
+		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		updateUser.ifPresent(selectUser->{
 			selectUser.setUserIsVisible(request.getUserIsVisible());
@@ -118,7 +118,7 @@ public class UserController {
 	@ApiOperation(value = "계정 삭제하기")
 	public void deleteUser(@RequestParam String id) {
 		
-		Optional<User> deleteUser= userRepo.findById(id);
+		Optional<User> deleteUser= userRepo.findByUserId(id);
 		
 		deleteUser.ifPresent(selectUser->{
 			userRepo.delete(selectUser);

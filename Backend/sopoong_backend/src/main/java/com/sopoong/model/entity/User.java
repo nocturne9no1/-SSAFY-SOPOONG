@@ -48,7 +48,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long user_idx;
+	private Long userIdx;
 	@NotNull
 	@Column(name="user_id", unique = true)
 	private String userId;
@@ -104,7 +104,7 @@ public class User {
 	@Override
 	public String toString() {
 		String s = "";
-		s = "User [userId=" + userId + ", userEmail=" + userEmail + ", userPassword=" + userPassword
+		s = "User [userIdx="+userIdx+"userId=" + userId + ", userEmail=" + userEmail + ", userPassword=" + userPassword
 		+ ", userNickname=" + userNickname + ", authNumber=" + authNumber + ", userPreference=" + userPreference
 		+ ", userIsVisible=" + userIsVisible + ", userAlarm=" + userAlarm + ", userComment=" + userComment
 		+ ", image=" + image + ", createdAt=" + createdAt + ", relationFollowing=";
