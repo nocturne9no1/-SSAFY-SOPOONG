@@ -55,7 +55,8 @@ public class User {
     @Column(name = "user_preference", columnDefinition = "jsonb", nullable = true)
     private Map<String, String> userPreference = new HashMap<>();
 	
-	private boolean userIsVisible;
+	@Column(name="user_is_visible", columnDefinition = "TINYINT", length=1)
+	private int userIsVisible;
 	
 	private int userAlarm;
 	
