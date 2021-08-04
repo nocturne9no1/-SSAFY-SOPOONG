@@ -1,0 +1,35 @@
+.main-wrap {
+  $gray: #707070;
+  $green: #b7dccc;
+  $yellow: #F4EEC8;
+
+  margin-left: 10rem;
+  margin-top: 7rem;
+  .google-map {
+    background: black;
+    width: 1200px;
+    height: 1200px / 9 * 5;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 3.5rem;
+    margin-right: 3rem;
+
+    .btn {
+      width: 120px;
+      height: 120px / 108 * 37;
+      margin-left: 2rem;
+      background: $green;
+      border: none;
+      border-radius: 30px;
+      color: $yellow;
+      font-size: 20px;
+      letter-spacing: 2.5px;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 3px 3px 10px rgba($gray, .5);
+    }
+  }
+}

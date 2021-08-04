@@ -5,11 +5,13 @@ import PageNotFound from '../views/PageNotFound.vue'
 
 // modules
 import accounts from './accounts.js'
+import main from './main.js'
 
 Vue.use(VueRouter)
 
 const routes = [
   ...accounts,
+  ...main,
   {
     path: '/',
     name: 'Home',
