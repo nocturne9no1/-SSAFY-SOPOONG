@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -18,15 +20,18 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -38,10 +43,15 @@ import springfox.documentation.spring.web.json.Json;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TypeDef(name = "jsonb", typeClass = JsonStringType.class)
+@Builder
 public class User {
 
 	@Id
-	private String userId;	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long user_idx;
+	@NotNull
+	@Column(name="user_id", unique = true)
+	private String userId;
 	
 	private String userEmail;
 	
@@ -55,7 +65,8 @@ public class User {
     @Column(name = "user_preference", columnDefinition = "jsonb", nullable = true)
     private Map<String, String> userPreference = new HashMap<>();
 	
-	private boolean userIsVisible;
+	@Column(name="user_is_visible", columnDefinition = "TINYINT", length=1)
+	private int userIsVisible;
 	
 	private int userAlarm;
 	
