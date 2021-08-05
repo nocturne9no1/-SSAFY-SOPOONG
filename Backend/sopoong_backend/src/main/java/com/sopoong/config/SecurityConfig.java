@@ -53,14 +53,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
 //                        UsernamePasswordAuthenticationFilter.class);
         
-        http.csrf().disable().authorizeRequests().antMatchers("/auth/*", "/v2/api-docs", 
-                "/swagger-resources/**",  
-                "/swagger-ui.html", 
-                "/webjars/**").permitAll().
-        anyRequest().authenticated().and().exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-        and().addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                UsernamePasswordAuthenticationFilter.class);
-                // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+    	 http.csrf().disable().cors().disable().authorizeRequests().antMatchers("/auth/*", "/v2/api-docs", 
+                 "/swagger-resources/**",  
+                 "/swagger-ui.html", 
+                 "/webjars/**").permitAll().
+         anyRequest().authenticated().and().exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+         and().addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                 UsernamePasswordAuthenticationFilter.class);
+                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
     }
 	
 	

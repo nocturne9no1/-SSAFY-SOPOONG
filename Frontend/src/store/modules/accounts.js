@@ -31,21 +31,23 @@ const actions = {
   },
   
   postSignInData(context, signInData) {
-    axios.get('localhost:8080/auth/login', signInData)
+    axios.get('http://localhost:8080/auth/login', { params :{ id: signInData.id, password: signInData.password } })
       .then(res => {
         context.commit('SET_TOKEN', res.data.key) // 보내주는 cookie key 저장
         // 여기서도 프로필 정보 얻어와야될수도있음
-        router.push('/')
+        console.log(res.data);
+        alert("로그인 성공!!>.<");
+        router.push('/main')
       })
       .catch(err => console.error(err))
   },
 
   signUp(context, signUpData) {
-    context.distpatch('postSignUpData', signUpData)
+    context.dispatch('postSignUpData', signUpData)
   },
 
   postSignUpData(context, signUpData) {
-    axios.post('localhost:8080/auth/register', signUpData)
+    axios.post('http://localhost:8080/auth/register', signUpData)
       .then(res => {
         // 여기서 할게 없음
         // 회원가입이 성공적으로 되었다 메세지?

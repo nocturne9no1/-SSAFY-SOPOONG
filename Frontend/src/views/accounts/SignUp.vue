@@ -119,7 +119,7 @@ export default {
       deep: true,
       handler() {
         this.checkForm();
-        this.$store.dispatch('duplicateCheck', this.signUpData)
+        //this.$store.dispatch('duplicateCheck', this.signUpData)
       },
     },
   },

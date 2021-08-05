@@ -8,12 +8,14 @@ import test from '../views/test.vue'
 
 // modules
 import accounts from './accounts.js'
+import main from './main.js'
 
 Vue.use(VueRouter)
 
 const routes = [
   ...accounts,
-  
+  ...main,
+
   // 404
   {
     path: '*',
