@@ -1,18 +1,14 @@
 <template>
   <div>
-    존재하지 않는 페이지입니다.
-    <SignUp />
+    <h1>비밀번호 변경 페이지</h1>
+    <h3>형규님 구현 예정</h3>
   </div>
 </template>
 
 <script>
-import SignUp from '@/views/accounts/SignUp.vue'
-
 export default {
-  name:'PageNotFound',
-  components: {
-    SignUp,
-  },
+  name:'ResetPassword',
+  components: {},
   data() {
     return {
       sampleData: ''
@@ -30,6 +26,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
