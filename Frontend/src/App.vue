@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/signin">로그인</router-link> |
+      <router-link to="/signup">회원가입</router-link> |
+      <router-link to="/123">임시 일지작성 화면</router-link>
     </div>
     <div>
       <button>

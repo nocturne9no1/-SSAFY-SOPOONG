@@ -3,6 +3,7 @@
   <div class="TableDiv">
     <div class="TableDivCell">
       <div class="SignUpDiv">
+        <img src="@/assets/sopoong_korean_logo.png" alt="">
         <div>
           <input
             v-model="signUpData.id"
@@ -118,6 +119,7 @@ export default {
       deep: true,
       handler() {
         this.checkForm();
+        this.$store.dispatch('duplicateCheck', this.signUpData)
       },
     },
   },
@@ -218,6 +220,13 @@ div {
   /* background-color: rgba(0, 0, 0, .75); */
   background-color: rgba(183, 220, 204, 0.5);
   /* opacity: 0.5; */
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+
 }
 
 input {

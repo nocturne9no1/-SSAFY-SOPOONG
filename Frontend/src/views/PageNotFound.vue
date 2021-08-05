@@ -1,13 +1,18 @@
 <template>
   <div>
     존재하지 않는 페이지입니다.
+    <SignUp />
   </div>
 </template>
 
 <script>
+import SignUp from '@/views/accounts/SignUp.vue'
+
 export default {
   name:'PageNotFound',
-  components: {},
+  components: {
+    SignUp,
+  },
   data() {
     return {
       sampleData: ''

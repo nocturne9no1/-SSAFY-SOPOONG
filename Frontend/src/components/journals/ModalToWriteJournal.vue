@@ -248,4 +248,8 @@ export default {
   width: auto;
   height: auto;
 }
+
+.imgsPreview .imageHolder .plus {
+  border: none;
+}
 </style>
