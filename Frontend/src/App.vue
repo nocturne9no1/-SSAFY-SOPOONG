@@ -1,58 +1,39 @@
 <template>
   <div id="app">
     <div id="nav">
-      <!-- Query문 데이터 보내서 링크 주소 만들기 실습 -->
-      <router-link to="/" @click="data">Home</router-link> |
-      <router-link
-        :to="{
-          name: 'users',
-          params: {
-            userId: `{{ idnum }}`,
-            name: '4dich',
-          },
-          query: {
-            group: idnum,
-            category: 'trial',
-          },
-        }"
-        >About</router-link
-      >
+      <router-link to="/signin">로그인</router-link> |
+      <router-link to="/signup">회원가입</router-link> |
+      <router-link to="/123">임시 일지작성 화면</router-link>
     </div>
-    <router-view />
+    <div>
+      <button>
+        <router-link to="/settings/changepassword">비밀번호 변경</router-link>
+      </button>
+    </div>
+    <router-view/>
   </div>
 </template>
 
-<script>
-export default ({
-  name: 'App',
-  data() {
-    return {
-      idnum: 4321,
-    }
-  },
-
-})
-</script>
-
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  // background-color: black;
 }
 
 #nav {
   padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  a {
+    font-weight: bold;
+    color: #2c3e50;
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>

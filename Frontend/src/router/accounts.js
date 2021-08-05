@@ -1,7 +1,9 @@
 import ChangePassword from '../components/accounts/ChangePassword.vue'
 import DeleteAccount from '../components/accounts/DeleteAccount.vue'
 import EmailAuthentication from '../views/accounts/EmailAuthentication.vue'
+import FindAccount from '../components/accounts/FindAccount.vue'
 import ProfileSettings from '../views/accounts/ProfileSettings.vue'
+import ResetPassword from '../components/accounts/ResetPassword.vue'
 import SignIn from '../views/accounts/SignIn.vue' 
 import SignUp from '../views/accounts/SignUp.vue'
 
@@ -22,7 +24,7 @@ export default [
         path: 'deleteaccount',
         name: 'DeleteAccount',
         component: DeleteAccount,
-      },
+      }
     ]
   },
   {
@@ -33,6 +35,18 @@ export default [
     path: '/signin',
     name: 'SignIn',
     component: SignIn,
+    children: [
+      {
+        path: 'identify',
+        name: 'FindAccount',
+        component: FindAccount,
+      },
+      {
+        path: 'identify/password/reset',
+        name: 'ResetPassword',
+        component: ResetPassword,
+      }
+    ]
   },
   {
     path: '/signup',
