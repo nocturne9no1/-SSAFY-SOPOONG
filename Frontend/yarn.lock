@@ -3897,27 +3897,27 @@ file-uri-to-path@1.0.0:
 
 filepond-plugin-file-metadata@^1.0.8:
   version "1.0.8"
-  resolved "https://registry.npmjs.org/filepond-plugin-file-metadata/-/filepond-plugin-file-metadata-1.0.8.tgz"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-file-metadata/-/filepond-plugin-file-metadata-1.0.8.tgz#52ebc23618f89c916272280906f4d389c98a85f2"
   integrity sha512-VjYbe8AwcBYQs1HO7J/vUPWUv5DQPSlq7Swu/x+3huGpfrNi5u5eRaV6BZE9wV8NvdAviqlTGfqqCeFCND/7NQ==
 
 filepond-plugin-file-validate-type@^1.2.6:
   version "1.2.6"
-  resolved "https://registry.npmjs.org/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.6.tgz"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.6.tgz#5a03e04fb8f70f0df37ff9a285d3d2343cdc55f2"
   integrity sha512-3JFxpb4o5D4BssP/Drjn2GPpejg/QXzU4e3/Pq8IvIJuokHz95b6+RPYstQ+6ITKREYup0N8F/CO/OQfhVkUgg==
 
 filepond-plugin-image-exif-orientation@^1.0.11:
   version "1.0.11"
-  resolved "https://registry.npmjs.org/filepond-plugin-image-exif-orientation/-/filepond-plugin-image-exif-orientation-1.0.11.tgz"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-exif-orientation/-/filepond-plugin-image-exif-orientation-1.0.11.tgz#c46b522e8873e2ad5b9c7e2bbbe71176c9df58b2"
   integrity sha512-hLBc12Fk6Zkj3L8mSAn+elugHOqT5rLUbgVXQQIQjMe0FsGjtpoxqeVR6jt4IWHGat2L9sFAgU2TGmd1mqosCg==
 
 filepond-plugin-image-preview@^4.6.7:
   version "4.6.7"
-  resolved "https://registry.npmjs.org/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.7.tgz"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.7.tgz#cc24e6f084c8e799e25ed4d317d3ff245fe31de1"
   integrity sha512-zr3f+8PdKx5o2wcCNgZ5bxfkT4dblXWpEWNL6Kvo/YP0kixnw4Sv55scVfpHKxQyCYqDzismbLbihQRU8kV92g==
 
 filepond@^4.28.2:
   version "4.28.2"
-  resolved "https://registry.npmjs.org/filepond/-/filepond-4.28.2.tgz"
+  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.28.2.tgz#ee8920a0aa36e8a93e0586d25a84078721eb8357"
   integrity sha512-D9JLsSMwAG8imNDYCLjk9qrkM4TXA8mR9VXpgnSn9FzBu7LroS/MfmTH45zHbujxLBdEeom75u3pK5EhwkNYkA==
 
 filesize@^3.6.1:
@@ -8598,10 +8598,10 @@ vue-eslint-parser@^7.0.0:
     lodash "^4.17.21"
     semver "^6.3.0"
 
-vue-filepond@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.npmjs.org/vue-filepond/-/vue-filepond-6.0.3.tgz"
-  integrity sha512-m0wArAdpgzOOs19bWA6zzYlHAb2aK+igPoKPZGrzpgKiiELPKW7XZ2OBDXzk7rhpFLkedujVrMqwjPyZfmQTTQ==
+vue-filepond@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/vue-filepond/-/vue-filepond-7.0.0.tgz#49f17551be0b1b10f0b0671bce432662d3e22bb5"
+  integrity sha512-FUqJqwOxVsz5BMYeK0tSFUAo7JhpTx+TMRA5XkYAzA1HH3KnkUz5tzvjDH+Pc282DTH2BIZOJe435BwYxYuHWg==
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
@@ -8656,7 +8656,7 @@ vue-template-es2015-compiler@^1.9.0:
 
 vue-upload-drop-images@^1.0.7:
   version "1.0.7"
-  resolved "https://registry.npmjs.org/vue-upload-drop-images/-/vue-upload-drop-images-1.0.7.tgz"
+  resolved "https://registry.yarnpkg.com/vue-upload-drop-images/-/vue-upload-drop-images-1.0.7.tgz#25618e874fef37ddd55d29575c0a4e4d53d39068"
   integrity sha512-O1G+iy0oTK9EaD6XHI5vjZQzdy+PeVCui7ty5Ja8ipw3bBWcY1o5+7JxofMZSXPQbr++Go0hWHtyb7xwQZOpQA==
 
 vue2-google-maps@^0.10.7:

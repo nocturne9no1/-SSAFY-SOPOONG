@@ -115,7 +115,7 @@ div {
   /* margin: 50px auto; */
   /* margin-block: 10%; */
 
-  /* text-align: center; */
+  text-align: center;
 
   border-radius: 50px;
   /* background-color: rgba(0, 0, 0, .75); */

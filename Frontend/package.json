@@ -20,7 +20,7 @@
     "sass": "^1.36.0",
     "sass-loader": "10",
     "vue": "^2.6.11",
-    "vue-filepond": "^6.0.3",
+    "vue-filepond": "^7.0.0",
     "vue-router": "^3.5.2",
     "vue-upload-drop-images": "^1.0.7",
     "vue2-google-maps": "^0.10.7",
