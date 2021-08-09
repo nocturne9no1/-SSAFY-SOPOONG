@@ -99,6 +99,8 @@
           Add Your First Journal!
         </div>
       </div>
+
+
     </div>
   </div>
 </template>

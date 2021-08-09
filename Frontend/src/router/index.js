@@ -5,6 +5,7 @@ import PageNotFound from '../views/PageNotFound.vue'
 // 없앨 예정
 import ModalToWriteJournal from '../components/journals/ModalToWriteJournal.vue'
 import test from '../views/test.vue'
+import JournalCardList from '../views/feeds/JournalCardList'
 
 // modules
 import accounts from './accounts.js'
@@ -17,10 +18,10 @@ const routes = [
   ...main,
 
   // 404
-  {
-    path: '*',
-    redirect: '/404',
-  },
+  // {
+  //   path: '*',
+  //   redirect: '/404',
+  // },
   {
     path: '/404',
     name: 'PageNotFound',
@@ -37,6 +38,11 @@ const routes = [
     path: '/',
     name: 'test',
     component: test,
+  },
+  {
+    path: '/feed',
+    name: 'JournalCardList',
+    component: JournalCardList,
   }
 ]
 

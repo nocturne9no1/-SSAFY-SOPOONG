@@ -1,5 +1,10 @@
 <template>
-  <div id="app">
+  <div id="test">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <file-pond
       name="test"
       ref="pond"
