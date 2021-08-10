@@ -31,6 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+<<<<<<< develop
 
 ### Property###
 application.properties
+=======
+>>>>>>> [feat] 사진 업로드
