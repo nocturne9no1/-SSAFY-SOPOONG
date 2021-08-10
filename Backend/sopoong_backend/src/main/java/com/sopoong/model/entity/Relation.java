@@ -10,11 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,29 +23,32 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Relation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long relationIdx;
 	
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumnOrFormula(column = @JoinColumn(name = "relation_following", insertable = false, updatable = false,referencedColumnName = "user_id")			
+	@JoinColumnOrFormula(column = @JoinColumn(name = "relation_following", referencedColumnName = "user_id")			
 	)
-	private User userFollowing; // 팔로우 한 사람
+	private User relationFollowing; // 팔로우 한 사람
 	
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumnOrFormula(column = @JoinColumn(name = "relation_followed", insertable = false, updatable = false, referencedColumnName = "user_id")			
+	@JoinColumnOrFormula(column = @JoinColumn(name = "relation_followed", referencedColumnName = "user_id")			
 	)
-	private User userFollowed; // 팔로우 당한 사람
+	private User relationFollowed; // 팔로우 당한 사람
 	
 	@Column(insertable = false, updatable = false)
 	private LocalDateTime createdAt;
 
 	@Override
 	public String toString() {
-		return "Relation [relationIdx=" + relationIdx + ", userFollowing=" + userFollowing.getUserId() + ", userFollowed="
-				+ userFollowed.getUserId() + ", createdAt=" + createdAt + "]";
+		return "Relation [relationIdx=" + relationIdx + ", relationFollowing=" + relationFollowing.getUserId() + ", relationFollowed="
+				+ relationFollowed.getUserId() + ", createdAt=" + createdAt + "]";
 	}
 	
 	

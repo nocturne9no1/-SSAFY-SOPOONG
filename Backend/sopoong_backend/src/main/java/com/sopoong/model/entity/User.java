@@ -49,11 +49,12 @@ import springfox.documentation.spring.web.json.Json;
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 @TypeDef(name = "jsonb", typeClass = JsonStringType.class)
 @Builder
-public class User implements Serializable{
+public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userIdx;
+	
 	@NotNull
 	@NaturalId
 	@Column(name="user_id", unique = true)
@@ -85,12 +86,10 @@ public class User implements Serializable{
 	@Column(insertable = false, updatable = false)
 	private LocalDateTime createdAt;
 	
-	@OneToMany
-	@JoinColumn(name = "relation_following")
+	@OneToMany(mappedBy = "relationFollowing")
 	private List<Relation> relationFollowing = new ArrayList<>();
 	
-	@OneToMany
-	@JoinColumn(name = "relation_followed" )
+	@OneToMany(mappedBy = "relationFollowed")
 	private List<Relation> relationFollowed = new ArrayList<>();
 	
 	@OneToMany
