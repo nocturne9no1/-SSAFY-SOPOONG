@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -17,13 +18,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
+import com.sopoong.model.dto.GoodRequest;
 import com.sopoong.model.entity.Good;
 import com.sopoong.repository.GoodRepository;
+import com.sopoong.repository.TravelRepository;
+import com.sopoong.repository.UserRepository;
 
 @Service
 public class GoodService {
 	@Autowired
 	private GoodRepository goodRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private TravelRepository travelRepository;
 	public static final Logger logger = LoggerFactory.getLogger(GoodService.class);
 	@Transactional
 	public BaseMessage getList(Pageable pageable, Long travelIdx) {
@@ -36,5 +46,21 @@ public class GoodService {
 		resultMap.put("seccess", people);
 		resultMap.put("isLast", goods.isLast());
 		return new BaseMessage(HttpStatus.OK,resultMap); 
+	}
+	
+	@Transactional
+	public BaseMessage saveGood(GoodRequest goodRequest) {
+		Map<String,Object> resultMap = new HashMap<>();
+		Optional<Good> good = goodRepository.findByUser_UserIdAndTravel_TravelIdx(goodRequest.getUserId(), goodRequest.getTravelIdx());
+		if(!good.isPresent()) {
+			goodRepository.save(Good.builder().user(userRepository.findByUserId(goodRequest.getUserId()).get())
+					.travel(travelRepository.findById(goodRequest.getTravelIdx()).get()).build());
+			resultMap.put("success", "좋아요 누르기 성공");
+			return new BaseMessage(HttpStatus.OK,resultMap); 
+		}else {
+			goodRepository.delete(good.get());
+			resultMap.put("success", "좋아요 삭제하기 성공");
+			return new BaseMessage(HttpStatus.OK,resultMap); 
+		}
 	}
 }
