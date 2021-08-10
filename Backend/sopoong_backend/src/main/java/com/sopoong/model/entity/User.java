@@ -1,5 +1,6 @@
 package com.sopoong.model.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,11 +22,14 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
@@ -42,14 +46,16 @@ import springfox.documentation.spring.web.json.Json;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 @TypeDef(name = "jsonb", typeClass = JsonStringType.class)
 @Builder
-public class User {
+public class User implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userIdx;
 	@NotNull
+	@NaturalId
 	@Column(name="user_id", unique = true)
 	private String userId;
 	
@@ -95,6 +101,7 @@ public class User {
 	@Nullable
 	@JoinColumn(name = "user_id")
 	private List<Good> goods = new ArrayList<>();
+	
 	
 	@OneToMany
 	@Nullable
