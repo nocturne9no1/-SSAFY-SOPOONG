@@ -57,7 +57,7 @@ public class SwaggerConfig {
 				.build();
 	}
 	private ApiKey authorizationKey() {
-		return new ApiKey("JWT_TOKEN", "sopoong", "header");
+		return new ApiKey("JWT_TOKEN", "X-AUTH-TOKEN", "header");
 	}
 	private ApiKey httpRequestKey() {
 		return new ApiKey("HTTP_REQUEST","sopoong", "header");
