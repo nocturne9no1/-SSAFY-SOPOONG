@@ -45,7 +45,7 @@ public class Image {
 	private Place place;
 	
 	@OneToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private User user;
 	
 	@Column(insertable = false, updatable = false)

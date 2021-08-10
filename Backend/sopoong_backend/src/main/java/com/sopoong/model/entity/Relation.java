@@ -29,12 +29,12 @@ public class Relation {
 	private long relationIdx;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumnOrFormula(column = @JoinColumn(name = "relation_following", insertable = false, updatable = false)			
+	@JoinColumnOrFormula(column = @JoinColumn(name = "relation_following", insertable = false, updatable = false,referencedColumnName = "user_id")			
 	)
 	private User userFollowing; // 팔로우 한 사람
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumnOrFormula(column = @JoinColumn(name = "relation_followed", insertable = false, updatable = false)			
+	@JoinColumnOrFormula(column = @JoinColumn(name = "relation_followed", insertable = false, updatable = false, referencedColumnName = "user_id")			
 	)
 	private User userFollowed; // 팔로우 당한 사람
 	
