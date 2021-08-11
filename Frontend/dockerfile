@@ -4,7 +4,6 @@ WORKDIR /homepage
 
 COPY . .
 RUN npm install --no-optional --global npm
-RUN npm install -g @vue/cli
 RUN npm run build
 
 
