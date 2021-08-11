@@ -28,7 +28,7 @@ public class AuthController {
 	
 
 	@CrossOrigin(origins = { "*" })
-	@GetMapping("auth/login")
+	@GetMapping("api/auth/login")
 	@ApiOperation("로그인")
 	public ResponseEntity login(@RequestParam(required = true) final String id,
             @RequestParam(required = true) final String password) throws Exception {
@@ -38,7 +38,7 @@ public class AuthController {
 
 	}
 
-	@PostMapping("auth/register")
+	@PostMapping("api/auth/register")
 	@ApiOperation("회원가입")
 	public ResponseEntity join(@RequestBody SignupRequest requestUser) {
 		System.out.println(requestUser.toString());
