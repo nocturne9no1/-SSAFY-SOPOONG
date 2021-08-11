@@ -38,13 +38,13 @@ pipeline {
 				docker rmi -f $(docker images -f dangling=true -q)' 
 
 				
-				sh 'docker run -d --name frontend \
+				sh 'docker run -d --name frontend nginx\
 				-p 80:80 \
 				-p 443:443 \
 				-v /etc/letsencrypt/live/i5a404.p.ssafy.io/:/etc/nginx/conf.d/ \
 				-v /etc/localtime:/etc/localtime:ro \
 				--network jenkinsnetwork \
-				frontend:latest nginx'
+				frontend:latest'
 
 				sh 'docker run -d -p 8080 --name backend \
 		--network jenkinsnetwork backend:latest'
