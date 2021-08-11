@@ -44,7 +44,7 @@ pipeline {
 				-v /etc/letsencrypt/live/i5a404.p.ssafy.io/:/etc/nginx/conf.d/ \
 				-v /etc/localtime:/etc/localtime:ro \
 				--network jenkinsnetwork \
-				nginx:latest'
+				frontend:latest'
 
 				sh 'docker run -d -p 8080 --name backend \
 		--network jenkinsnetwork backend:latest'
