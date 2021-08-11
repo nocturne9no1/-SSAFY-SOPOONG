@@ -31,7 +31,7 @@ const actions = {
   },
   
   postSignInData(context, signInData) {
-    axios.get('https://http://i5a404.p.ssafy.io/api/auth/login', { params :{ id: signInData.id, password: signInData.password } })
+    axios.get('https://i5a404.p.ssafy.io/api/auth/login', { params :{ id: signInData.id, password: signInData.password } })
       .then(res => {
         context.commit('SET_TOKEN', res.data.key) // 보내주는 cookie key 저장
         // 여기서도 프로필 정보 얻어와야될수도있음
@@ -47,7 +47,7 @@ const actions = {
   },
 
   postSignUpData(context, signUpData) {
-    axios.post('https://http://i5a404.p.ssafy.io/api/auth/register', signUpData)
+    axios.post('https://i5a404.p.ssafy.io/api/auth/register', signUpData)
       .then(res => {
         // 여기서 할게 없음
         // 회원가입이 성공적으로 되었다 메세지?
