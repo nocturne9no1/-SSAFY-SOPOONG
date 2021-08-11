@@ -11,9 +11,9 @@ pipeline {
 		stage('Docker build') {
 			agent any
 			steps {
-				sh 'docker build -t frontend:latest /Frontend' 
+				sh 'docker build -t frontend:latest ./Frontend' 
 				
-				sh 'docker build -t backend:latest /Backend/sopoong_backend' 
+				sh 'docker build -t backend:latest ./Backend/sopoong_backend' 
 				
 
 			}
