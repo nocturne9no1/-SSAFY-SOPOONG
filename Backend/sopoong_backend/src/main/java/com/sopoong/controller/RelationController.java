@@ -13,7 +13,7 @@ import com.sopoong.model.entity.Relation;
 import com.sopoong.service.RelationService;
 
 @RestController
-@RequestMapping("/auth")
+//@RequestMapping("/auth")
 public class RelationController {
 	
 	@Autowired

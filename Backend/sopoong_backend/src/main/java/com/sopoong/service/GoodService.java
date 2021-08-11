@@ -16,10 +16,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.GoodRequest;
+import com.sopoong.model.entity.Alarm;
 import com.sopoong.model.entity.Good;
+import com.sopoong.repository.AlarmRepository;
 import com.sopoong.repository.GoodRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
@@ -34,6 +37,10 @@ public class GoodService {
 	
 	@Autowired
 	private TravelRepository travelRepository;
+	
+	@Autowired
+	private AlarmRepository alarmRepository;
+	
 	public static final Logger logger = LoggerFactory.getLogger(GoodService.class);
 	@Transactional
 	public BaseMessage getList(Pageable pageable, Long travelIdx) {
@@ -53,8 +60,16 @@ public class GoodService {
 		Map<String,Object> resultMap = new HashMap<>();
 		Optional<Good> good = goodRepository.findByUser_UserIdAndTravel_TravelIdx(goodRequest.getUserId(), goodRequest.getTravelIdx());
 		if(!good.isPresent()) {
-			goodRepository.save(Good.builder().user(userRepository.findByUserId(goodRequest.getUserId()).get())
-					.travel(travelRepository.findById(goodRequest.getTravelIdx()).get()).build());
+			long index= goodRepository.save(Good.builder().user(userRepository.findByUserId(goodRequest.getUserId()).get())
+					.travel(travelRepository.findById(goodRequest.getTravelIdx()).get()).build()).getGoodIdx();
+			if (String.format("%03d", Integer.parseInt(Integer.toBinaryString(userRepository.findByUserId(goodRequest.getUserId()).get().getUserAlarm()))).charAt(1)=='1') {
+				alarmRepository.save(Alarm.builder()
+					.user(userRepository.findByUserId(goodRequest.getUserId()).get())
+					.alarmCategory(2)
+					.alarmCheck(0)
+					.good(goodRepository.findById(index).get())
+					.build());
+			}
 			resultMap.put("success", "좋아요 누르기 성공");
 			return new BaseMessage(HttpStatus.OK,resultMap); 
 		}else {

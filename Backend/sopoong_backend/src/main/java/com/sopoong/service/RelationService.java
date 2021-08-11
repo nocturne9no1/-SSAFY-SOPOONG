@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.followRequest;
+import com.sopoong.model.entity.Alarm;
 import com.sopoong.model.entity.Relation;
+import com.sopoong.repository.AlarmRepository;
 import com.sopoong.repository.RelationRepository;
 import com.sopoong.repository.UserRepository;
 
@@ -23,6 +25,8 @@ public class RelationService {
 	private RelationRepository relationRepo;
 	@Autowired
 	private UserRepository userRepo;
+	@Autowired
+	private AlarmRepository alarmRepo;
 	
 	@Transactional
 	public BaseMessage follow(followRequest request) {
@@ -35,13 +39,22 @@ public class RelationService {
 			resultMap.put("success", "팔로우 취소");
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
-			relationRepo.save(Relation.builder()
+			long index= relationRepo.save(Relation.builder()
 					.relationFollowing(userRepo.findByUserId(request.getRelationFollowing()).get())
 					.relationFollowed(userRepo.findByUserId(request.getRelationFollowed()).get())
+					.build()).getRelationIdx();
+			
+//			System.out.println(String.format("%03d", Integer.parseInt(Integer.toBinaryString(userRepo.findByUserId(request.getRelationFollowed()).get().getUserAlarm()))));
+			if (String.format("%03d", Integer.parseInt(Integer.toBinaryString(userRepo.findByUserId(request.getRelationFollowed()).get().getUserAlarm()))).charAt(1)=='1') {
+				alarmRepo.save(Alarm.builder()
+					.user(userRepo.findByUserId(request.getRelationFollowed()).get())
+					.alarmCategory(2)
+					.alarmCheck(0)
+					.relation(relationRepo.findById(index).get())
 					.build());
-			System.out.println(userRepo.findByUserId(request.getRelationFollowing()).get().toString());
-			System.out.println(userRepo.findByUserId(request.getRelationFollowed()).get().toString());
-			resultMap.put("success", "팔로우");
+			}
+			
+			resultMap.put("success", "팔로우 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		}
 		
