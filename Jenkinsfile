@@ -41,7 +41,7 @@ pipeline {
 				sh 'docker run -d --name frontend \
 				-p 80:80 \
 				-p 443:443 \
-				-v /etc/letsencrypt/live/i5a404.p.ssafy.io/:/etc/nginx/conf.d/ \
+				-v /etc/letsencrypt:/cert \
 				-v /etc/localtime:/etc/localtime:ro \
 				--network jenkinsnetwork \
 				frontend:latest'
