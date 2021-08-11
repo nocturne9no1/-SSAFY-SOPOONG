@@ -12,6 +12,7 @@
 	<groupId>com.sopoong</groupId>
 	<artifactId>sopoong_backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>sopoong_backend</name>
 	<description>project for Spring Boot</description>
 	<properties>
