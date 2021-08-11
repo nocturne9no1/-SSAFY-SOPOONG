@@ -49,14 +49,15 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {},
+    "optionalDependencies": {
+      "fsevents": "*"
+    }
+
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not dead"
-  ],
-   "optionalDependencies": {
-     "fsevents": "*"
-   },
+  ]
 }
