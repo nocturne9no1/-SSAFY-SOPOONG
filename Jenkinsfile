@@ -39,7 +39,7 @@ pipeline {
 
 				
 				sh 'docker run -d --name frontend \
-				-p 80:80 \
+				-p 80:80 nginx\
 				-p 443:443 \
 				-v /etc/letsencrypt/live/i5a404.p.ssafy.io/:/etc/nginx/conf.d/ \
 				-v /etc/localtime:/etc/localtime:ro \
