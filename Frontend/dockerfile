@@ -3,7 +3,7 @@ WORKDIR /homepage
 
 
 COPY . .
-RUN npm install --no-optional fsevents
+RUN npm install --global npm --no-optional fsevents
 RUN npm install -g @vue/cli
 RUN npm run build
 
