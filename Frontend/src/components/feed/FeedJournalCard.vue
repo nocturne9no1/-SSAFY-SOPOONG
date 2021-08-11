@@ -82,9 +82,12 @@ export default {
       // 데이터 보내서 수정해야 함.
       return this.liked
     },
+    // 일지 디테일로 연결
     journalDetail() {
       // this.$router.push('/')
       console.log(this.image)
+      // 멀티플 파라미터 쏘고 싶을 때
+      this.$store.dispatch('', [this.image])
     }
   }
 };

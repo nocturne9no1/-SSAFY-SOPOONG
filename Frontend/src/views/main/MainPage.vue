@@ -100,17 +100,19 @@
         </div>
       </div>
 
-
+      <main-feed />
     </div>
   </div>
 </template>
 
 <script>
 import ProfileBox from '../accounts/ProfileBox.vue'
+import MainFeed from '@/components/main/MainFeed.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Vue from 'vue'
 // import GmapCustomMarker from 'vue2-gmap-custom-marker'
 import '../../components/css/mainpage.scss'
+
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -123,6 +125,7 @@ export default {
   name:'MainPage',
   components: {
     ProfileBox,
+    MainFeed
     // 'gmap-custom-marker': GmapCustomMarker,
   },
   data() {

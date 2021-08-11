@@ -83,13 +83,14 @@
 
 <script>
 import { mapActions } from "vuex";
+import axios from 'axios'
 
 export default {
   name: "SignUp",
   components: {},
   data() {
     return {
-      sampleData: "",
+      sampleData: "abcdef",
       signUpData: {
         id: "",
         nickname: "",
@@ -120,6 +121,9 @@ export default {
       handler() {
         this.checkForm();
         //this.$store.dispatch('duplicateCheck', this.signUpData)
+        this.existId();
+        this.existNickname();
+        this.existEmail();
       },
     },
   },
@@ -173,6 +177,39 @@ export default {
       var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
       return regExp.test(email);
     },
+
+    existId() {
+      axios.get('http://localhost:8080/auth/id', { params :{ id: this.signUpData.id }})
+        .then(res => {
+          console.log(res.data)
+          if ( this.signUpData.id === res.data && this.signUpData.id.length >= 6 ) {
+            this.error.id = "아이디가 중복됩니다."
+          }
+        })
+        .catch(err => console.error(err))
+    },
+
+    existNickname() {
+      axios.get('http://localhost:8080/auth/nickname', { params :{ nickname: this.signUpData.nickname }})
+        .then(res => {
+          console.log(res.data)
+          if ( this.signUpData.nickname === res.data && this.signUpData.nickname.length >= 6 ) {
+            this.error.nickname = "닉네임이 중복됩니다."
+          }
+        })
+        .catch(err => console.error(err))
+    },
+
+    existEmail() {
+      axios.get('http://localhost:8080/auth/email', { params :{ email: this.signUpData.email }})
+        .then(res => {
+          console.log(res.data)
+          if ( this.signUpData.email === res.data && this.signUpData.email.length >= 6 ) {
+            this.error.email = "이메일이 중복됩니다."
+          }
+        })
+        .catch(err => console.error(err))
+    }
   },
 };
 </script>

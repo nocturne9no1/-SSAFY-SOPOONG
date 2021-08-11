@@ -1,14 +1,13 @@
 <template>
   <div style="display: flex;">
-    <profile-box />
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <h1>Masonry NewsFeed</h1>
+          <h1>Masonry MainFeed</h1>
           <!-- <button class="filterButton">Filter</button> -->
         </div>
         <div class="cards" v-if="images.length">
-          <journal-card
+          <main-feed-journal-card
             v-for="image in images"
             :key="image.id"
             :image="image"
@@ -19,24 +18,19 @@
         </div>
       </div>
     </div>
-    <FeedFilter />
   </div>
 </template>
 
 <script>
-import JournalCard from "@/components/JournalCard.vue";
+import MainFeedJournalCard from "@/components/main/MainFeedJournalCard.vue";
 import axios from "axios";
-import ProfileBox from '@/views/accounts/ProfileBox.vue';
-import FeedFilter from '@/components/FeedFilter.vue';
 
 const DEFAULT_IMAGES_COUNT = 30;
 
 export default {
   name: "",
   components: {
-    JournalCard,
-    ProfileBox,
-    FeedFilter,
+    MainFeedJournalCard,
   },
   data() {
     return {
@@ -101,9 +95,9 @@ export default {
 } */
 
 .wrapper {
-  margin-left: 10rem;
+  /* margin-left: 10rem;
   margin-top: 7rem;
-  margin-right: 3rem;
+  margin-right: 3rem; */
 }
 .heading h1 {
   text-align: center;

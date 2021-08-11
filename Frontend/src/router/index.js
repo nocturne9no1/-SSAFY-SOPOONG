@@ -5,17 +5,20 @@ import PageNotFound from '../views/PageNotFound.vue'
 // 없앨 예정
 import ModalToWriteJournal from '../components/journals/ModalToWriteJournal.vue'
 import test from '../views/test.vue'
-import JournalCardList from '../views/feeds/JournalCardList'
 
 // modules
 import accounts from './accounts.js'
 import main from './main.js'
+import feed from './feed.js'
+import travel from './travel.js'
 
 Vue.use(VueRouter)
 
 const routes = [
   ...accounts,
   ...main,
+  ...feed,
+  ...travel,
 
   // 404
   // {
@@ -39,11 +42,6 @@ const routes = [
     name: 'test',
     component: test,
   },
-  {
-    path: '/feed',
-    name: 'JournalCardList',
-    component: JournalCardList,
-  }
 ]
 
 const router = new VueRouter({
