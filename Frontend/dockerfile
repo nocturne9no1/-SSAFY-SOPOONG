@@ -4,8 +4,8 @@ WORKDIR /homepage
 
 COPY . .
 RUN npm install --no-optional --global npm
+RUN npm install vue
 RUN npm install -g @vue/cli
-RUN npm i -g vue-cli-service
 RUN npm run build
 
 
