@@ -19,6 +19,7 @@
     "node-sass": "^6.0.1",
     "sass": "^1.36.0",
     "sass-loader": "10",
+    "v-click-outside": "^3.1.2",
     "vue": "^2.6.11",
     "vue-filepond": "^7.0.0",
     "vue-router": "^3.5.2",

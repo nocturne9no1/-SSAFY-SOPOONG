@@ -121,7 +121,6 @@ export default {
   name:'MainPage',
   components: {
     ProfileBox,
-    // 'gmap-custom-marker': GmapCustomMarker,
   },
   data() {
     return {

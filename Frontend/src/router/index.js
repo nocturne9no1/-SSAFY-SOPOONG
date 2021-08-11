@@ -5,6 +5,8 @@ import PageNotFound from '../views/PageNotFound.vue'
 // 없앨 예정
 import ModalToWriteJournal from '../components/journals/ModalToWriteJournal.vue'
 import test from '../views/test.vue'
+import Pintest from '../views/Pintest.vue'
+import completeForm from '../views/completeForm.vue'
 
 // modules
 import accounts from './accounts.js'
@@ -37,6 +39,16 @@ const routes = [
     path: '/',
     name: 'test',
     component: test,
+  },
+  {
+    path: '/pintest',
+    name: 'pintest',
+    component: Pintest,
+  },
+  {
+    path: '/last',
+    name: 'completeForm',
+    component: completeForm,
   }
 ]
 
