@@ -6,6 +6,6 @@ COPY . .
 RUN mvn clean package
 ARG JAR_FILE=./target/sopoong_backend-0.0.1-SNAPSHOT.jar
 RUN ls target -a
-COPY COPY --from=builder /backend/target/*.jar app.jar
+COPY COPY --from=builder ./backend/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
