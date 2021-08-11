@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.GoodRequest;
@@ -62,10 +61,10 @@ public class GoodService {
 		if(!good.isPresent()) {
 			long index= goodRepository.save(Good.builder().user(userRepository.findByUserId(goodRequest.getUserId()).get())
 					.travel(travelRepository.findById(goodRequest.getTravelIdx()).get()).build()).getGoodIdx();
-			if (String.format("%03d", Integer.parseInt(Integer.toBinaryString(userRepository.findByUserId(goodRequest.getUserId()).get().getUserAlarm()))).charAt(1)=='1') {
+			if (String.format("%03d", Integer.parseInt(Integer.toBinaryString(userRepository.findByUserId(goodRequest.getUserId()).get().getUserAlarm()))).charAt(2)=='1') {
 				alarmRepository.save(Alarm.builder()
 					.user(userRepository.findByUserId(goodRequest.getUserId()).get())
-					.alarmCategory(2)
+					.alarmCategory(1)
 					.alarmCheck(0)
 					.good(goodRepository.findById(index).get())
 					.build());
