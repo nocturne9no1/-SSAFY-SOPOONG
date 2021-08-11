@@ -46,7 +46,7 @@ pipeline {
 				--network jenkinsnetwork \
 				frontend:latest'
 
-				sh 'docker run -d --name backend \
+				sh 'docker run -d -p 8080 --name backend \
 		--network jenkinsnetwork backend:latest'
 			}
 		}
