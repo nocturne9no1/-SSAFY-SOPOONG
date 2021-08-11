@@ -41,7 +41,7 @@ pipeline {
 				sh 'docker run -d --name frontend \
 				-p 80:80 \
 				-p 443:443 \
-				-v /home/ubuntu/sslkey/:/var/jenkins_home/workspace/jenkins-cicd/sslkey/ \
+				-v /home/ubuntu/sslkey/:/var/jenkins_home/workspace/sopoong-jenkins-cicd/sslkey/ \
 				-v /etc/localtime:/etc/localtime:ro \
 				--network jenkinsnetwork \
 				frontend:latest'
