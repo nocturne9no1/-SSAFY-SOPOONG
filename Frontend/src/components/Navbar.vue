@@ -4,10 +4,10 @@
       <ul class="nav-container">
         <div class="nav-left">
           <li class="nav-item nav-logo">
-            <router-link to="/">
+            <router-link to="/main">
               <img class="logo" src="../assets/logo.png" alt="Sopoong logo">
             </router-link></li>
-            <router-link to="/" class="text-logo">
+            <router-link to="/main" class="text-logo">
               SOPOONG
             </router-link>
           <li class="nav-item nav-newsfeed"><router-link to="/feed">NewsFeed</router-link></li>

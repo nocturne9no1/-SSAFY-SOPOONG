@@ -147,6 +147,7 @@ div {
 
   border-radius: 50px;
   background-color: rgba(183, 220, 204, 0.6);
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
 }
 
 .EmailAuthDiv {
@@ -174,6 +175,7 @@ div {
   /* background-color: rgba(0, 0, 0, .75); */
   background-color: rgba(183, 220, 204, 0.6);
   /* opacity: 0.5; */
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
 }
 
 h1 {

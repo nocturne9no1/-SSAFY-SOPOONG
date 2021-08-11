@@ -10,13 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import javax.persistence.Table;
 
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +23,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Table(name = "image")
 public class Image {
 
 	@Id
@@ -31,10 +32,14 @@ public class Image {
 	private long imageIdx;
 	
 	@NotNull
-	private String imageTitle;
+	@Column(name = "image_origin_title")
+	private String imageOriginTitle; // 업로드 된 실제 파일명
 	
 	@NotNull
-	private String imagePath;
+	private String imageTitle; // 서버에 저장된 파일명
+	
+	@NotNull
+	private String imagePath; // 파일 저장 경로
 	
 	@ManyToOne
 	@JoinColumn(name = "travel_idx")
@@ -45,7 +50,7 @@ public class Image {
 	private Place place;
 	
 	@OneToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private User user;
 	
 	@Column(insertable = false, updatable = false)
@@ -53,9 +58,8 @@ public class Image {
 
 	@Override
 	public String toString() {
-		return "Image [imageIdx=" + imageIdx + ", imageTitle=" + imageTitle + ", imagePath=" + imagePath + ", travel="
-				+ travel + ", place=" + place + ", user=" + user.getUserId() + ", createdAt=" + createdAt + "]";
-	}
-	
-	
+		return "Image [imageIdx=" + imageIdx + ", imageOriginTitle=" + imageOriginTitle + ", imageTitle=" + imageTitle
+				+ ", imagePath=" + imagePath + ", travel=" + travel + ", place=" + place + ", user=" + user
+				+ ", createdAt=" + createdAt + "]";
+	}  
 }

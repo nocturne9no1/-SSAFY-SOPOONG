@@ -3,7 +3,8 @@
     <div class="SignInDiv" v-if="$route.path.length == 8 || $route.path.length == 7">
       <div class="SignInDivBody" @keyup.enter="signIn(signInData)">
         <!-- <h1>Sign In</h1> -->
-        <img src="https://cdn.discordapp.com/attachments/869113013892964412/870324360420929586/logo_png.png" alt="">
+        <!-- <img src="https://cdn.discordapp.com/attachments/869113013892964412/870324360420929586/logo_png.png" alt=""> -->
+        <img src="@/assets/sopoong_image_logo.png" alt="">
         <div>
           <!-- <label for="id">ID </label> -->
           <input
@@ -76,10 +77,12 @@ export default {
   methods: {
     identify() {
       console.log(this.$route.path.length)
-      this.$router.push('identify')
+      this.$router.push('signin/identify')
     },
-    signIn() {
-      alert("click!")
+    signIn(signInData) {
+      this.$store.dispatch('signIn', signInData)
+      this.signInData.id = null
+      this.signInData.password = null
     },
     signUp() {
       this.$router.push('/signup')
@@ -112,12 +115,13 @@ div {
   /* margin: 50px auto; */
   /* margin-block: 10%; */
 
-  /* text-align: center; */
+  text-align: center;
 
   border-radius: 50px;
   /* background-color: rgba(0, 0, 0, .75); */
   background-color: rgba(183, 220, 204, .5);
   /* opacity: 0.5; */
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
 }
 
 .SignInDivBody {
