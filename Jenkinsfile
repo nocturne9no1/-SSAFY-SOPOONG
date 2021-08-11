@@ -8,7 +8,7 @@ pipeline {
 				checkout scm
 			}
 		}
-		stage('Docker build') { # docker build 상태
+		stage('Docker build') { 
 			agent any
 			steps {
 				sh 'docker build -t frontend:latest /var/jenkins_home/workspace/jenkins-cicd/frontend' 
