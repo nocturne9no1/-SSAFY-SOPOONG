@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,7 @@ import com.sopoong.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 	
 	@Autowired
