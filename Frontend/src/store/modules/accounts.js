@@ -36,7 +36,7 @@ const actions = {
         context.commit('SET_TOKEN', res.data.key) // 보내주는 cookie key 저장
         // 여기서도 프로필 정보 얻어와야될수도있음
         console.log(res.data);
-        alert("로그인 성공!!>.<");
+        alert("로그인 성공!!>.<!!!!");
         router.push('/main')
       })
       .catch(err => console.error(err))
