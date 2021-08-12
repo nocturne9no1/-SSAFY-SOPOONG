@@ -1,5 +1,5 @@
 <template>
-  <div style="display:flex;">
+  <div style="display:flex;" v-if="test()">
     <profile-box />
     <each-place-journal-card-list />
   </div>
@@ -30,7 +30,13 @@ export default {
   updated() {},
   beforeUnmount() {}, 
   unmounted() {},
-  methods: {}
+  methods: {
+    test() {
+      // 없어짐
+      // return "" 
+      return "값이 있으니 생김."
+    }
+  }
 }
 </script>
 
