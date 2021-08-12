@@ -133,7 +133,7 @@ export default {
         exifr.parse(image).then((output) => {
           if (output) {
             console.log("I am in !", output.latitude);
-            if (output.latitude) {
+            if (output.latitude !== undefined) {
               locData = {
                 latitude: output.latitude,
                 longitude: output.longitude,
@@ -189,24 +189,25 @@ export default {
         exifr.parse(image).then((output) => {
           if (output) {
             console.log("I am in !", output.latitude);
-            if (output.latitude) {
+            if (output.latitude !== undefined) {
               locData = {
                 latitude: output.latitude,
                 longitude: output.longitude,
               };
-              this.files[this.files.length-1].locData = locData;
+              // this.files.length-1 을 바꿔줘야함. 안그러면 계속 최고값 나옴
+              this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
               locData = [];
             } else {
               locData = {
                 latitude: 37.512126019029,
                 longitude: 127.04489721131,
               };
-              this.files[this.files.length-1].locData = locData;
+              this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
               locData = [];
             }
           } else {
             locData = { latitude: 37.512126019029, longitude: 127.04489721131 };
-            this.files[this.files.length-1].locData = locData;
+            this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
             locData = [];
           }
         });
