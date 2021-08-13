@@ -51,14 +51,14 @@ const actions = {
   },
   
   postSignInData(context, signInData) {
-    axios.get('http://localhost:8080/auth/login', { params :{ id: signInData.id, password: signInData.password } })
+    axios.get('https://i5a404.p.ssafy.io/api/auth/login', { params :{ id: signInData.id, password: signInData.password } })
       .then(res => {
         context.commit('SET_TOKEN', res.data.key) // 보내주는 cookie key 저장? 키값이 이렇게 오는게 맞나?
         cookies.set('X-AUTH-TOKEN', res.data.key) // 키 , 값, 만료일
         // this.$cookies.set('auth-token', res.data.key, "7d")  // 글로벌 설정으로 쿠키 가져올때(main.js).
         // 여기서도 프로필 정보 얻어와야될수도있음
         console.log(res.data);
-        alert("로그인 성공!!>.<");
+        alert("로그인 성공!!>.<!!!!");
         router.push('/main')
       })
       .catch(err => console.error(err))
@@ -69,7 +69,7 @@ const actions = {
   },
 
   postSignUpData(context, signUpData) {
-    axios.post('http://localhost:8080/auth/register', signUpData)
+    axios.post('https://i5a404.p.ssafy.io/api/auth/register', signUpData)
       .then(res => {
         // 여기서 할게 없음
         // 회원가입이 성공적으로 되었다 메세지?

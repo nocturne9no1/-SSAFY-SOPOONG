@@ -26,7 +26,10 @@
             type="text"
           />
         </div>
-
+        <div class="error-text" v-if="error.nickname">
+            {{ error.nickname }}
+        </div>
+        
         <div>
           <input
             v-model="signUpData.email"
@@ -101,6 +104,7 @@ export default {
       error: {
         id: false,
         email: false,
+        nickname: false,
         password: false,
         confirmPassword: false,
       },
@@ -179,10 +183,10 @@ export default {
     },
 
     existId() {
-      axios.get('http://localhost:8080/auth/id', { params :{ id: this.signUpData.id }})
+      axios.get('https://i5a404.p.ssafy.io/api/auth/id', { params :{ id: this.signUpData.id }})
         .then(res => {
           console.log(res.data)
-          if ( this.signUpData.id === res.data && this.signUpData.id.length >= 6 ) {
+          if (res.data.data.errors && this.signUpData.id.length >= 6 ) {
             this.error.id = "아이디가 중복됩니다."
           }
         })
@@ -190,21 +194,21 @@ export default {
     },
 
     existNickname() {
-      axios.get('http://localhost:8080/auth/nickname', { params :{ nickname: this.signUpData.nickname }})
+      axios.get('https://i5a404.p.ssafy.io/api/auth/nickname', { params :{ nickName: this.signUpData.nickname }})
         .then(res => {
           console.log(res.data)
-          if ( this.signUpData.nickname === res.data && this.signUpData.nickname.length >= 6 ) {
+          if (res.data.data.errors && this.signUpData.nickname.length >= 6 ) {
             this.error.nickname = "닉네임이 중복됩니다."
-          }
+          }else this.error.nickname = false;
         })
         .catch(err => console.error(err))
     },
 
     existEmail() {
-      axios.get('http://localhost:8080/auth/email', { params :{ email: this.signUpData.email }})
+      axios.get('https://i5a404.p.ssafy.io/api/auth/email', { params :{ email: this.signUpData.email }})
         .then(res => {
           console.log(res.data)
-          if ( this.signUpData.email === res.data && this.signUpData.email.length >= 6 ) {
+          if (res.data.data.errors && this.signUpData.email.length >= 6 ) {
             this.error.email = "이메일이 중복됩니다."
           }
         })

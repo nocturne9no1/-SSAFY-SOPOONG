@@ -28,7 +28,7 @@ public class AuthController {
 	
 
 	@CrossOrigin(origins = { "*" })
-	@GetMapping("auth/login")
+	@GetMapping("api/auth/login")
 	@ApiOperation("로그인")
 	public ResponseEntity login(@RequestParam(required = true) final String id,
             @RequestParam(required = true) final String password) throws Exception {
@@ -38,7 +38,7 @@ public class AuthController {
 
 	}
 
-	@PostMapping("auth/register")
+	@PostMapping("api/auth/register")
 	@ApiOperation("회원가입")
 	public ResponseEntity join(@RequestBody SignupRequest requestUser) {
 		System.out.println(requestUser.toString());
@@ -46,21 +46,21 @@ public class AuthController {
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 	}
 	
-	@GetMapping("auth/id")
+	@GetMapping("api/auth/id")
 	@ApiOperation("아이디 중복 검사")
 	public ResponseEntity checkId(@RequestParam(required = true) final String id) throws Exception{
 		BaseMessage bm = authService.checkId(id);
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 	}
 	
-	@GetMapping("auth/email")
+	@GetMapping("api/auth/email")
 	@ApiOperation("이메일 중복 검사")
 	public ResponseEntity checkEmail(@RequestParam(required = true) final String email) throws Exception{
 		BaseMessage bm = authService.checkEmail(email);
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 	}
 	
-	@GetMapping("auth/nickname")
+	@GetMapping("api/auth/nickname")
 	@ApiOperation("닉네임 중복 검사")
 	public ResponseEntity checkNickname(@RequestParam(required = true) final String nickName) throws Exception{
 		BaseMessage bm = authService.checkNickname(nickName);
