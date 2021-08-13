@@ -182,7 +182,7 @@ export default {
       axios.get('https://i5a404.p.ssafy.io/api/auth/id', { params :{ id: this.signUpData.id }})
         .then(res => {
           console.log(res.data)
-          if ( this.signUpData.id === res.data.data.errors && this.signUpData.id.length >= 6 ) {
+          if (res.data.data.errors && this.signUpData.id.length >= 6 ) {
             this.error.id = "아이디가 중복됩니다."
           }
         })
@@ -193,7 +193,7 @@ export default {
       axios.get('https://i5a404.p.ssafy.io/api/auth/nickname', { params :{ nickName: this.signUpData.nickname }})
         .then(res => {
           console.log(res.data)
-          if ( this.signUpData.nickname === res.data.data.errors && this.signUpData.nickname.length >= 6 ) {
+          if (res.data.data.errors && this.signUpData.nickname.length >= 6 ) {
             this.error.nickname = "닉네임이 중복됩니다."
           }
         })
@@ -204,7 +204,7 @@ export default {
       axios.get('https://i5a404.p.ssafy.io/api/auth/email', { params :{ email: this.signUpData.email }})
         .then(res => {
           console.log(res.data)
-          if ( this.signUpData.email === res.data.data.errors && this.signUpData.email.length >= 6 ) {
+          if (res.data.data.errors && this.signUpData.email.length >= 6 ) {
             this.error.email = "이메일이 중복됩니다."
           }
         })
