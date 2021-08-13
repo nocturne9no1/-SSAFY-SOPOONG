@@ -29,39 +29,28 @@
       <button class="btn">Publish</button>
     </div>
 
-    <div v-show="isChoicePushed" class="photo-container">
-
+    <div v-if="isChoicePushed" class="side-window" v-click-outside="closeSideWindow">
+      <!-- 이부분에 이미지를 띄워준다. -->
+      <!-- <div v-for=""> -->
+        <!-- 이미지를 클릭 시에 대표사진으로 설정할 수 있게 한다. -->
+      <!-- </div> -->
     </div>
-
-    <input type="checkbox" id="sidewindow">
-    <div>
-      <label for="sidewindow" class="menu">ㅇ</label>
-    </div>
-
-    <div class="container">
-      asdf
-      <img src="" alt="">
-    </div>
-
-    <div class="sidewindow_content">
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-      </ul>
-      <label for="sidewindow"></label>
-    </div>
-    <label for="sidewindow"></label>
   </div>
 </template>
 
 <script>
 import '../components/css/completeform.scss'
+import vClickOutside from 'v-click-outside'
+
 
 export default {
   name:'completeForm',
   components: {},
+
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
+
   data() {
     return {
       sampleData: '',
@@ -83,6 +72,9 @@ export default {
     },
     clickChoice() {
       this.isChoicePushed = !this.isChoicePushed
+    },
+    closeSideWindow() {
+      this.isChoicePushed = false
     },
   }
 }
