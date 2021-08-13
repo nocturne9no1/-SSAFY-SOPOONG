@@ -82,14 +82,14 @@ export default {
         console.error(error);
       }
     },
-    // async getRandomImagesFromLocal() {
-    //   try {
-    //     const { default: localData } = await import('@/assets/test_data.json')
-    //     this.images = localData
-    //   } catch (err) {
-    //     console.error(err)
-    //   }
-    // }
+    async getRandomImagesFromLocal() {
+      try {
+        const { default: localData } = await import('@/assets/test_data.json')
+        this.images = localData
+      } catch (err) {
+        console.error(err)
+      }
+    }
   },
 };
 </script>
