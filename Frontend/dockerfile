@@ -4,9 +4,9 @@ WORKDIR /homepage
 
 COPY . .
 RUN npm install --no-optional --global npm
-RUN npm install vue --save --legacy-peer-deps
-RUN npm install -g @vue/cli
-RUN npm run build
+RUN npm install --global yarn
+RUN yarn install
+RUN yarn build
 
 
 FROM nginx:stable-alpine as production-stage
