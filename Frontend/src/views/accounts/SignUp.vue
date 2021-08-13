@@ -26,7 +26,10 @@
             type="text"
           />
         </div>
-
+        <div class="error-text" v-if="error.nickname">
+            {{ error.nickname }}
+        </div>
+        
         <div>
           <input
             v-model="signUpData.email"
@@ -101,6 +104,7 @@ export default {
       error: {
         id: false,
         email: false,
+        nickname: false,
         password: false,
         confirmPassword: false,
       },
@@ -195,7 +199,7 @@ export default {
           console.log(res.data)
           if (res.data.data.errors && this.signUpData.nickname.length >= 6 ) {
             this.error.nickname = "닉네임이 중복됩니다."
-          }
+          }else this.error.nickname = false;
         })
         .catch(err => console.error(err))
     },
