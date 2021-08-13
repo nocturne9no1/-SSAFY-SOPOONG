@@ -21,6 +21,7 @@ import com.sopoong.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 	
 	@Autowired

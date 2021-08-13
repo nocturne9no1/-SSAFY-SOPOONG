@@ -54,13 +54,10 @@ public class UserService {
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		if (updateUser.isPresent()) {
-			updateUser.ifPresent(selectUser->{
-				selectUser.setImage(request.getImage());
-				selectUser.setUserNickname(request.getUserNickname());
-				selectUser.setUserComment(request.getUserComment());
-				
-				userRepo.save(selectUser);
-			});
+			updateUser.get().setImage(request.getImage());
+			updateUser.get().setUserNickname(request.getUserNickname());
+			updateUser.get().setUserComment(request.getUserComment());
+			userRepo.save(updateUser.get());
 			
 			resultMap.put("success", "프로필 변경 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
@@ -77,11 +74,8 @@ public class UserService {
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		if (updateUser.isPresent()) {
-			updateUser.ifPresent(selectUser->{
-				selectUser.setUserPassword(passwordEncoder.encode(request.getChangedPassword()));
-				
-				userRepo.save(selectUser);
-			});
+			updateUser.get().setUserPassword(passwordEncoder.encode(request.getChangedPassword()));
+			userRepo.save(updateUser.get());
 			
 			resultMap.put("success", "비밀번호 변경 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
@@ -98,11 +92,8 @@ public class UserService {
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		if (updateUser.isPresent()) {
-			updateUser.ifPresent(selectUser->{
-				selectUser.setUserAlarm(request.getUserAlarm());
-				
-				userRepo.save(selectUser);
-			});
+			updateUser.get().setUserAlarm(request.getUserAlarm());
+			userRepo.save(updateUser.get());
 			
 			resultMap.put("success", "알람 범위 변경 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
@@ -119,11 +110,8 @@ public class UserService {
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		if (updateUser.isPresent()) {
-			updateUser.ifPresent(selectUser->{
-				selectUser.setUserIsVisible(request.getUserIsVisible());
-				
-				userRepo.save(selectUser);
-			});
+			updateUser.get().setUserIsVisible(request.getUserIsVisible());
+			userRepo.save(updateUser.get());
 			
 			resultMap.put("success", "계정 공개 범위 변경 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
@@ -141,9 +129,8 @@ public class UserService {
 
 		
 		if (deleteUser.isPresent()) {
-			deleteUser.ifPresent(selectUser->{
-				userRepo.delete(selectUser);
-			});
+			userRepo.delete(deleteUser.get());
+			
 			resultMap.put("success", "계정 삭제 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
