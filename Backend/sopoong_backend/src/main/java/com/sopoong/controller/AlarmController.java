@@ -14,7 +14,7 @@ import com.sopoong.service.AlarmService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-//@RequestMapping("/auth")
+@RequestMapping("/api")
 public class AlarmController {
 	
 	@Autowired
