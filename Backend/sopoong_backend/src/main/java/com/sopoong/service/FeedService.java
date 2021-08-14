@@ -47,7 +47,7 @@ public class FeedService {
 			userIds.add(followings.get(i).getRelationFollowed().getUserId());
 		}
 		
-		Page<Travel> travels = travelRepository.findByUser_UserIdIn(userIds, pageable);
+		Page<Travel> travels = travelRepository.findByUser_UserIdInAndTravelIsVisible(userIds, 1,pageable);
 		List<FeedDto> feeds = new ArrayList<>();
 		for(int i=0;i<travels.getContent().size();i++) {
 			feeds.add(new FeedDto(travels.getContent().get(i)));

@@ -10,6 +10,6 @@ import com.sopoong.model.entity.Travel;
 
 public interface TravelRepository extends JpaRepository<Travel, Long> {
 
-	Page<Travel> findByUser_UserIdIn(List<String> userIds, Pageable pageable);
+	Page<Travel> findByUser_UserIdInAndTravelIsVisible(List<String> userIds, int travelIsVisible, Pageable pageable);
 	
 }
