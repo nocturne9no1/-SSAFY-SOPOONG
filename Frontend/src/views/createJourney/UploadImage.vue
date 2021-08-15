@@ -79,6 +79,9 @@
     <!-- <div v-for="image in files" :key="image.file.name">
       <img :src="image.preview" alt="" style="width:200px;" />
     </div> -->
+    <div>
+      <button @click="onClickNextBtn">Next Step</button>
+    </div>
   </div>
 </template>
 
@@ -86,7 +89,8 @@
 import exifr from "exifr";
 
 export default {
-  name: "HelloWorld",
+  name: "UploadImage",
+
   data() {
     return {
       image: "",
@@ -127,7 +131,7 @@ export default {
 
         // EXIF
         var image = this.$refs.files.files[i];
-        var locData = new Array();
+        var position = new Array();
 
         // 스크린샷은 undefined로, exif 없는 경우 조회가 안되는 문제
         exifr.parse(image).then((output) => {
@@ -135,24 +139,24 @@ export default {
             console.log("I am in !", output.latitude);
             this.files[i].dateTime = image.lastModifiedDate
             if (output.latitude !== undefined) {
-              locData = {
-                latitude: output.latitude,
-                longitude: output.longitude,
+              position = {
+                lat: output.latitude,
+                lng: output.longitude,
               };
-              this.files[i].locData = locData;
-              locData = [];
+              this.files[i].position = position;
+              position = [];
             } else {
-              locData = {
-                latitude: 37.512126019029,
-                longitude: 127.04489721131,
+              position = {
+                lat: 37.512126019029,
+                lng: 127.04489721131,
               };
-              this.files[i].locData = locData;
-              locData = [];
+              this.files[i].position = position;
+              position = [];
             }
           } else {
-            locData = { latitude: 37.512126019029, longitude: 127.04489721131 };
-            this.files[i].locData = locData;
-            locData = [];
+            position = { lat: 37.512126019029, lng: 127.04489721131 };
+            this.files[i].position = position;
+            position = [];
           }
         });
         // 이미지 미리보기
@@ -185,32 +189,32 @@ export default {
 
         // EXIF
         var image = this.$refs.files.files[i];
-        var locData = new Array();
+        var position = new Array();
 
         exifr.parse(image).then((output) => {
           if (output) {
             console.log("I am in !", output.latitude);
             this.files[this.files.length - this.$refs.files.files.length + i].dateTime = this.files[this.files.length - this.$refs.files.files.length + i].file.lastModifiedDate
             if (output.latitude !== undefined) {
-              locData = {
-                latitude: output.latitude,
-                longitude: output.longitude,
+              position = {
+                lat: output.latitude,
+                lng: output.longitude,
               };
               // this.files.length-1 을 바꿔줘야함. 안그러면 계속 최고값 나옴
-              this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
-              locData = [];
+              this.files[ this.files.length - this.$refs.files.files.length + i].position = position;
+              position = [];
             } else {
-              locData = {
-                latitude: 37.512126019029,
-                longitude: 127.04489721131,
+              position = {
+                lat: 37.512126019029,
+                lng: 127.04489721131,
               };
-              this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
-              locData = [];
+              this.files[ this.files.length - this.$refs.files.files.length + i].position = position;
+              position = [];
             }
           } else {
-            locData = { latitude: 37.512126019029, longitude: 127.04489721131 };
-            this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
-            locData = [];
+            position = { lat: 37.512126019029, lng: 127.04489721131 };
+            this.files[ this.files.length - this.$refs.files.files.length + i].position = position;
+            position = [];
           }
         });
         // 이미지 미리보기
@@ -250,6 +254,12 @@ export default {
         );
         console.log("체크 안된경우 새로운 checkedData 배열!", this.checkedData);
       }
+    },
+
+    onClickNextBtn() {
+      console.log('asdf')
+      this.$emit('next-step')
+      this.$emit('upload-image', this.files)
     },
   },
 };

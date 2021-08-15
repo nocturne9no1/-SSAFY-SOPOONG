@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import PageNotFound from '../views/PageNotFound.vue'
+import CreateJourney from '../views/createJourney/CreateJourney.vue'
+
 
 // 없앨 예정
 import ModalToWriteJournal from '../components/journals/ModalToWriteJournal.vue'
@@ -31,6 +33,11 @@ const routes = [
     path: '/404',
     name: 'PageNotFound',
     component: PageNotFound
+  },
+  {
+    path: '/create',
+    name: 'CreateJourney',
+    component: CreateJourney
   },
 
   // 개발용 임시 router. 추후 삭제 예정
