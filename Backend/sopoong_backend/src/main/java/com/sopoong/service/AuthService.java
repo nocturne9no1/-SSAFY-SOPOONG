@@ -104,13 +104,15 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		Optional<User> userOpt = userRepository.findByUserId(id);
 		if(userOpt.isPresent()) {
-			userOpt.get().setAuthNumber(generAuthKey());
-			System.out.println(userOpt.get().getAuthNumber());
-			emailService.sendMail(userOpt.get());
-			userRepository.save(userOpt.get());
-			resultMap.put("success", "이메일 보내기 완료");
-		}else if(userOpt.get().getAuthNumber().equals("AUTH")) {
-			resultMap.put("errors", "이미 인증된 아이디");
+			if(userOpt.get().getAuthNumber().endsWith("AUTH")) {
+				userOpt.get().setAuthNumber(generAuthKey());
+				System.out.println(userOpt.get().getAuthNumber());
+				emailService.sendMail(userOpt.get());
+				userRepository.save(userOpt.get());
+				resultMap.put("success", "이메일 보내기 완료");
+			}else {
+				resultMap.put("errors", "이미 인증된 아이디");
+			}
 		}else {
 			resultMap.put("errors", "존재하지 않는 아이디"); 
 		}
@@ -147,7 +149,9 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		Optional<User> userOpt = userRepository.findByUserId(confirmRequest.getId());
 		if(userOpt.isPresent()) {
-			if(userOpt.get().getAuthNumber().equals(confirmRequest.getAuthNumber())){
+			if(userOpt.get().getAuthNumber().equals("AUTH")) {
+				resultMap.put("errors", "이미 인증된 사용자");
+			}else if(userOpt.get().getAuthNumber().equals(confirmRequest.getAuthNumber())){
 				userOpt.get().setAuthNumber("AUTH");
 				userRepository.save(userOpt.get());
 				resultMap.put("sucess", "인증 성공");
