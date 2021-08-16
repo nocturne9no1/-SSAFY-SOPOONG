@@ -3,6 +3,7 @@ package com.sopoong.service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
+import com.sopoong.model.dto.ConfirmRequest;
 import com.sopoong.model.dto.SignupRequest;
 import com.sopoong.model.entity.User;
 import com.sopoong.repository.UserRepository;
@@ -28,6 +30,10 @@ public class AuthService {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
+	
+	@Autowired
+	private EmailService emailService;
+	
 	@Transactional
 	public BaseMessage joinUser(SignupRequest requestUser) {
 		Map<String,Object> resultMap = new HashMap<>();
@@ -51,6 +57,10 @@ public class AuthService {
 		}
 		if (!passwordEncoder.matches(password, member.get().getUserPassword())) {
 			resultMap.put("errors","비밀번호 틀림");
+			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
+		}
+		if(!member.get().getAuthNumber().equals("AUTH")) {
+			resultMap.put("errors", "인증못받은 사용자");
 			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
 		}
 		resultMap.put("seccess", jwtTokenProvider.createToken(member.get().getUserId()));
@@ -90,4 +100,67 @@ public class AuthService {
 		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 	
+	public BaseMessage sendEmail(String id) {
+		Map<String,Object> resultMap = new HashMap<>();
+		Optional<User> userOpt = userRepository.findByUserId(id);
+		if(userOpt.isPresent()) {
+			if(userOpt.get().getAuthNumber().endsWith("AUTH")) {
+				userOpt.get().setAuthNumber(generAuthKey());
+				System.out.println(userOpt.get().getAuthNumber());
+				emailService.sendMail(userOpt.get());
+				userRepository.save(userOpt.get());
+				resultMap.put("success", "이메일 보내기 완료");
+			}else {
+				resultMap.put("errors", "이미 인증된 아이디");
+			}
+		}else {
+			resultMap.put("errors", "존재하지 않는 아이디"); 
+		}
+		
+		
+		return new BaseMessage(HttpStatus.OK,resultMap);
+	}
+	//인증키 만들기 8글자
+	public String generAuthKey() {
+		StringBuffer temp = new StringBuffer();
+		Random rnd = new Random();
+		for (int i = 0; i < 8; i++) {
+		    int rIndex = rnd.nextInt(3);
+		    switch (rIndex) {
+		    case 0:
+		        // a-z
+		        temp.append((char) ((int) (rnd.nextInt(26)) + 97));
+		        break;
+		    case 1:
+		        // A-Z
+		        temp.append((char) ((int) (rnd.nextInt(26)) + 65));
+		        break;
+		    case 2:
+		        // 0-9
+		        temp.append((rnd.nextInt(10)));
+		        break;
+		    }
+		}
+		
+		return temp.toString();
+	}
+
+	public BaseMessage confirm(ConfirmRequest confirmRequest) {
+		Map<String,Object> resultMap = new HashMap<>();
+		Optional<User> userOpt = userRepository.findByUserId(confirmRequest.getId());
+		if(userOpt.isPresent()) {
+			if(userOpt.get().getAuthNumber().equals("AUTH")) {
+				resultMap.put("errors", "이미 인증된 사용자");
+			}else if(userOpt.get().getAuthNumber().equals(confirmRequest.getAuthNumber())){
+				userOpt.get().setAuthNumber("AUTH");
+				userRepository.save(userOpt.get());
+				resultMap.put("sucess", "인증 성공");
+			}else {
+				resultMap.put("errors", "인증번호 실패");
+			}
+		}else {
+			resultMap.put("errors", "아이디 조회 실패");
+		}
+		return new BaseMessage(HttpStatus.OK,resultMap);
+	}
 }

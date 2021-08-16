@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sopoong.common.BaseMessage;
+import com.sopoong.model.dto.ConfirmRequest;
+import com.sopoong.model.dto.EmailRequest;
 import com.sopoong.model.dto.SignupRequest;
 import com.sopoong.service.AuthService;
 
@@ -64,6 +66,20 @@ public class AuthController {
 	@ApiOperation("닉네임 중복 검사")
 	public ResponseEntity checkNickname(@RequestParam(required = true) final String nickName) throws Exception{
 		BaseMessage bm = authService.checkNickname(nickName);
+		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
+	}
+	
+	@PostMapping("api/auth/email")
+	@ApiOperation("이메일 전송하기")
+	public ResponseEntity sendEmail(@RequestBody final EmailRequest emailRequest) throws Exception{
+		BaseMessage bm = authService.sendEmail(emailRequest.getId());
+		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
+	}
+	
+	@PostMapping("api/auth/confirm")
+	@ApiOperation("인증하기")
+	public ResponseEntity confirm(@RequestBody final ConfirmRequest confirmRequest) throws Exception{
+		BaseMessage bm = authService.confirm(confirmRequest);
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 	}
 }
