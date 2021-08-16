@@ -8,14 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sopoong.common.BaseMessage;
+import com.sopoong.model.dto.ConfirmIdRequest;
 import com.sopoong.model.dto.ConfirmRequest;
 import com.sopoong.model.dto.EmailRequest;
+import com.sopoong.model.dto.FindIdRequest;
+import com.sopoong.model.dto.FindPasswordRequest;
 import com.sopoong.model.dto.SignupRequest;
 import com.sopoong.service.AuthService;
 
@@ -77,10 +81,31 @@ public class AuthController {
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 	}
 	
-	@PostMapping("api/auth/confirm")
+	@PostMapping("api/auth/confirm/account")
 	@ApiOperation("인증하기")
 	public ResponseEntity confirm(@RequestBody final ConfirmRequest confirmRequest) throws Exception{
 		BaseMessage bm = authService.confirm(confirmRequest);
+		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
+	}
+	
+	@PostMapping("api/auth/find/id")
+	@ApiOperation("아이디 찾기")
+	public ResponseEntity sendFindIdMail(@RequestBody final FindIdRequest findIdRequest) throws Exception{
+		BaseMessage bm = authService.sendFindIdMail(findIdRequest);
+		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
+	}
+	
+	@PostMapping("api/auth/confirm/id")
+	@ApiOperation("아이디 찾기 인증하기")
+	public ResponseEntity confirmFindId(@RequestBody final ConfirmIdRequest confirmIdRequest) throws Exception{
+		BaseMessage bm = authService.confirmFindId(confirmIdRequest);
+		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
+	}
+	
+	@PatchMapping("api/auth/find/password")
+	@ApiOperation("비밀번호 변경하기")
+	public ResponseEntity changePassword(@RequestBody final FindPasswordRequest findPasswordRequest) throws Exception{
+		BaseMessage bm = authService.changePassword(findPasswordRequest);
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 	}
 }

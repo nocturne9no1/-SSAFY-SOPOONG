@@ -15,7 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
+import com.sopoong.model.dto.ConfirmIdRequest;
 import com.sopoong.model.dto.ConfirmRequest;
+import com.sopoong.model.dto.FindIdRequest;
+import com.sopoong.model.dto.FindPasswordRequest;
 import com.sopoong.model.dto.SignupRequest;
 import com.sopoong.model.entity.User;
 import com.sopoong.repository.UserRepository;
@@ -104,7 +107,7 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		Optional<User> userOpt = userRepository.findByUserId(id);
 		if(userOpt.isPresent()) {
-			if(userOpt.get().getAuthNumber() == null || !userOpt.get().getAuthNumber().equals("AUTH")) {
+			if(userOpt.get().getAuthNumber() == null || !userOpt.get().getAuthNumber().contains("AUTH")) {
 				userOpt.get().setAuthNumber(generAuthKey());
 				System.out.println(userOpt.get().getAuthNumber());
 				emailService.sendMail(userOpt.get());
@@ -149,15 +152,70 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		Optional<User> userOpt = userRepository.findByUserId(confirmRequest.getId());
 		if(userOpt.isPresent()) {
-			if(userOpt.get().getAuthNumber().equals("AUTH")) {
+			if(userOpt.get().getAuthNumber().contains("AUTH")) {
 				resultMap.put("errors", "이미 인증된 사용자");
 			}else if(userOpt.get().getAuthNumber().equals(confirmRequest.getAuthNumber())){
 				userOpt.get().setAuthNumber("AUTH");
 				userRepository.save(userOpt.get());
+				emailService.sendMail(userOpt.get());
 				resultMap.put("sucess", "인증 성공");
 			}else {
 				resultMap.put("errors", "인증번호 실패");
 			}
+		}else {
+			resultMap.put("errors", "아이디 조회 실패");
+		}
+		return new BaseMessage(HttpStatus.OK,resultMap);
+	}
+	
+	public BaseMessage sendFindIdMail(FindIdRequest findIdRequest) {
+		Map<String,Object> resultMap = new HashMap<>();
+		Optional<User> userOpt=  userRepository.findByUserEmail(findIdRequest.getEmail());
+		if(userOpt.isPresent()) {
+			if(userOpt.get().getAuthNumber()==null || !userOpt.get().getAuthNumber().contains("AUTH")) {
+				resultMap.put("errors", "인증받지 않은 사용자");
+			}else if(userOpt.get().getAuthNumber().contains("AUTH")) {
+				//인증받은 사용자
+				userOpt.get().setAuthNumber("AUTH&"+generAuthKey());
+				userRepository.save(userOpt.get());
+				emailService.sendFindIdMail(userOpt.get());
+				resultMap.put("success", "메일보내기 성공");
+			}
+		}else {
+			resultMap.put("errors", "이메일 조회 실패");
+		}
+		return new BaseMessage(HttpStatus.OK,resultMap);
+	}
+
+	public BaseMessage confirmFindId(ConfirmIdRequest confirmIdRequest) {
+		Map<String,Object> resultMap = new HashMap<>();
+		Optional<User> userOpt=  userRepository.findByUserEmail(confirmIdRequest.getEmail());
+		if(userOpt.isPresent()) {
+			if(userOpt.get().getAuthNumber()==null || !userOpt.get().getAuthNumber().contains("AUTH")) {
+				resultMap.put("errors", "인증받지 않은 사용자");
+			}else if(userOpt.get().getAuthNumber().contains("AUTH")) {
+				//인증받은 사용자
+				if(userOpt.get().getAuthNumber().substring(5).equals(confirmIdRequest.getAuthNumber())) {
+					userOpt.get().setAuthNumber("AUTH");
+					userRepository.save(userOpt.get());
+					resultMap.put("success", userOpt.get().getUserId());
+				}else {
+					resultMap.put("errors", "인증번호 실패");
+				}
+			}
+		}else {
+			resultMap.put("errors", "이메일 조회 실패");
+		}
+		return new BaseMessage(HttpStatus.OK,resultMap);
+	}
+	
+	public BaseMessage changePassword(FindPasswordRequest findPasswordRequest) {
+		Map<String,Object> resultMap = new HashMap<>();
+		Optional<User> userOpt=  userRepository.findByUserId(findPasswordRequest.getId());
+		if(userOpt.isPresent()) {
+			userOpt.get().setUserPassword(passwordEncoder.encode(findPasswordRequest.getPassword()));
+			userRepository.save(userOpt.get());
+			resultMap.put("success", "비밀번호 변경 완료");
 		}else {
 			resultMap.put("errors", "아이디 조회 실패");
 		}

@@ -30,4 +30,14 @@ public class EmailService {
 		
 		javaMailSender.send(message);
 	}
+	
+	public void sendFindIdMail(User user) throws MailException{
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(user.getUserEmail());
+	    message.setFrom("Sopoong");
+		message.setSubject("Sopoong 아이디 찾기 인증");
+		message.setText("인증번호 : " +user.getAuthNumber().substring(5));
+		
+		javaMailSender.send(message);
+	}
 }
