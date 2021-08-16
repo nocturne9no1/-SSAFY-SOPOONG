@@ -3,6 +3,7 @@ package com.sopoong.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -56,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.csrf().disable().cors().disable().authorizeRequests().antMatchers("/api/auth/**", "/v2/api-docs", 
                 "/swagger-resources/**",  
                 "/swagger-ui.html", 
-                "/webjars/**").permitAll().
+                "/webjars/**").permitAll().antMatchers(HttpMethod.OPTIONS,"/api/auth/**").permitAll().
         anyRequest().authenticated().and().exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
         and().addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter.class);
