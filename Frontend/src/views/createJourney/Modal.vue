@@ -7,7 +7,7 @@
     <!-- 글 작성 부분 -->
     <div class="text">
       <!-- 제목 -->
-      <input type="text" placeholder="Title">
+      <input v-model="this.nowPlace.title" type="text" placeholder="Title">
       <!-- 대분류 -->
       <fieldset class="category">
         <legend>Category</legend>
@@ -21,7 +21,7 @@
         <div class="sub-category">
           <div v-if="whichCategory === 'hotel'" class="select">
             <label for="hotel"></label>
-            <select name="hotel-category" id="hotel" @change="onSubCategoryChange($event)">
+            <select v-model="subCategory" name="hotel-category" id="hotel" @change="onSubCategoryChange($event)">
               <option selected="" hidden="" value="">Where</option>
               <option value="Hotel">Hotel</option>
               <option value="Guest House">Guest House</option>
@@ -33,7 +33,7 @@
           </div>
           <div v-else-if="whichCategory === 'res'" class="select" @change="onSubCategoryChange($event)">
             <label for="res"></label>
-            <select name="res-category" id="res">
+            <select v-model="subCategory" name="res-category" id="res">
               <option selected="" hidden="" value="">어떤 식당?</option>
               <option value="Food">Food</option>
               <option value="Cafe">Cafe</option>
@@ -43,7 +43,7 @@
           </div>
           <div v-else-if="whichCategory === 'activity'" class="select" @change="onSubCategoryChange($event)">
             <label for="activity"></label>
-            <select name="activity-category" id="activity">
+            <select v-model="subCategory" name="activity-category" id="activity">
               <option selected="" hidden="">어떤 활동?</option>
               <option value="Visit">Visit</option>
               <option value="Shopping">Shopping</option>
@@ -68,7 +68,7 @@
         <div class="nothing" :class="{'hotel': categoryBind['hotel'], 'res' : categoryBind['res'], 'activity' : categoryBind['activity']}">
           <div class="transport-icons">
             <span :class="{'active': transport.plane }" @click="selectTransport('plane')"><i class="fas fa-2x fa-plane"></i></span>
-            <span :class="{'active': transport.subway }" @click="selectTransport('subway')"><i class="fas fa-2x fa-subway"></i></span>
+            <span :class="{'active': transport.train }" @click="selectTransport('train')"><i class="fas fa-2x fa-subway"></i></span>
             <span :class="{'active': transport.bus }" @click="selectTransport('bus')"><i class="fas fa-2x fa-bus"></i></span>
             <span :class="{'active': transport.car }" @click="selectTransport('car')"><i class="fas fa-2x fa-car"></i></span>
             <span :class="{'active': transport.walking }" @click="selectTransport('walking')"><i class="fas fa-2x fa-walking"></i></span>
@@ -82,7 +82,7 @@
         <div class="nothing" :class="{'hotel': categoryBind['hotel'], 'res' : categoryBind['res'], 'activity' : categoryBind['activity']}">
           <div class="transport-icons">
             <span :class="{'active': transport.plane }" @click="selectTransport('plane')"><i class="fas fa-2x fa-plane"></i></span>
-            <span :class="{'active': transport.subway }" @click="selectTransport('subway')"><i class="fas fa-2x fa-subway"></i></span>
+            <span :class="{'active': transport.train }" @click="selectTransport('train')"><i class="fas fa-2x fa-subway"></i></span>
             <span :class="{'active': transport.bus }" @click="selectTransport('bus')"><i class="fas fa-2x fa-bus"></i></span>
             <span :class="{'active': transport.car }" @click="selectTransport('car')"><i class="fas fa-2x fa-car"></i></span>
             <span :class="{'active': transport.walking }" @click="selectTransport('walking')"><i class="fas fa-2x fa-walking"></i></span>
@@ -96,7 +96,7 @@
         <div class="nothing" :class="{'hotel': categoryBind['hotel'], 'res' : categoryBind['res'], 'activity' : categoryBind['activity']}">
           <div class="transport-icons">
             <span :class="{'active': transport.plane }" @click="selectTransport('plane')"><i class="fas fa-2x fa-plane"></i></span>
-            <span :class="{'active': transport.subway }" @click="selectTransport('subway')"><i class="fas fa-2x fa-subway"></i></span>
+            <span :class="{'active': transport.train }" @click="selectTransport('train')"><i class="fas fa-2x fa-subway"></i></span>
             <span :class="{'active': transport.bus }" @click="selectTransport('bus')"><i class="fas fa-2x fa-bus"></i></span>
             <span :class="{'active': transport.car }" @click="selectTransport('car')"><i class="fas fa-2x fa-car"></i></span>
             <span :class="{'active': transport.walking }" @click="selectTransport('walking')"><i class="fas fa-2x fa-walking"></i></span>
@@ -344,6 +344,8 @@
 
 
 <script>
+
+import '../../components/css/createJourney/createplace.scss'
 import vClickOutside from 'v-click-outside'
 
 export default {
@@ -379,6 +381,9 @@ export default {
         car: false,
         walking: false,
       },
+
+      subCategory: '',
+
     }
   },
 
@@ -401,6 +406,9 @@ export default {
     for (let each in this.transport) {
       if ( each === this.nowPlace.transport ) { this.transport[each] = true }
     }
+
+    // 이전에 고른 sub category
+    this.subCategory = this.nowPlace.category.sub
   }, 
   beforeMount() {}, 
   mounted() {}, 
@@ -465,7 +473,7 @@ export default {
 
     nowImage() {
       
-      return URL.createObjectURL(this.nowPlace.fileList[0])
+      return URL.createObjectURL(this.nowPlace.imageList[0].file)
       // return console.log(this.nowPlace.fileList[0])
     },
 

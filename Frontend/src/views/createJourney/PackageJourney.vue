@@ -26,7 +26,7 @@
       </div>
       <p></p>
 
-      <button class="btn">Publish</button>
+      <button @click="onTrans" class="btn">Publish</button>
     </div>
 
     <div v-if="isChoicePushed" class="side-window" v-click-outside="closeSideWindow">
@@ -42,7 +42,7 @@
 <script>
 import '../../components/css/createJourney/packagejourney.scss'
 import vClickOutside from 'v-click-outside'
-
+import axios from 'axios'
 
 export default {
   name:'completeForm',
@@ -102,15 +102,23 @@ export default {
       this.travel.travelLat = image.position.lat
       this.travel.travelLng = image.position.lng
       for ( let idx in this.travel.placeList ) {
-        for ( let each in this.travel.placeList[idx].fileList ) {
-          console.log(this.travel.placeList[idx].fileList[each].file)
+        for ( let each in this.travel.placeList[idx].imageList ) {
+          console.log(this.travel.placeList[idx].imageList[each].file)
           console.log(image)
-          if ( this.travel.placeList[idx].fileList[each].file == image.file ) {
+          if ( this.travel.placeList[idx].imageList[each].file == image.file ) {
             console.log('여기까진 ㅇㅋ')
-            this.travel.placeList[idx].fileList[each].isTravelLeader = true
+            this.travel.placeList[idx].imageList[each].isTravelLeader = true
           }
         }
       }
+    },
+
+    onTrans() {
+      axios.post('http://localhost:8080/auth/travel/create', this.travel)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => console.log(err))
     },
 
   }

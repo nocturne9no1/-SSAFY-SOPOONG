@@ -16,6 +16,12 @@
   $body: 'Roboto', sans-serif;
 
   .google-map {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translateX(-50%) translateY(-50%);
+
     width: 1280px;
     height: 900px;
   }
@@ -104,7 +110,9 @@
         width: 80%;
         border: 1px solid $aqua;
         border-radius: 5px;
-      
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         .category-btns {
             button {
               width: 100px;
@@ -136,8 +144,8 @@
             /* Personalize */
             flex: 1;
             padding: 0 1em;
-            color: black;
-            background-color: #2c3e50;
+            color: white;
+            background-color: #d6cfa0;
             background-image: none;
             cursor: pointer;
           }
@@ -149,17 +157,18 @@
           .select {
             position: relative;
             display: flex;
-            width: 20em;
-            height: 3em;
+            margin-top: 10px;
+            width: 19em;
+            height: 2em;
             border-radius: .25em;
             overflow: hidden;
             &::after {
               content: '\25BC';
               position: absolute;
-              top: 0;
               right: 0;
               padding: 1em;
-              background-color: #34495e;
+              padding-top: 0.3em;
+              background-color: #d6cfa0;
               transition: .25s all ease;
               pointer-events: none;
             }
@@ -169,6 +178,7 @@
           }
         }
       }
+
       .transport {
         width: 80%;
         border: 1px solid $aqua;

@@ -69,6 +69,7 @@ export default {
   watch: {
     // 새로운 이미지 업로드 될 시마다 marker 정보 생성
     images: function () {
+      // 아마 업로드 시마다 시간 순 정렬을 해줘야 할 듯함
       // images 배열에서 각 image 에 대한 marker 정보 생성
       for (let image of this.images) {
         console.log('hi')
@@ -100,13 +101,14 @@ export default {
         eachImage.isTravelLeader = false
         eachImage.preview = image.preview
         eachImage.dateTime = image.dateTime
-        marker.fileList = [
+        marker.imageList = [
           eachImage
         ]
 
         marker.imageNum = image.number
 
         this.travel.placeList.push(marker)
+
       }
     }
 

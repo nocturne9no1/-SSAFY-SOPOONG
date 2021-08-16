@@ -2,8 +2,9 @@
   <div class="pintest">
     <GmapMap
         ref="mapRef"
-        :center="center"
-        :zoom="2"
+        :center="travel.placeList[0].position"
+        :zoom="14"
+        :options="options"
         class="google-map"
     >
       <div v-for="(nowPlace, idx) in travel.placeList" :key="idx">
@@ -51,8 +52,13 @@
         @click="clickBasicPin"
       /> -->
 
-      <!-- polyline prototype -->
-      <gmap-polyline v-bind:path.sync="path" v-bind:options="{ strokeColor:'#008000'}"/>
+      <!-- polyline component -->
+      <div v-for="(eachPath, idx) in paths" :key="idx">
+        <EachPolyline
+          :eachPath="eachPath"
+        />
+      </div>
+      <gmap-polyline v-bind:path.sync="path" v-bind:options="{ strokeColor:'#000000'}"/> 
     </GmapMap>
 
 
@@ -71,7 +77,7 @@
 
 
     <!-- Button to go to next step -->
-    <div>
+    <div style="position: absolute; top: 10%;">
       <button @click="onClickNextBtn">Next Step</button>
     </div>
   </div>
@@ -83,11 +89,13 @@ import Vue from 'vue'
 import '../../components/css/createJourney/createplace.scss'
 import vClickOutside from 'v-click-outside'
 import Modal from './Modal.vue'
+import EachPolyline from '../../components/createJourney/Polyline.vue'
 
 Vue.use(VueGoogleMaps, {
   load: {
     key: "AIzaSyBwPv3o2CKXGTbC5qPIjTCdU5F1ToEExio",
     libraries: "places",
+    map_id: '6d451fecd5c294f9',
   }
 })
 
@@ -101,7 +109,7 @@ export default {
   },
 
   components: {
-    Modal,
+    Modal, EachPolyline,
   },
 
   directives: {
@@ -114,7 +122,9 @@ export default {
         lat: 37.5,
         lng: 127,
       },
-
+      options : {
+        mapId: "6d451fecd5c294f9"
+      },
       // icon 모음
       icons:  {
         basic: {
@@ -168,12 +178,13 @@ export default {
       // 어떤 카테고리 골랐는지
       whichCategory: '',
       // polyline test
-      path: [
+      paths: [
             // {lat: 55.9352001, lng: -4.7766924 },
             // {lat: 55.9358131, lng: -4.7770143 },
             // {lat: 55.9361256, lng: -4.7767353 },
             // {lat: 37.9366784, lng: -4.7739458 }
       ],
+      path: [],
       category: {
         main: '',
         sub: '',
@@ -199,7 +210,29 @@ export default {
       position.lng = image.position.lng
       this.path.push(position)
     }
+
   },
+
+  // mounted() {
+  //   for (let i = 0; i < this.travel.placeList.length - 1; i++ ) {
+  //     const forPath = new Object()
+  //     const position = new Array()
+  //     position.push(this.travel.placeList[i].position)
+  //     position.push(this.travel.placeList[i + 1].position)
+  //     forPath.position = position
+  //     forPath.transport = ''
+  //     console.log(forPath)
+  //     this.paths.push(forPath)
+  //     console.log(this.paths)
+  //   }
+  // },
+  // watch: {
+  //   travel: function() {
+  //     for (let i=0; i<travel.placeList.length() - 1; i++) {
+        
+  //     }
+  //   },
+  // },
 
   methods: {
     openModal(nowPlace) {
