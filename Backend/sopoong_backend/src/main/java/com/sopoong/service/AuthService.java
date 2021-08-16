@@ -104,7 +104,7 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		Optional<User> userOpt = userRepository.findByUserId(id);
 		if(userOpt.isPresent()) {
-			if(userOpt.get().getAuthNumber().endsWith("AUTH")) {
+			if(userOpt.get().getAuthNumber() == null || !userOpt.get().getAuthNumber().equals("AUTH")) {
 				userOpt.get().setAuthNumber(generAuthKey());
 				System.out.println(userOpt.get().getAuthNumber());
 				emailService.sendMail(userOpt.get());
