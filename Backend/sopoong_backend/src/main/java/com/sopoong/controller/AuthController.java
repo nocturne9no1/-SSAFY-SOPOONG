@@ -72,6 +72,7 @@ public class AuthController {
 	@PostMapping("api/auth/email")
 	@ApiOperation("이메일 전송하기")
 	public ResponseEntity sendEmail(@RequestBody final EmailRequest emailRequest) throws Exception{
+		logger.info("LOGGGGGGG + " + emailRequest.getId());
 		BaseMessage bm = authService.sendEmail(emailRequest.getId());
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 	}
