@@ -3,9 +3,9 @@
     <div class="form-box">
       <h1>PACKAGING</h1>
       <h2>Title</h2>
-      <input v-model="travel.title" type="text" placeholder=" title">
+      <input v-model="travel.travelTitle" type="text" placeholder=" title">
       <h2>Comment</h2>
-      <textarea v-model="travel.comment" class="text-box" name="" id="" rows="5" placeholder="content"></textarea>
+      <textarea v-model="travel.travelContent" class="text-box" name="" id="" rows="5" placeholder="content"></textarea>
       <p></p>
       <h2>대표사진 고르기</h2>
       <button @click="clickChoice">사진고르기</button>
@@ -31,9 +31,9 @@
 
     <div v-if="isChoicePushed" class="side-window" v-click-outside="closeSideWindow">
       <!-- 이부분에 이미지를 띄워준다. -->
-      <div v-for="(image, idx) in images" :key="idx">
+      <div v-for="(image, idx) in images" :key="idx" class="image-box">
         <!-- 이미지를 클릭 시에 대표사진으로 설정할 수 있게 한다. -->
-        <img :src="renderImage(image)" alt="">
+        <img @click="setMainImage(image)" :src="image.preview" alt="">
       </div>
     </div>
   </div>
@@ -60,14 +60,18 @@ export default {
   data() {
     return {
       sampleData: '',
-      publicSetting: false,
+      publicSetting: true,
       isChoicePushed: false,
+      imageList: new Array(),
     };
   },
   beforeCreate() {},
-  created() {}, 
+  created() {
+  }, 
   beforeMount() {}, 
-  mounted() {}, 
+  mounted() {
+
+  }, 
   beforeUpdate() {},
   updated() {},
   beforeUnmount() {}, 
@@ -82,13 +86,34 @@ export default {
   methods: {
     toggle() {
       this.publicSetting = !this.publicSetting
+      this.travel.travelIsVisible = !this.travel.travelIsVisible
     },
+
     clickChoice() {
       this.isChoicePushed = !this.isChoicePushed
     },
+
     closeSideWindow() {
       this.isChoicePushed = false
     },
+
+    setMainImage(image) {
+      this.travel.mainImage = image
+      this.travel.travelLat = image.position.lat
+      this.travel.travelLng = image.position.lng
+      for ( let idx in this.travel.placeList ) {
+        for ( let each in this.travel.placeList[idx].fileList ) {
+          console.log(this.travel.placeList[idx].fileList[each].file)
+          console.log(image)
+          if ( this.travel.placeList[idx].fileList[each].file == image.file ) {
+            console.log('여기까진 ㅇㅋ')
+            this.travel.placeList[idx].fileList[each].isTravelLeader = true
+          }
+        }
+      }
+    },
+
   }
+
 }
 </script>

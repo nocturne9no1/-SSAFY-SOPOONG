@@ -1,7 +1,7 @@
 <template>
   <div class="modal-body" v-click-outside="closeModal">
     <div class="image">
-      <img src="https://picsum.photos/300/500" alt="" class="pic">
+      <img :src="nowImage" alt="" class="pic">
     </div>
 
     <!-- 글 작성 부분 -->
@@ -63,15 +63,57 @@
       
 
       <!-- 이동수단 -->
-      <fieldset class="transport">
+      <fieldset class="transport" v-if="categoryBind['hotel']">
         <legend>transport</legend>
         <div class="nothing" :class="{'hotel': categoryBind['hotel'], 'res' : categoryBind['res'], 'activity' : categoryBind['activity']}">
           <div class="transport-icons">
-            <span @click="selectTransport('plane')"><i class="fas fa-2x fa-plane"></i></span>
-            <span @click="selectTransport('subway')"><i class="fas fa-2x fa-subway"></i></span>
-            <span @click="selectTransport('bus')"><i class="fas fa-2x fa-bus"></i></span>
-            <span @click="selectTransport('car')"><i class="fas fa-2x fa-car"></i></span>
-            <span @click="selectTransport('walking')"><i class="fas fa-2x fa-walking"></i></span>
+            <span :class="{'active': transport.plane }" @click="selectTransport('plane')"><i class="fas fa-2x fa-plane"></i></span>
+            <span :class="{'active': transport.subway }" @click="selectTransport('subway')"><i class="fas fa-2x fa-subway"></i></span>
+            <span :class="{'active': transport.bus }" @click="selectTransport('bus')"><i class="fas fa-2x fa-bus"></i></span>
+            <span :class="{'active': transport.car }" @click="selectTransport('car')"><i class="fas fa-2x fa-car"></i></span>
+            <span :class="{'active': transport.walking }" @click="selectTransport('walking')"><i class="fas fa-2x fa-walking"></i></span>
+          </div>
+        </div>
+      </fieldset>
+
+      
+      <fieldset class="transport" v-else-if="categoryBind['res']">
+        <legend>transport</legend>
+        <div class="nothing" :class="{'hotel': categoryBind['hotel'], 'res' : categoryBind['res'], 'activity' : categoryBind['activity']}">
+          <div class="transport-icons">
+            <span :class="{'active': transport.plane }" @click="selectTransport('plane')"><i class="fas fa-2x fa-plane"></i></span>
+            <span :class="{'active': transport.subway }" @click="selectTransport('subway')"><i class="fas fa-2x fa-subway"></i></span>
+            <span :class="{'active': transport.bus }" @click="selectTransport('bus')"><i class="fas fa-2x fa-bus"></i></span>
+            <span :class="{'active': transport.car }" @click="selectTransport('car')"><i class="fas fa-2x fa-car"></i></span>
+            <span :class="{'active': transport.walking }" @click="selectTransport('walking')"><i class="fas fa-2x fa-walking"></i></span>
+          </div>
+        </div>
+      </fieldset>
+
+      
+      <fieldset class="transport" v-else-if="categoryBind['activity']">
+        <legend>transport</legend>
+        <div class="nothing" :class="{'hotel': categoryBind['hotel'], 'res' : categoryBind['res'], 'activity' : categoryBind['activity']}">
+          <div class="transport-icons">
+            <span :class="{'active': transport.plane }" @click="selectTransport('plane')"><i class="fas fa-2x fa-plane"></i></span>
+            <span :class="{'active': transport.subway }" @click="selectTransport('subway')"><i class="fas fa-2x fa-subway"></i></span>
+            <span :class="{'active': transport.bus }" @click="selectTransport('bus')"><i class="fas fa-2x fa-bus"></i></span>
+            <span :class="{'active': transport.car }" @click="selectTransport('car')"><i class="fas fa-2x fa-car"></i></span>
+            <span :class="{'active': transport.walking }" @click="selectTransport('walking')"><i class="fas fa-2x fa-walking"></i></span>
+          </div>
+        </div>
+      </fieldset>
+
+      
+      <fieldset class="transport" v-else>
+        <legend>transport</legend>
+        <div class="nothing" :class="{'hotel': categoryBind['hotel'], 'res' : categoryBind['res'], 'activity' : categoryBind['activity']}">
+          <div class="transport-icons">
+            <span><i class="fas fa-2x fa-plane"></i></span>
+            <span><i class="fas fa-2x fa-subway"></i></span>
+            <span><i class="fas fa-2x fa-bus"></i></span>
+            <span><i class="fas fa-2x fa-car"></i></span>
+            <span><i class="fas fa-2x fa-walking"></i></span>
           </div>
         </div>
       </fieldset>
@@ -106,9 +148,9 @@
             </div>
 
             <div class="rating-system">
-              <class class="rate-name">
+              <div class="rate-name">
                 <h3>서비스</h3>
-              </class>
+              </div>
               <div class="bars" id="rate2">
                 <input v-model="rate2" value="5" type="radio" name='rate2' :id="rate2star5" />
                 <label @click="rate('rate2', 5)" :for="rate2star5"></label>
@@ -182,9 +224,9 @@
             </div>
 
             <div class="rating-system">
-              <class class="rate-name">
+              <div class="rate-name">
                 <h3>서비스</h3>
-              </class>
+              </div>
               <div class="bars" id="rate2">
                 <input v-model="rate2" value="5" type="radio" name='rate2' :id="rate2star5" />
                 <label @click="rate('rate2', 5)" :for="rate2star5"></label>
@@ -258,9 +300,9 @@
               </div>
 
             <div class="rating-system">
-              <class class="rate-name">
+              <div class="rate-name">
                 <h3>만족도</h3>
-              </class>
+              </div>
               <div class="bars" id="rate2">
                 <input v-model="rate2" value="5" type="radio" name='rate2' :id="rate2star5" />
                 <label @click="rate('rate2', 5)" :for="rate2star5"></label>
@@ -329,7 +371,15 @@ export default {
       rate1: '',
       rate2: '',
       rate3: '',
-    };
+
+      transport: {
+        plane: false,
+        train: false,
+        bus: false,
+        car: false,
+        walking: false,
+      },
+    }
   },
 
   beforeCreate() {},
@@ -346,6 +396,11 @@ export default {
     this.rate1 = String(this.nowPlace.rates.rate1)
     this.rate2 = String(this.nowPlace.rates.rate2)
     this.rate3 = String(this.nowPlace.rates.rate3)
+
+    // 이전에 고른 transport 있으면 표시
+    for (let each in this.transport) {
+      if ( each === this.nowPlace.transport ) { this.transport[each] = true }
+    }
   }, 
   beforeMount() {}, 
   mounted() {}, 
@@ -408,12 +463,18 @@ export default {
       return this.nowPlace.file + '3-1'
     },
 
+    nowImage() {
+      
+      return URL.createObjectURL(this.nowPlace.fileList[0])
+      // return console.log(this.nowPlace.fileList[0])
+    },
+
   },
 
   methods: {
     // main category 선택
     clickBtn(category) {
-      this.whichCategory = category
+      // this.whichCategory = category
       this.nowPlace.category.main = category
       this.categoryBind[category] = true
       for (let key in this.categoryBind) {
@@ -439,6 +500,10 @@ export default {
     // transport 선택
     selectTransport(transport) {
       this.nowPlace.transport = transport
+      this.transport[transport] = true
+      for (let each in this.transport) {
+        if (each != transport) { this.transport[each] = false }
+      }
     },
     
     // 별점 매기기

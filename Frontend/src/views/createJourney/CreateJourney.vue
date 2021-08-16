@@ -18,7 +18,7 @@
       />
       <PackageJourney
         v-else-if="nowStep === 3"
-        :imgaes="images"
+        :images="images"
         :travel="travel"
       />
     </div>
@@ -46,6 +46,7 @@ export default {
         imageIdx: '',
         travelLat: '',
         travelLng: '',
+        mainImage: '',
       },
 
       // 1. image upload 이후 2. markerDetail로 넘기기 전에 and 3. 마무리 에서 쓸 사진 자료 유통 창고
@@ -92,9 +93,17 @@ export default {
           lat: image.position.lat,
           lng: image.position.lng
         }
+        const eachImage = new Object
+        eachImage.file = image.file
+        eachImage.position = image.position
+        eachImage.isPlaceLeader = true
+        eachImage.isTravelLeader = false
+        eachImage.preview = image.preview
+        eachImage.dateTime = image.dateTime
         marker.fileList = [
-          image.file
+          eachImage
         ]
+
         marker.imageNum = image.number
 
         this.travel.placeList.push(marker)
