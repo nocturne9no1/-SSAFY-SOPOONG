@@ -1,33 +1,37 @@
 <template>
   <div class="main-container">
+    <div class="image-box">
+      <!-- <div class="image-profile">
+            <img :src="profileImage" />
+          </div>-->
+      <label for="file">Upload File</label>
+      <input
+        ref="files"
+        @change="imageUpload"
+        type="file"
+        id="file"
+        name="file"
+        accept="image/*"
+        multiple
+      />
+    </div>
     <div class="room-deal-information-container">
       <div class="room-file-upload-wrapper">
         <div v-if="!files.length" class="room-file-upload-example-container">
           <div class="room-file-upload-example">
-            <div class="room-file-image-example-wrapper">이미지</div>
+            <!-- <div class="room-file-image-example-wrapper">이미지</div>
             <div class="room-file-notice-item">
               실사진 최소 3장 이상 등록하셔야 하며, 가로사진을 권장합니다.
             </div>
             <div class="room-file-notice-item room-file-notice-item-red">
               로고를 제외한 불필요한 정보(워터마크,상호,전화번호 등)가 있는
               매물은 비공개처리됩니다
+            </div> -->
+            <div class="plus-sign">
+              <i class="fas fa-plus"></i>
             </div>
             <div class="room-file-notice-item room-file-upload-button">
-              <div class="image-box">
-                <!-- <div class="image-profile">
-                      <img :src="profileImage" />
-                    </div>-->
-                <label for="file">일반 사진 등록</label>
-                <input
-                  ref="files"
-                  @change="imageUpload"
-                  type="file"
-                  id="file"
-                  name="file"
-                  accept="image/*"
-                  multiple
-                />
-              </div>
+              
             </div>
           </div>
         </div>
@@ -45,7 +49,7 @@
                 @click="fileDeleteButton"
                 :name="file.number"
               >
-                x
+                <i class="fas fa-times"></i>
               </div>
               <!-- checkImage()로 사용시, 기본 파라미터 event 사용이 불가능 -->
               <!-- <input
@@ -80,13 +84,14 @@
       <img :src="image.preview" alt="" style="width:200px;" />
     </div> -->
     <div>
-      <button @click="onClickNextBtn">Next Step</button>
+      <button class="btn" @click="onClickNextBtn">Next Step</button>
     </div>
   </div>
 </template>
 
 <script>
 import exifr from "exifr";
+import '../../components/css/createJourney/uploadimage.scss'
 
 export default {
   name: "UploadImage",
@@ -266,6 +271,7 @@ export default {
 </script>
 
 <style scoped>
+/*
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -297,16 +303,14 @@ export default {
   min-height: 50px;
   display: flex;
 }
-
-/* .room-deal-informtaion-content-title {
+ .room-deal-informtaion-content-title {
   font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 150px;
   background-color: #f9f9f9;
-} */
-
+}
 .room-deal-information-content {
   width: 100%;
   font-size: 14px;
@@ -457,7 +461,7 @@ export default {
   align-items: center;
   justify-content: center;
   /* height: 100%;
-  width: 100%; */
+  width: 100%; 
 }
 
 .room-file-image-example-wrapper {
@@ -513,7 +517,7 @@ export default {
 
 .file-close-button {
   position: absolute;
-  /* align-items: center; */
+  /* align-items: center; 
   line-height: 18px;
   z-index: 99;
   font-size: 18px;
@@ -574,5 +578,5 @@ export default {
 .file-check-button {
   position: absolute;
   z-index: 100;
-}
+} */
 </style>

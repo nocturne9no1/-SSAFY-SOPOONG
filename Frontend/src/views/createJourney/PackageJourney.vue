@@ -2,13 +2,19 @@
   <div class="complete-form">
     <div class="form-box">
       <h1>PACKAGING</h1>
-      <h2>Title</h2>
-      <input v-model="travel.travelTitle" type="text" placeholder=" title">
-      <h2>Comment</h2>
-      <textarea v-model="travel.travelContent" class="text-box" name="" id="" rows="5" placeholder="content"></textarea>
+      <div class="title-wrap">
+        <h2>Title</h2>
+        <input v-model="travel.travelTitle" type="text" placeholder=" title">
+      </div>
+      <div class="comment-wrap">
+        <h2>Comment</h2>
+        <textarea v-model="travel.travelContent" class="text-box" name="" id="" rows="5" placeholder="content"></textarea>
+      </div>
       <p></p>
-      <h2>대표사진 고르기</h2>
-      <button @click="clickChoice">사진고르기</button>
+      <div class="pick-wrap">
+        <h2>대표사진 고르기</h2>
+        <button class="pick-btn" @click="clickChoice">PICK</button>
+      </div>
       <p></p>
       <div class="public-setting">
         <h2>공개 여부</h2>
