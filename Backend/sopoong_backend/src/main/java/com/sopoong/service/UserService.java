@@ -79,15 +79,15 @@ public class UserService {
 				updateUser.get().setUserPassword(passwordEncoder.encode(request.getChangedPassword()));
 				userRepo.save(updateUser.get());
 				
-				resultMap.put("success", "비밀번호 변경 성공");	
+				resultMap.put("success", "비밀번호 변경 성공");
+				return new BaseMessage(HttpStatus.OK, resultMap);
 			} else {
 				resultMap.put("errors", "비밀번호 일치하지 않음");
 			}
-			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
 			resultMap.put("errors", "비밀번호 변경 실패");
-			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
+		return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		
 	}
 	
