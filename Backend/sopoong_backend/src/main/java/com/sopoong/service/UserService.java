@@ -43,6 +43,7 @@ public class UserService {
 		
 		if (user.isPresent()) {
 			getUser.setUserId(user.get().getUserId());
+			getUser.setUserEmail(user.get().getUserEmail());
 			getUser.setUserNickname(user.get().getUserNickname());
 			getUser.setUserComment(user.get().getUserComment());
 			getUser.setImage(user.get().getImage());
