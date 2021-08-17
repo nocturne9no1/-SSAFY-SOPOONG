@@ -13,7 +13,6 @@ import com.sopoong.model.entity.Travel;
 
 @Repository
 public interface TravelRepository extends JpaRepository<Travel, Long> {
-
 	Page<Travel> findByUser_UserIdInAndTravelIsVisible(List<String> userIds, int travelIsVisible, Pageable pageable);
 	List<Travel> findByUser_UserId(String userId);
 	Optional<Travel> findBytravelIdx(long travelIdx);

@@ -14,17 +14,23 @@ import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.FileDto;
-import com.sopoong.model.dto.FollowListRequest;
+import com.sopoong.model.dto.PlaceCategory;
 import com.sopoong.model.dto.PlaceDto;
+import com.sopoong.model.dto.PlaceList;
+import com.sopoong.model.dto.PlaceRate;
+import com.sopoong.model.dto.TravelDetail;
 import com.sopoong.model.dto.TravelDto;
-import com.sopoong.model.entity.Alarm;
 import com.sopoong.model.dto.TravelList;
+import com.sopoong.model.entity.Alarm;
 import com.sopoong.model.entity.Image;
+import com.sopoong.model.entity.Place;
 import com.sopoong.model.entity.Relation;
 import com.sopoong.model.entity.Travel;
+import com.sopoong.model.entity.User;
 import com.sopoong.repository.AlarmRepository;
 import com.sopoong.repository.GoodRepository;
 import com.sopoong.repository.ImageRepository;
+import com.sopoong.repository.PlaceRepository;
 import com.sopoong.repository.RelationRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
@@ -34,6 +40,9 @@ public class TravelService {
 
 	@Autowired
 	private TravelRepository travelRepository;
+	
+	@Autowired
+	private PlaceRepository placeRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -159,7 +168,7 @@ public class TravelService {
 
 		for (Travel travel : tlist) {
 			if (travel == null) {
-				return new BaseMessage(HttpStatus.BAD_REQUEST, "error");
+				return new BaseMessage(HttpStatus.BAD_REQUEST, "error: Travel is null");
 			}
 			
 			TravelList t = TravelList.builder()
@@ -177,13 +186,71 @@ public class TravelService {
 			System.out.println(t.toString());
 			travelList.add(t);
 		}
-		//resultMap.put("success", travelList);
 		return new BaseMessage(HttpStatus.OK, travelList);
 
 	}
 
 	public BaseMessage selectTravelDetail(long travelIdx) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Travel> travel = travelRepository.findBytravelIdx(travelIdx);
+		
+		// travelIdx에 해당하는 Travel 정보 저장
+		TravelList t = TravelList.builder()
+						.travelIdx(travel.get().getTravelIdx())
+						.travelTitle(travel.get().getTravelTitle())
+						.travelContent(travel.get().getTravelContent())
+						.imagePath(imageRepository.findByImageIdx(travel.get().getImage().getImageIdx()).get().getImagePath())
+						.travelLat(travel.get().getTravelLat())
+						.travelLong(travel.get().getTravelLong())
+						.startDate(null)
+						.endDate(null)
+						.totalLike(goodRepository.countByTravel_TravelIdx(travel.get().getTravelIdx()))
+						.build();
+		
+		// PlaceList[] 정보 저장
+		List<Place> plist = placeRepository.findByTravel_TravelIdx(travelIdx); // travelIdx로 검색한 placeList들
+		ArrayList<PlaceList> placeList = new ArrayList<>();
+		
+		for(Place place : plist) {
+			if (place == null) {
+				return new BaseMessage(HttpStatus.BAD_REQUEST, "error: place is null");
+			}
+			
+			PlaceList p = PlaceList.builder()
+						.placeIdx(place.getPlaceIdx())
+						.placeTitle(place.getPlaceTitle())
+						.placeComment(place.getPlaceComment())
+						.placeCategory(new PlaceCategory(place.getPlaceCategory(), place.getPlaceCategory2()))
+						.placeRates(new PlaceRate(place.getPlaceRate1(), place.getPlaceRate2(), place.getPlaceRate3()))
+						.placeTransport(place.getPlaceTransport())
+						.placeVisitDate(place.getPlaceVisitDate())
+						.placeLat(place.getPlaceLat())
+						.placeLong(place.getPlaceLong())
+						.imagePath(imageRepository.findByImageIdx(place.getImage().getImageIdx()).get().getImagePath())
+						.build();
+			
+			placeList.add(p);
+		}
+		
+		// TravelDetail에 데이터 저장
+		TravelDetail travelDetail = TravelDetail.builder()
+								.travel(t)
+								.placeList(placeList)
+								.build();
+		return new BaseMessage(HttpStatus.OK, travelDetail);
+	}
+
+	public BaseMessage deleteTravel(long travelIdx) {
+		Map<String,Object> resultMap= new HashMap<>();
+		Optional<Travel> delTravel= travelRepository.findBytravelIdx(travelIdx);
+		
+		if (delTravel.isPresent()) {
+			travelRepository.delete(delTravel.get());
+			
+			resultMap.put("success", "Travel 삭제 성공");
+			return new BaseMessage(HttpStatus.OK, resultMap);
+		} else {
+			resultMap.put("errors", "Travel 삭제 실패 (존재하지 않는 travelIdx)");
+			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
+		}
 	}
 }

@@ -14,6 +14,7 @@ import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.PlaceDto;
 import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Place;
+import com.sopoong.model.entity.Travel;
 import com.sopoong.repository.ImageRepository;
 import com.sopoong.repository.PlaceRepository;
 import com.sopoong.repository.TravelRepository;
@@ -78,6 +79,21 @@ public class PlaceService {
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
 			resultMap.put("errors", "Place 변경 실패 (존재하지 않는 placeIdx)");
+			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
+		}
+	}
+
+	public BaseMessage deletePlace(long placeIdx) {
+		Map<String,Object> resultMap= new HashMap<>();
+		Optional<Place> delPlace= placeRepository.findByplaceIdx(placeIdx);
+		
+		if (delPlace.isPresent()) {
+			placeRepository.delete(delPlace.get());
+			
+			resultMap.put("success", "Place 삭제 성공");
+			return new BaseMessage(HttpStatus.OK, resultMap);
+		} else {
+			resultMap.put("errors", "Place 삭제 실패 (존재하지 않는 placeIdx)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
 	}

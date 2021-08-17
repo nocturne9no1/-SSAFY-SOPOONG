@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sopoong.common.BaseMessage;
+import com.sopoong.model.dto.TravelDetail;
 import com.sopoong.model.dto.TravelDto;
 import com.sopoong.model.dto.TravelList;
 import com.sopoong.service.TravelService;
@@ -38,18 +40,25 @@ public class TravelController {
 	}
 	
 	@ApiOperation(value = "여행 일지 가져오기")
-	@GetMapping("/travelList")
+	@GetMapping("/travel/travelList")
 	public ResponseEntity<BaseMessage> selectTravelList(@RequestParam String userId) {
 		BaseMessage bm = travelService.selctTravelList(userId);
 		List<TravelList> travelList = (List<TravelList>) bm.getData();
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), travelList), bm.getHeaders(), bm.getHttpStatus());
 	}
 	
-	@ApiOperation(value = "여행 세부일지 가져오기")
-	@GetMapping("/travelDetail")
+	@ApiOperation(value = "여행 세부일지(travel 내용 + placeList[]) 가져오기")
+	@GetMapping("/travel/travelDetail")
 	public ResponseEntity<BaseMessage> selectTravelDetail(@RequestParam long travelIdx) {
 		BaseMessage bm = travelService.selectTravelDetail(travelIdx);
-		List<TravelList> travelList = (List<TravelList>) bm.getData();
-		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), travelList), bm.getHeaders(), bm.getHttpStatus());
+		TravelDetail travelDetail = (TravelDetail) bm.getData();
+		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), travelDetail), bm.getHeaders(), bm.getHttpStatus());
+	}
+	
+	@ApiOperation(value = "여행 일지 삭제")
+	@DeleteMapping("/travel/delete")
+	public ResponseEntity<BaseMessage> deleteTravel(@RequestParam long travelIdx) {
+		BaseMessage bm = travelService.deleteTravel(travelIdx);
+		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
 	}
 }
