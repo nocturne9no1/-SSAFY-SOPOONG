@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background">
     <div class="SignInDiv" v-if="$route.path.length == 8 || $route.path.length == 7">
       <div class="SignInDivBody" @keyup.enter="signIn(signInData)">
         <!-- <h1>Sign In</h1> -->
@@ -94,6 +94,13 @@ export default {
 <style scoped>
 div {
   font-family: monospace;
+}
+
+.background {
+  background-image: url('../../assets/background.jpg');
+  /* position: absolute; */
+  background-size: cover;
+
 }
 
 .SignInDiv {

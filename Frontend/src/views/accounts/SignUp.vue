@@ -1,18 +1,77 @@
 <template>
   <!-- signIn과 다른점은 최상위 div를 하나 더 두었음. -->
-  <div class="TableDiv">
-    <div class="TableDivCell">
-      <div class="SignUpDiv">
-        <img src="@/assets/sopoong_korean_logo.png" alt="">
-        <div>
-          <input
-            v-model="signUpData.id"
-            :class="{ invalidId: error.id }"
-            id="id"
-            pattern="^([a-z0-9_]){6,50}$"
-            placeholder="ID"
-            type="text"
-          />
+  <div class="background">
+    <div class="TableDiv">
+      <div class="TableDivCell">
+        <div class="SignUpDiv">
+          <img src="@/assets/sopoong_korean_logo.png" alt="">
+          <div>
+            <input
+              v-model="signUpData.id"
+              :class="{ invalidId: error.id }"
+              id="id"
+              pattern="^([a-z0-9_]){6,50}$"
+              placeholder="ID"
+              type="text"
+            />
+          </div>
+          <div class="error-text" v-if="error.id">
+            {{ error.id }}
+          </div>
+
+          <div>
+            <input
+              v-model="signUpData.nickname"
+              id="nickname"
+              placeholder="Nickname"
+              type="text"
+            />
+          </div>
+
+          <div>
+            <input
+              v-model="signUpData.email"
+              :class="{ invalidEmail: error.email }"
+              id="email"
+              pattern="/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/"
+              placeholder="Email"
+              type="email"
+            />
+          </div>
+          <div class="error-text" v-if="error.email">
+            {{ error.email }}
+          </div>
+
+          <div>
+            <input
+              v-model="signUpData.password"
+              :class="{ invalidPassword: error.password }"
+              id="password"
+              pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/"
+              placeholder="Password"
+              type="password"
+            />
+          </div>
+          <div class="error-text" v-if="error.password">
+            {{ error.password }}
+          </div>
+
+          <div>
+            <input
+              v-model="signUpData.confirmPassword"
+              id="confirm-password"
+              pattern=""
+              placeholder="Confirm Password"
+              type="password"
+            />
+          </div>
+          <div class="error-text" v-if="error.confirmPassword">
+            {{ error.confirmPassword }}
+          </div>
+
+          <button @click="signUp(signUpData)" @keyup.enter="signUp(signUpData)">
+            회원가입
+          </button>
         </div>
         <div class="error-text" v-if="error.id">
           {{ error.id }}
@@ -76,11 +135,6 @@
           회원가입
         </button>
       </div>
-      <!-- 추가할 것.
-            정규표현식 이용한 패턴 관리.
-            에러메세지 출력 구현? 이거 어째야될지 모르겠음...
-            CSS(나중에)
-      -->
     </div>
   </div>
 </template>
@@ -215,6 +269,14 @@ export default {
 </script>
 
 <style scoped>
+
+.background {
+  background-image: url('../../assets/background.jpg');
+  /* position: absolute; */
+  background-size: cover;
+
+}
+
 div {
   font-family: monospace;
 }

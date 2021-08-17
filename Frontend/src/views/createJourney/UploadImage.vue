@@ -1,33 +1,37 @@
 <template>
   <div class="main-container">
+    <div class="image-box">
+      <!-- <div class="image-profile">
+            <img :src="profileImage" />
+          </div>-->
+      <label for="file">Upload File</label>
+      <input
+        ref="files"
+        @change="imageUpload"
+        type="file"
+        id="file"
+        name="file"
+        accept="image/*"
+        multiple
+      />
+    </div>
     <div class="room-deal-information-container">
       <div class="room-file-upload-wrapper">
         <div v-if="!files.length" class="room-file-upload-example-container">
           <div class="room-file-upload-example">
-            <div class="room-file-image-example-wrapper">이미지</div>
+            <!-- <div class="room-file-image-example-wrapper">이미지</div>
             <div class="room-file-notice-item">
               실사진 최소 3장 이상 등록하셔야 하며, 가로사진을 권장합니다.
             </div>
             <div class="room-file-notice-item room-file-notice-item-red">
               로고를 제외한 불필요한 정보(워터마크,상호,전화번호 등)가 있는
               매물은 비공개처리됩니다
+            </div> -->
+            <div class="plus-sign">
+              <i class="fas fa-plus"></i>
             </div>
             <div class="room-file-notice-item room-file-upload-button">
-              <div class="image-box">
-                <!-- <div class="image-profile">
-                      <img :src="profileImage" />
-                    </div>-->
-                <label for="file">일반 사진 등록</label>
-                <input
-                  ref="files"
-                  @change="imageUpload"
-                  type="file"
-                  id="file"
-                  name="file"
-                  accept="image/*"
-                  multiple
-                />
-              </div>
+              
             </div>
           </div>
         </div>
@@ -45,7 +49,7 @@
                 @click="fileDeleteButton"
                 :name="file.number"
               >
-                x
+                <i class="fas fa-times"></i>
               </div>
               <!-- checkImage()로 사용시, 기본 파라미터 event 사용이 불가능 -->
               <!-- <input
@@ -54,7 +58,7 @@
                 @change="checkImage"
                 :name="file.number"
               /> -->
-              <img :src="file.preview" />
+              <img :src="file.preview"/>
             </div>
             <div class="file-preview-wrapper-upload">
               <div class="image-box">
@@ -79,14 +83,19 @@
     <!-- <div v-for="image in files" :key="image.file.name">
       <img :src="image.preview" alt="" style="width:200px;" />
     </div> -->
+    <div>
+      <button class="next-btn" @click="onClickNextBtn">Next Step</button>
+    </div>
   </div>
 </template>
 
 <script>
 import exifr from "exifr";
+import '../../components/css/createJourney/uploadimage.scss'
 
 export default {
-  name: "HelloWorld",
+  name: "UploadImage",
+
   data() {
     return {
       image: "",
@@ -127,7 +136,7 @@ export default {
 
         // EXIF
         var image = this.$refs.files.files[i];
-        var locData = new Array();
+        var position = new Array();
 
         // 스크린샷은 undefined로, exif 없는 경우 조회가 안되는 문제
         exifr.parse(image).then((output) => {
@@ -135,32 +144,29 @@ export default {
             console.log("I am in !", output.latitude);
             this.files[i].dateTime = image.lastModifiedDate
             if (output.latitude !== undefined) {
-              locData = {
-                latitude: output.latitude,
-                longitude: output.longitude,
+              position = {
+                lat: output.latitude,
+                lng: output.longitude,
               };
-              this.files[i].locData = locData;
-              locData = [];
+              this.files[i].position = position;
+              position = [];
             } else {
-              locData = {
-                latitude: 37.512126019029,
-                longitude: 127.04489721131,
+              position = {
+                lat: 37.512126019029,
+                lng: 127.04489721131,
               };
-              this.files[i].locData = locData;
-              locData = [];
+              this.files[i].position = position;
+              position = [];
             }
           } else {
-            locData = { latitude: 37.512126019029, longitude: 127.04489721131 };
-            this.files[i].locData = locData;
-            locData = [];
+            position = { lat: 37.512126019029, lng: 127.04489721131 };
+            this.files[i].position = position;
+            position = [];
           }
         });
         // 이미지 미리보기
         const url = URL.createObjectURL(image);
         this.image = url;
-
-        // 시간
-        this.files[i].dateTime = this.files[i].file.lastModifiedDate
       }
       this.uploadImageIndex = num + 1; //이미지 index의 마지막 값 + 1 저장
       console.log(this.files);
@@ -188,40 +194,37 @@ export default {
 
         // EXIF
         var image = this.$refs.files.files[i];
-        var locData = new Array();
+        var position = new Array();
 
         exifr.parse(image).then((output) => {
           if (output) {
             console.log("I am in !", output.latitude);
             this.files[this.files.length - this.$refs.files.files.length + i].dateTime = this.files[this.files.length - this.$refs.files.files.length + i].file.lastModifiedDate
             if (output.latitude !== undefined) {
-              locData = {
-                latitude: output.latitude,
-                longitude: output.longitude,
+              position = {
+                lat: output.latitude,
+                lng: output.longitude,
               };
               // this.files.length-1 을 바꿔줘야함. 안그러면 계속 최고값 나옴
-              this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
-              locData = [];
+              this.files[ this.files.length - this.$refs.files.files.length + i].position = position;
+              position = [];
             } else {
-              locData = {
-                latitude: 37.512126019029,
-                longitude: 127.04489721131,
+              position = {
+                lat: 37.512126019029,
+                lng: 127.04489721131,
               };
-              this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
-              locData = [];
+              this.files[ this.files.length - this.$refs.files.files.length + i].position = position;
+              position = [];
             }
           } else {
-            locData = { latitude: 37.512126019029, longitude: 127.04489721131 };
-            this.files[ this.files.length - this.$refs.files.files.length + i].locData = locData;
-            locData = [];
+            position = { lat: 37.512126019029, lng: 127.04489721131 };
+            this.files[ this.files.length - this.$refs.files.files.length + i].position = position;
+            position = [];
           }
         });
         // 이미지 미리보기
         const url = URL.createObjectURL(image);
         this.image = url;
-
-        // 시간
-        this.files[this.files.length - this.$refs.files.files.length + i].dateTime = this.files[this.files.length - this.$refs.files.files.length + i].file.lastModifiedDate
       }
 
       this.uploadImageIndex = this.uploadImageIndex + num + 1;
@@ -257,11 +260,21 @@ export default {
         console.log("체크 안된경우 새로운 checkedData 배열!", this.checkedData);
       }
     },
+
+    onClickNextBtn() {
+      if ( this.files.length > 0 ) {
+        this.$emit('next-step')
+        this.$emit('upload-image', this.files)
+      } else {
+        alert('한 장 이상의 사진을 올려주세용')
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
+/*
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -293,16 +306,14 @@ export default {
   min-height: 50px;
   display: flex;
 }
-
-/* .room-deal-informtaion-content-title {
+ .room-deal-informtaion-content-title {
   font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 150px;
   background-color: #f9f9f9;
-} */
-
+}
 .room-deal-information-content {
   width: 100%;
   font-size: 14px;
@@ -453,7 +464,7 @@ export default {
   align-items: center;
   justify-content: center;
   /* height: 100%;
-  width: 100%; */
+  width: 100%; 
 }
 
 .room-file-image-example-wrapper {
@@ -509,7 +520,7 @@ export default {
 
 .file-close-button {
   position: absolute;
-  /* align-items: center; */
+  /* align-items: center; 
   line-height: 18px;
   z-index: 99;
   font-size: 18px;
@@ -570,5 +581,5 @@ export default {
 .file-check-button {
   position: absolute;
   z-index: 100;
-}
+} */
 </style>
