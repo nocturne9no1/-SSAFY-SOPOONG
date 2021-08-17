@@ -48,12 +48,12 @@
                 x
               </div>
               <!-- checkImage()로 사용시, 기본 파라미터 event 사용이 불가능 -->
-              <input
+              <!-- <input
                 class="file-check-button"
                 type="checkbox"
                 @change="checkImage"
                 :name="file.number"
-              />
+              /> -->
               <img :src="file.preview" />
             </div>
             <div class="file-preview-wrapper-upload">
@@ -76,9 +76,9 @@
       </div>
     </div>
 
-    <div v-for="image in files" :key="image.file.name">
+    <!-- <div v-for="image in files" :key="image.file.name">
       <img :src="image.preview" alt="" style="width:200px;" />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -157,6 +157,9 @@ export default {
         // 이미지 미리보기
         const url = URL.createObjectURL(image);
         this.image = url;
+
+        // 시간
+        this.files[i].dateTime = this.files[i].file.lastModifiedDate
       }
       this.uploadImageIndex = num + 1; //이미지 index의 마지막 값 + 1 저장
       console.log(this.files);
@@ -214,6 +217,9 @@ export default {
         // 이미지 미리보기
         const url = URL.createObjectURL(image);
         this.image = url;
+
+        // 시간
+        this.files[this.files.length - this.$refs.files.files.length + i].dateTime = this.files[this.files.length - this.$refs.files.files.length + i].file.lastModifiedDate
       }
 
       this.uploadImageIndex = this.uploadImageIndex + num + 1;

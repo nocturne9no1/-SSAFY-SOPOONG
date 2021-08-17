@@ -5,6 +5,8 @@ import cookies from 'vue-cookies'
 const state = {
   authToken: cookies.get('X-AUTH-TOKEN'),
   userProfile: null,
+  emailAuthId: null,
+  passwordResetInfo: null,
 }
 const getters = {
   isSignedIn: state => !!state.authToken,
@@ -13,74 +15,141 @@ const getters = {
     headers: {
       "X-AUTH-TOKEN": `Token ${state.authToken}`
     }
-  })
+  }),
+  getEmailAuthId: state => state.emailAuthId,
+  getPasswordResetInfo: state => state.passwordResetInfo,
+
 }
 const mutations = {
   SET_TOKEN(state, token) {
     state.authToken = token
   },
-  GET_PROFILE(state, userData) {
+  SET_PROFILE(state, userData) {
     state.userProfile = userData
-  }
+  },
+  SET_EMAIL_AUTH_ID(state, id) {
+    state.emailAuthId = id
+  },
+  SET_PASSWORD_RESET_INFO(state, data) {
+    state.passwordResetInfo = data
+  },
+  RESET_SET_PASSWORD_RESET_INFO(state) {
+    state.passwordResetInfo = null
+  },
 }
 const actions = {
-  requestEmailAuth(context, authKey) {
-    console.log(context)
-    const url = '???'
-    axios.get(url, authKey)
+  
+  // 로그인
+  signIn(context, signInData) {
+    // 로그인시도
+    axios.get('auth/login', { params :{ id: signInData.id, password: signInData.password } })
+    .then(res => {
+      console.log(res.data)
+      context.commit('SET_TOKEN', res.data.data.seccess) // 보내주는 cookie key 저장? 키값이 이렇게 오는게 맞나?
+      cookies.set('X-AUTH-TOKEN', res.data.data.seccess, "7d") // 키 , 값, 만료일
+      // this.$cookies.set('auth-token', res.data.key, "7d")  // 글로벌 설정으로 쿠키 가져올때(main.js).
+      
+      // 프로필 정보 기억
+      context.dispatch('getProfile', signInData.id)
+      alert("로그인 성공!!>.<!!!!");
+      router.push('/main')
+    })
+    .catch(err => {console.log(err), alert('아이디와 비밀번호를 확인하세요.')})
+  },
+  
+  // 로그인시 프로필 데이터 get
+  getProfile(context, id) {
+    // axios.get(`user/${id}`) // 이거 각자 정보 불러오는 구조가 어떻게 될지?
+    axios.get(`user`)
+      .then(res => {console.log(id, res.data), context.commit("SET_PROFILE", res.data)})
+      .catch(err => console.error(err))
+  },
+
+  // 로그아웃
+  signOut(context) {
+    context.commit('SET_TOKEN', null)  // state에서
+    cookies.remove('X-AUTH-TOKEN')  // cookie에서
+    router.push({ name:'NewsFeed' })
+  },
+  
+  // 회원가입
+  signUp(context, signUpData) {
+    // 이메일 인증용 ID 기억
+    context.commit('SET_EMAIL_AUTH_ID', signUpData.id)
+    // 회원가입 실행
+    context.dispatch('postSignUpData', signUpData)
+    // 인증 메일 발송
+    context.dispatch('requestEmailAuth', signUpData.id)
+  },
+  
+  postSignUpData(context, signUpData) {
+    axios.post('auth/register', signUpData)
+    .then(res => {
+      
+      // 회원가입이 성공적으로 되었다 메세지?
+      console.log(res)  // 회원가입시 받아오는 모든것들.
+      console.log(context)
+      router.push('/auth')
+    })
+    .catch(err => console.error(err))
+  },
+  
+  // 가입시 이메일 인증 요청
+  requestEmailAuth(context, id) {
+    console.log("이메일 인증까지 잘 들어왔습니다.")
+    const url = 'auth/email'
+    axios.post(url, { id: id, headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Accept": "application/json; charset=utf-8"
+      }})
       .then(res => {
-        console.log(res.data)
-        router.push('/')
+        console.log("성공했습니다!", res.data)
       })
       .catch(err => {
         console.log(err)
       })
   },
-  
-  signIn(context, signInData) {
-    // 로그인시도
-    context.dispatch('postSignInData', signInData),
-    // 프로필 정보 얻어오기
-    context.dispatch('getProfile', signInData.id)
-  },
 
-  getProfile(context, id) {
-    axios.get(`http://localhost:8080/user/${id}`) // 이거 각자 정보 불러오는 구조가 어떻게 될지?
-      .then(res => {context.commit("GET_PROFILE", res.data)})
-      .catch(err => console.error(err))
-  },
-  
-  postSignInData(context, signInData) {
-    axios.get('https://i5a404.p.ssafy.io/api/auth/login', { params :{ id: signInData.id, password: signInData.password } })
+  // 가입시 이메일 인증번호 확인
+  confirmAuthKey(context, authKey) {
+    axios.post('auth/confirm/account', { id: context.getters['getEmailAuthId'], authNumber : authKey})
       .then(res => {
-        context.commit('SET_TOKEN', res.data.key) // 보내주는 cookie key 저장? 키값이 이렇게 오는게 맞나?
-        cookies.set('X-AUTH-TOKEN', res.data.key) // 키 , 값, 만료일
-        // this.$cookies.set('auth-token', res.data.key, "7d")  // 글로벌 설정으로 쿠키 가져올때(main.js).
-        // 여기서도 프로필 정보 얻어와야될수도있음
-        console.log(res.data);
-        alert("로그인 성공!!>.<!!!!");
-        router.push('/main')
-      })
-      .catch(err => console.error(err))
-  },
-
-  signUp(context, signUpData) {
-    context.dispatch('postSignUpData', signUpData)
-  },
-
-  postSignUpData(context, signUpData) {
-    axios.post('https://i5a404.p.ssafy.io/api/auth/register', signUpData)
-      .then(res => {
-        // 여기서 할게 없음
-        // 회원가입이 성공적으로 되었다 메세지?
-        console.log(res)
-        console.log(context)
+        res,
+        alert('회원가입이 완료되었습니다.')
         router.push('/signin')
       })
-      .catch(err => console.error(err))
+      .catch(err => err, alert('인증키를 확인해주세요.'))
   },
 
+  // 아이디 찾기 이메일 인증 요청
+  findIdEmailAuth(context, email) {
+    axios.post('auth/find/id', { email : email })
+      .then(res => {
+        console.log(res.data)
+      })
+  },
 
+  // 아이디 찾기 인증번호 인증
+  findIdConfirmAuthKey(context, data) {
+    axios.post('auth/confirm/id', { email : data.email, authNumber : data.authKey })
+     .then(res => {
+       console.log(data.authKey, data.email, res.data)
+       router.push('/signin/identify/password/reset')
+       context.commit('SET_PASSWORD_RESET_INFO', [res.data.data.success, data.email])
+     })
+  },
+  // 패스워드 리셋 후 state 데이터 리셋.
+  resetPassword(context, data) {
+    axios.patch('auth/find/password', data)
+      .then(res => {
+        console.log(res.data, '성공!')
+        // 로그인창 복귀
+        router.push('/signin')
+        // vue 데이터 초기화
+        context.commit('RESET_SET_PASSWORD_RESET_INFO')
+      })
+      .catch(err => {err, ('비밀번호 양식을 확인해주세요.')})    
+  },
 }
 
 export default {

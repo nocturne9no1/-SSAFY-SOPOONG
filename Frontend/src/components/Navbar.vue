@@ -11,16 +11,18 @@
               SOPOONG
             </router-link>
           <li class="nav-item nav-newsfeed"><router-link to="/feed">NewsFeed</router-link></li>
+          <li v-if="isSignedIn" class="nav-item nav-followfeed" @click="toFollowFeed()">FollowFeed</li>
         </div>
         <div class="nav-right">
           <div class="search-bar" id="search-bar">
             <input type="search" v-model="searchWord" @keydown.enter="onEnter">
           </div>
-          <div v-if="!isLogin" class="nav-right">
-            <li class="nav-item nav-login"><router-link to="signin">Login</router-link></li>
-            <li class="nav-item nav-signup"><router-link to="signup">Signup</router-link></li>
+          <div v-if="!isSignedIn" class="nav-right">
+            <li class="nav-item nav-login"><router-link to="/signin">Login</router-link></li>
+            <li class="nav-item nav-signup"><router-link to="/signup">Signup</router-link></li>
           </div>
           <div v-else class="nav-right">
+            <li class="nav-item nav-login" @click="signOut">Logout</li>
             <li class="nav-item">알람</li>
             <li class="nav-item">프사</li>
           </div>
@@ -32,22 +34,37 @@
 
 <script>
 import "./css/navbar.scss"
+import { mapActions, mapGetters } from 'vuex'
+import router from '@/router'
+
 export default {
   data() {
     return {
       // 향후 vuex에서 로그인 여부를 가져오는 것으로 바꿔야함
       // test 용
-      isLogin: false,
       isSearchClick: false,
       searchWord: '',
     }
   },
+
+  computed: {
+    ...mapGetters(["isSignedIn"])
+  },
   
   methods: {
+    ...mapActions(["signOut"]),
+
+
     onEnter() {
       // 향후 검색 페이지로 이동
-      console.log(this.searchWord)
+    console.log(this.searchWord)
     },
+
+    toFollowFeed() {
+      if (this.$route.name != 'FollowingPeopleFeed') {
+        router.push({name: 'FollowingPeopleFeed'})
+      }
+    }
   },
 }
 </script>
