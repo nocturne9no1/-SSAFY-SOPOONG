@@ -1,4 +1,4 @@
-package com.sopoong.util;
+	package com.sopoong.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -23,7 +23,7 @@ public class JwtTokenProvider {
 	private String secretKey = "sopoong";
 
     // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    private long tokenValidTime = 30 * 60 * 2 * 24 * 30 * 1000L;
     
     private final UserDetailsService userDetailsService;
 
