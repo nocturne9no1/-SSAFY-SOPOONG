@@ -18,10 +18,12 @@ import com.sopoong.model.dto.FollowListRequest;
 import com.sopoong.model.dto.PlaceDto;
 import com.sopoong.model.dto.TravelDto;
 import com.sopoong.model.entity.Alarm;
+import com.sopoong.model.dto.TravelList;
 import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Relation;
 import com.sopoong.model.entity.Travel;
 import com.sopoong.repository.AlarmRepository;
+import com.sopoong.repository.GoodRepository;
 import com.sopoong.repository.ImageRepository;
 import com.sopoong.repository.RelationRepository;
 import com.sopoong.repository.TravelRepository;
@@ -46,8 +48,11 @@ public class TravelService {
 	private RelationRepository relationRepository;
 
 	@Autowired
+	private GoodRepository goodRepository;
+
+	@Autowired
 	private PlaceService placeService;
-	
+
 	@Autowired
 	private ImageService imageService;
 
@@ -60,20 +65,13 @@ public class TravelService {
 		long placeIdx;
 		System.out.println("[userId] " + travelDto.getUserId());
 		System.out.println(travelDto.getTravelTitle() + " " + travelDto.getTravelContent());
-		
+
 		/* 1. 여행 기록 */
-		Travel travel = Travel.builder()
-				.user(userRepository.findByUserId(travelDto.getUserId()).get())
-				.travelTitle(travelDto.getTravelTitle())
-				.travelContent(travelDto.getTravelContent())
-				.travelIsVisible(travelDto.isTravelIsVisible())
-				.startDate(travelDto.getStartDate())
-				.endDate(travelDto.getEndDate())
-				.image(null)
-				.travelLat(0.0)
-				.travelLong(0.0)
-				.startDate(travelDto.getStartDate())
-				.endDate(travelDto.getEndDate()).build();
+		Travel travel = Travel.builder().user(userRepository.findByUserId(travelDto.getUserId()).get())
+				.travelTitle(travelDto.getTravelTitle()).travelContent(travelDto.getTravelContent())
+				.travelIsVisible(travelDto.isTravelIsVisible()).startDate(travelDto.getStartDate())
+				.endDate(travelDto.getEndDate()).image(null).travelLat(0.0).travelLong(0.0)
+				.startDate(travelDto.getStartDate()).endDate(travelDto.getEndDate()).build();
 
 		travel = travelRepository.save(travel);
 		resultMap.put("success", travel);
@@ -99,7 +97,7 @@ public class TravelService {
 			/* 3. 사진 기록 */
 			List<FileDto> files = place.getImageList();
 			BaseMessage bmImage = imageService.saveImage(files, userId, travelIdx, placeIdx);
-			if(!bmImage.getHttpStatus().equals(HttpStatus.OK)) {
+			if (!bmImage.getHttpStatus().equals(HttpStatus.OK)) {
 				return new BaseMessage(HttpStatus.BAD_REQUEST, bmImage.getData());
 			}
 
@@ -113,7 +111,7 @@ public class TravelService {
 
 		/* travel 대표사진 idx 구하기 */
 		Image travelImage = imageRepository.findImageByTravel_TravelIdxAndIsTravelLeader(travelIdx, 1).get();
-	
+
 		// travel 테이블에 저장
 		updateTravel(travel, travelImage);
 		
@@ -153,5 +151,39 @@ public class TravelService {
 			resultMap.put("errors", "Place 변경 실패 (존재하지 않는 placeIdx)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
+	}
+
+	public BaseMessage selctTravelList(String userId) {
+		List<Travel> tlist = travelRepository.findByUser_UserId(userId);
+		ArrayList<TravelList> travelList = new ArrayList<>();
+
+		for (Travel travel : tlist) {
+			if (travel == null) {
+				return new BaseMessage(HttpStatus.BAD_REQUEST, "error");
+			}
+			
+			TravelList t = TravelList.builder()
+						.travelIdx(travel.getTravelIdx())
+						.travelTitle(travel.getTravelTitle())
+						.travelContent(travel.getTravelContent())
+						.imagePath(imageRepository.findByImageIdx(travel.getImage().getImageIdx()).get().getImagePath())
+						.travelLat(travel.getTravelLat())
+						.travelLong(travel.getTravelLong())
+						.startDate(null)
+						.endDate(null)
+						.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
+						.build();
+			
+			System.out.println(t.toString());
+			travelList.add(t);
+		}
+		//resultMap.put("success", travelList);
+		return new BaseMessage(HttpStatus.OK, travelList);
+
+	}
+
+	public BaseMessage selectTravelDetail(long travelIdx) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
