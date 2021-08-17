@@ -63,8 +63,6 @@ public class Travel implements Serializable{
 	
 	private double travelLong;
 	
-	private boolean travelIsVisible;
-	
 	private LocalDateTime startDate;
 	
 	private LocalDateTime endDate;
