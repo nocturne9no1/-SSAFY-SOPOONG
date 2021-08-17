@@ -157,7 +157,6 @@ public class AuthService {
 			}else if(userOpt.get().getAuthNumber().equals(confirmRequest.getAuthNumber())){
 				userOpt.get().setAuthNumber("AUTH");
 				userRepository.save(userOpt.get());
-				emailService.sendMail(userOpt.get());
 				resultMap.put("sucess", "인증 성공");
 			}else {
 				resultMap.put("errors", "인증번호 실패");
