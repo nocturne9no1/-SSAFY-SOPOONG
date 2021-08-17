@@ -1,5 +1,8 @@
 package com.sopoong.controller;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +25,7 @@ import com.sopoong.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 	
 	@Autowired
@@ -37,7 +42,7 @@ public class UserController {
 	
 	@PatchMapping("/user/profile")
 	@ApiOperation(value = "프로필 변경하기")
-	public ResponseEntity<BaseMessage> changeProfile(@Valid @RequestBody changeProfileRequest request) {
+	public ResponseEntity<BaseMessage> changeProfile(@Valid @RequestBody changeProfileRequest request) throws IllegalStateException, NoSuchAlgorithmException, IOException {
 		
 		BaseMessage bm= userService.changeProfile(request);
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());

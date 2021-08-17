@@ -54,6 +54,7 @@ public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userIdx;
+	
 	@NotNull
 	@NaturalId
 	@Column(name="user_id", unique = true)
