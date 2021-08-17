@@ -1,7 +1,5 @@
 package com.sopoong.model.dto;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +17,5 @@ public class ScrapDto {
 	private String travelTitle;
 	private String travelComment;
 	private String travelImagePath;
-	private int travelIsVisible;
+	private boolean travelIsVisible;
 }
