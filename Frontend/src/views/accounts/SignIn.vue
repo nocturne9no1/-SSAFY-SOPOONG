@@ -164,14 +164,14 @@ input {
   border-radius: 20px;
   background-color: rgba(255, 255, 255, .6);
 
-  color: white;
+  color: black;
   font-size: 16px;
 
 }
   
-input#id:invalid {
+/* input#id:invalid {
   border: 3px solid red;
-}
+} */
 /* input:valid {
     background-color: greenyellow;
   } */

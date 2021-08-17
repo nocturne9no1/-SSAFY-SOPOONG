@@ -55,7 +55,8 @@ public class Travel implements Serializable{
 	@JoinColumn(name = "image_idx")
 	private Image image;
 	
-	private boolean travelIsVisible;
+	@Column(name="travel_is_visible", columnDefinition = "TINYINT", length=1)
+	private int travelIsVisible;
 	
 	@Column(insertable = false, updatable = true)
 	private LocalDateTime updatedAt;

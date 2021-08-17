@@ -10,20 +10,20 @@
       <span>
         <input
           v-model="authKey"
-          @keyup.enter="requestEmailAuth(authKey)"
+          @keyup.enter="confirmAuthKey(authKey)"
           id="authkey"
           placeholder="인증코드"
           type="text"
         />
         <button
-          @click="requestEmailAuth(authKey)"
-          @keyup.enter="requestEmailAuth(authKey)"
+          @click="confirmAuthKey(authKey)"
+          @keyup.enter="confirmAuthKey(authKey)"
         >
           인증
         </button>
       </span>
       <p>
-        <a href="" @click="resend">인증메일 다시 보내기</a>
+        <span href="" @click="resend">인증메일 다시 보내기</span>
       </p>
     </div>
   </div>
@@ -49,10 +49,11 @@ export default {
   beforeUnmount() {},
   unmounted() {},
   methods: {
-    ...mapActions(["requestEmailAuth"]),
+    ...mapActions(["confirmAuthKey"]),
     resend() {
+      let id = this.$store.getters["getEmailAuthId"]
+      this.$store.dispatch('requestEmailAuth', id)
       alert("인증 메일이 재전송되었습니다.");
-      // 과정 추가
     },
   },
 };

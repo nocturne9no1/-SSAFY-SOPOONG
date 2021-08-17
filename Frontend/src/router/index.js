@@ -25,10 +25,10 @@ const routes = [
   ...travel,
 
   // 404
-  // {
-  //   path: '*',
-  //   redirect: '/404',
-  // },
+  {
+    path: '*',
+    redirect: '/404',
+  },
   {
     path: '/404',
     name: 'PageNotFound',

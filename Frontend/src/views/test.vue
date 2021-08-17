@@ -54,7 +54,7 @@
                 @change="checkImage"
                 :name="file.number"
               /> -->
-              <img :src="file.preview"/>
+              <img :src="file.preview" />
             </div>
             <div class="file-preview-wrapper-upload">
               <div class="image-box">
@@ -158,6 +158,9 @@ export default {
         // 이미지 미리보기
         const url = URL.createObjectURL(image);
         this.image = url;
+
+        // 시간
+        this.files[i].dateTime = this.files[i].file.lastModifiedDate
       }
       this.uploadImageIndex = num + 1; //이미지 index의 마지막 값 + 1 저장
       console.log(this.files);
@@ -216,6 +219,9 @@ export default {
         // 이미지 미리보기
         const url = URL.createObjectURL(image);
         this.image = url;
+
+        // 시간
+        this.files[this.files.length - this.$refs.files.files.length + i].dateTime = this.files[this.files.length - this.$refs.files.files.length + i].file.lastModifiedDate
       }
 
       this.uploadImageIndex = this.uploadImageIndex + num + 1;

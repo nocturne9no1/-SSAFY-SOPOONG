@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import com.sopoong.util.MD5Generator;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@RequestMapping("/api")
 public class ImageController {
 	public static final Logger logger = LoggerFactory.getLogger(ImageController.class);
 
