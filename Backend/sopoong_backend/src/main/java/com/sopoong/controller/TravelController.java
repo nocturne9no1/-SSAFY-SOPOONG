@@ -1,17 +1,22 @@
 package com.sopoong.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.TravelDto;
+import com.sopoong.model.dto.TravelList;
 import com.sopoong.service.TravelService;
 
 import io.swagger.annotations.ApiOperation;
@@ -30,5 +35,21 @@ public class TravelController {
 	public ResponseEntity<BaseMessage> writeTravel(@ModelAttribute TravelDto travelDto) throws Exception {
 		BaseMessage bm = travelService.writeTravel(travelDto);
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
+	}
+	
+	@ApiOperation(value = "여행 일지 가져오기")
+	@GetMapping("/travelList")
+	public ResponseEntity<BaseMessage> selectTravelList(@RequestParam String userId) {
+		BaseMessage bm = travelService.selctTravelList(userId);
+		List<TravelList> travelList = (List<TravelList>) bm.getData();
+		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), travelList), bm.getHeaders(), bm.getHttpStatus());
+	}
+	
+	@ApiOperation(value = "여행 세부일지 가져오기")
+	@GetMapping("/travelDetail")
+	public ResponseEntity<BaseMessage> selectTravelDetail(@RequestParam long travelIdx) {
+		BaseMessage bm = travelService.selectTravelDetail(travelIdx);
+		List<TravelList> travelList = (List<TravelList>) bm.getData();
+		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), travelList), bm.getHeaders(), bm.getHttpStatus());
 	}
 }
