@@ -60,6 +60,10 @@
       </div>
       <gmap-polyline v-bind:path.sync="path" v-bind:options="{ strokeColor:'#000000'}"/> 
     </GmapMap>
+        <!-- Button to go to next step -->
+    <div style="position: absolute; top: 10%;">
+      <button class="next-btn" @click="onClickNextBtn">Next Step</button>
+    </div>
 
 
     <!-- Modal part -->
@@ -76,10 +80,7 @@
     </div>
 
 
-    <!-- Button to go to next step -->
-    <div style="position: absolute; top: 10%;">
-      <button @click="onClickNextBtn">Next Step</button>
-    </div>
+
   </div>
 </template>
 

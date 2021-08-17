@@ -354,4 +354,21 @@
     }
 
   }
+
+  .next-btn {
+    display: block;
+    position: fixed;
+    right: 20%;
+    top: 15%;
+    margin-top: 5%;
+    padding: 10px 20px;
+    background-color: $aqua;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 2px 5px 5px rgba($gray, .5);
+    font-family: $body;
+  }
 }

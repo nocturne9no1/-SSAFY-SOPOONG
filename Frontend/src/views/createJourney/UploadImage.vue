@@ -84,7 +84,7 @@
       <img :src="image.preview" alt="" style="width:200px;" />
     </div> -->
     <div>
-      <button class="btn" @click="onClickNextBtn">Next Step</button>
+      <button class="next-btn" @click="onClickNextBtn">Next Step</button>
     </div>
   </div>
 </template>
@@ -262,9 +262,12 @@ export default {
     },
 
     onClickNextBtn() {
-      console.log('asdf')
-      this.$emit('next-step')
-      this.$emit('upload-image', this.files)
+      if ( this.files.length > 0 ) {
+        this.$emit('next-step')
+        this.$emit('upload-image', this.files)
+      } else {
+        alert('한 장 이상의 사진을 올려주세용')
+      }
     },
   },
 };

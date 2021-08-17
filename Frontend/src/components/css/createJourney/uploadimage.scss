@@ -14,7 +14,7 @@
   $body: 'Roboto', sans-serif;
 
   width: 1200px;
-  height: 400px;
+  min-height: 400px;
   margin: 5% auto;
 
   input[type="file"] {
@@ -32,7 +32,7 @@
     background-color: $green;
     color: #fff;
     vertical-align: middle;
-    font-size: 15px;
+    font-size: 20px;
     cursor: pointer;
     border-radius: 20px;
     box-shadow: 2px 5px 5px rgba($gray, .5);
@@ -135,16 +135,30 @@
       .file-preview-content-container {
         height: 100%;
 
+        column-count: 4;
+        column-gap: 10px;
+
         .file-preview-container {
           height: 100%;
           display: flex;
           flex-wrap: wrap;
         }
 
+        grid-row: 2;
+        grid-column: 1;
+        background-color: rgba(255,255,255,.5);
+        padding: .2em .5em;
+        justify-self: start;
+
         .file-preview-wrapper {
           padding: 15px;
           position: relative;
-
+          
+          margin: 0;
+          display: grid;
+          grid-template-rows: 1fr auto;
+          margin-bottom: 10px;
+          break-inside: avoid;
 
           .file-close-button {
             position: absolute;
@@ -169,10 +183,16 @@
 
 
           img {
-            position: relative;
-            width: 190px;
-            height: 130px;
-            z-index: 10;
+            // position: relative;
+            // width: 190px;
+            // height: 130px;
+            // z-index: 10;
+
+            max-width: 100%;
+            display: block;
+
+            grid-row: 1 / -1;
+            grid-column: 1;
           }
 
           .file-preview-wrapper-upload {
@@ -214,6 +234,21 @@
     }
 
 
+  }
+
+  .next-btn {
+    display: block;
+    float: right;
+    margin-top: 5%;
+    padding: 10px 20px;
+    background-color: $aqua;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 2px 5px 5px rgba($gray, .5);
+    font-family: $body;
   }
 
 }

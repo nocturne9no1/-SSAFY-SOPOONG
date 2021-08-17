@@ -42,6 +42,9 @@
         <img @click="setMainImage(image)" :src="image.preview" alt="">
       </div>
     </div>
+    <div v-if="mainImage">
+      <img class="main-image" :src="mainImage.preview" alt="">
+    </div>
   </div>
 </template>
 
@@ -69,6 +72,7 @@ export default {
       publicSetting: true,
       isChoicePushed: false,
       imageList: new Array(),
+      mainImage: '',
     };
   },
   beforeCreate() {},
@@ -105,6 +109,7 @@ export default {
 
     setMainImage(image) {
       this.travel.mainImage = image
+      this.mainImage = image
       this.travel.travelLat = image.position.lat
       this.travel.travelLng = image.position.lng
       for ( let idx in this.travel.placeList ) {
@@ -119,12 +124,59 @@ export default {
       }
     },
 
-    onTrans() {
-      axios.post('http://localhost:8080/auth/travel/create', this.travel)
+onTrans() {
+      const travel = new FormData()
+      travel.append('travelTitle', this.travel.travelTitle)
+      travel.append('userId', 'wpffl3333')
+      travel.append('travelContent', this.travel.travelContent)
+      travel.append('travelIsVisible', this.travel.travelIsVisible)
+      travel.append('travelLat', this.travel.travelLat)
+      travel.append('travelLng', this.travel.travelLng)
+
+      for ( let idx in this.travel.placeList ) {
+        travel.append(`placeList[${idx}].title`, this.travel.placeList[idx].title)
+        travel.append(`placeList[${idx}].comment`, this.travel.placeList[idx].comment)
+        travel.append(`placeList[${idx}].category.main`, this.travel.placeList[idx].category.main)
+        travel.append(`placeList[${idx}].category.sub`, this.travel.placeList[idx].category.sub)
+        travel.append(`placeList[${idx}].rates.rate1`, this.travel.placeList[idx].rates.rate1)
+        travel.append(`placeList[${idx}].rates.rate2`, this.travel.placeList[idx].rates.rate2)
+        travel.append(`placeList[${idx}].rates.rate3`, this.travel.placeList[idx].rates.rate3)
+        travel.append(`placeList[${idx}].transport`, this.travel.placeList[idx].transport)
+        const date = new Date(this.travel.placeList[idx].visitDate).toUTCString()
+        travel.append(`placeList[${idx}].visitDate`, date)
+        travel.append(`placeList[${idx}].position.lat`, this.travel.placeList[idx].position.lat)
+        travel.append(`placeList[${idx}].position.lng`, this.travel.placeList[idx].position.lng)
+
+        for ( let i in this.travel.placeList[idx].imageList ) {
+          travel.append(`placeList[${idx}].imageList[${i}].file`, this.travel.placeList[idx].imageList[i].file)
+          travel.append(`placeList[${idx}].imageList[${i}].position.lat`, this.travel.placeList[idx].imageList[i].position.lat)
+          travel.append(`placeList[${idx}].imageList[${i}].position.lng`, this.travel.placeList[idx].imageList[i].position.lng)
+          if(this.travel.placeList[idx].imageList[i].isPlaceLeader == true) {
+            travel.append(`placeList[${idx}].imageList[${i}].isPlaceLeader`, 1)
+          } else {
+            travel.append(`placeList[${idx}].imageList[${i}].isPlaceLeader`, 0)
+          }
+          if(this.travel.placeList[idx].imageList[i].isTravelLeader == true) {
+            travel.append(`placeList[${idx}].imageList[${i}].isTravelLeader`, 1)
+          } else {
+            travel.append(`placeList[${idx}].imageList[${i}].isTravelLeader`, 0)
+          }
+        }
+      }
+
+      console.log(travel)
+      axios.post('http://localhost:8080/api/auth/travel/create', travel, {
+        headers: {
+          'Content-Type' : 'multipart/form-data'
+        }
+      })
         .then(res => {
           console.log(res)
+          console.log("와!")
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+        })
     },
 
   }
