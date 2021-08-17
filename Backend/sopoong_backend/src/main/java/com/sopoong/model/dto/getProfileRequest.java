@@ -15,6 +15,8 @@ public class getProfileRequest {
 	
 	String userId;
 	
+	String userEmail;
+	
 	String userNickname;
 	
 	String userComment;
