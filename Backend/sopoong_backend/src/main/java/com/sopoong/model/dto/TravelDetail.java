@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor 
 public class TravelDetail {
 	private TravelList travel;
 	private ArrayList<PlaceList> placeList;

@@ -83,7 +83,7 @@ public class PlaceService {
 		}
 	}
 
-	public BaseMessage deletePlace(long placeIdx) {
+	public BaseMessage deletePlace(long placeIdx) { 
 		Map<String,Object> resultMap= new HashMap<>();
 		Optional<Place> delPlace= placeRepository.findByplaceIdx(placeIdx);
 		
