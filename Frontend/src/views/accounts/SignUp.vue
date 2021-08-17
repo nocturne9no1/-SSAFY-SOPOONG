@@ -73,67 +73,6 @@
             회원가입
           </button>
         </div>
-        <div class="error-text" v-if="error.id">
-          {{ error.id }}
-        </div>
-
-        <div>
-          <input
-            v-model="signUpData.nickname"
-            :class="{ invalidNickname: error.nickname }"
-            id="nickname"
-            placeholder="Nickname"
-            type="text"
-          />
-        </div>
-        <div class="error-text" v-if="error.nickname">
-          {{ error.nickname }}
-        </div>
-
-        <div>
-          <input
-            v-model="signUpData.email"
-            :class="{ invalidEmail: error.email }"
-            id="email"
-            pattern="/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/"
-            placeholder="Email"
-            type="email"
-          />
-        </div>
-        <div class="error-text" v-if="error.email">
-          {{ error.email }}
-        </div>
-
-        <div>
-          <input
-            v-model="signUpData.password"
-            :class="{ invalidPassword: error.password }"
-            id="password"
-            pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/"
-            placeholder="Password"
-            type="password"
-          />
-        </div>
-        <div class="error-text" v-if="error.password">
-          {{ error.password }}
-        </div>
-
-        <div>
-          <input
-            v-model="signUpData.confirmPassword"
-            id="confirm-password"
-            pattern=""
-            placeholder="Confirm Password"
-            type="password"
-          />
-        </div>
-        <div class="error-text" v-if="error.confirmPassword">
-          {{ error.confirmPassword }}
-        </div>
-
-        <button @click="signUp(signUpData)" @keyup.enter="signUp(signUpData)">
-          회원가입
-        </button>
       </div>
     </div>
   </div>
