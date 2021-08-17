@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,19 +17,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class)
@@ -36,6 +38,7 @@ public class Travel implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore
 	private long travelIdx;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -45,9 +48,8 @@ public class Travel implements Serializable{
 	@NotNull
 	private String travelTitle;
 	
-	@OneToOne
-	@JoinColumn(name = "place_idx")
-	private Place place;
+	@OneToMany(mappedBy = "travel", cascade = CascadeType.ALL)
+	private List<Place> placeIdxList = new ArrayList<Place>();
 	
 	private String travelContent;
 	
@@ -57,6 +59,15 @@ public class Travel implements Serializable{
 	
 	@Column(name="travel_is_visible", columnDefinition = "TINYINT", length=1)
 	private int travelIsVisible;
+	private double travelLat;
+	
+	private double travelLong;
+	
+	private boolean travelIsVisible;
+	
+	private LocalDateTime startDate;
+	
+	private LocalDateTime endDate;
 	
 	@Column(insertable = false, updatable = true)
 	private LocalDateTime updatedAt;
@@ -64,22 +75,19 @@ public class Travel implements Serializable{
 	@Column(insertable = false, updatable = false)
 	private LocalDateTime createdAt;
 	
-	@OneToMany
-	@JoinColumn(name = "travel_idx")
-	private List<Place> places = new ArrayList<>();
+//	@OneToMany
+//	@JoinColumn(name = "travel_idx")
+//	private List<Place> places = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "travel")
 	private List<Good> goods = new ArrayList<>();
 
 	@Override
 	public String toString() {
-		String s = "Travel [travelIdx=" + travelIdx + ", user=" + user.getUserId() + ", travelTitle=" + travelTitle + ", place=" + place.getPlaceIdx()
+		String s = "Travel [travelIdx=" + travelIdx + ", user=" + user.getUserId() + ", travelTitle=" + travelTitle 
 		+ ", travelContent=" + travelContent + ", image=" + image.getImageIdx() + ", travelIsVisible=" + travelIsVisible
 		+ ", updatedAt=" + updatedAt + ", createdAt=" + createdAt + ", places=";
 		
-		for(int i=0;i<places.size();i++) {
-			s+=places.get(i).toString();
-		}
 		s+=", likes=";
 		for(int i=0;i<goods.size();i++) {
 			s+=goods.get(i).toString();
@@ -87,9 +95,5 @@ public class Travel implements Serializable{
 		s+="]";
 		
 		return s;
-	}
-
-	
-	
-	
+	}	
 }

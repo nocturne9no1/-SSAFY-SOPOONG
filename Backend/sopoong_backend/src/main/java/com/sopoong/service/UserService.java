@@ -1,5 +1,8 @@
 package com.sopoong.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -15,12 +18,18 @@ import com.sopoong.model.dto.changePasswordRequest;
 import com.sopoong.model.dto.changeProfileRequest;
 import com.sopoong.model.dto.changeVisibleRequest;
 import com.sopoong.model.dto.getProfileRequest;
+import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.User;
+import com.sopoong.repository.ImageRepository;
 import com.sopoong.repository.UserRepository;
 
 @Service
 public class UserService {
 	
+	@Autowired
+	private ImageService imageService;
+	@Autowired
+	private ImageRepository imageRepo;
 	@Autowired
 	private UserRepository userRepo;
 	@Autowired
@@ -48,13 +57,39 @@ public class UserService {
 		
 	}
 
-	public BaseMessage changeProfile(changeProfileRequest request) {
+	public BaseMessage changeProfile(changeProfileRequest request) throws IllegalStateException, NoSuchAlgorithmException, IOException {
 		
 		Map<String,Object> resultMap= new HashMap<>();
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
+		long imageIdx = updateUser.get().getImage().getImageIdx();
+		if(imageIdx != 0) { // 프로필 사진이 있는 경우
+			// 파일 제거
+			Optional<Image> image = imageRepo.findByImageIdx(imageIdx);
+			String path = image.get().getImagePath();
+			File file = new File(path);
+			
+			if(file.delete()){ // 파일 삭제에 성공하면 true, 실패하면 false
+                System.out.println("파일을 삭제하였습니다");
+            }else{
+                System.out.println("파일 삭제에 실패하였습니다");
+            }
+			
+			// DB에서 제거
+			imageService.deleteImage(imageIdx);
+		}
+		
+		// 질문? 프로필 사진을 지운경우, image_idx에 0을 넣어야되는데,,, Image로 되어있어서 불가능...
+		// 어떻게 해야되나..?
+		if(request.getImage().isEmpty()) { // 프로필 사진이 없는 경우
+			
+		}
+		
+		BaseMessage bm = imageService.saveProfile(request.getImage(), request.getUserComment());
+		long imgIdx = (long) bm.getData();
+		
 		if (updateUser.isPresent()) {
-			updateUser.get().setImage(request.getImage());
+			updateUser.get().setImage(imageRepo.findByImageIdx(imgIdx).get());
 			updateUser.get().setUserNickname(request.getUserNickname());
 			updateUser.get().setUserComment(request.getUserComment());
 			userRepo.save(updateUser.get());
@@ -65,7 +100,6 @@ public class UserService {
 			resultMap.put("errors", "프로필 변경 실패 (존재하지 않는 아이디)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
-		
 	}
 	
 	public BaseMessage changePassword(changePasswordRequest request) {
