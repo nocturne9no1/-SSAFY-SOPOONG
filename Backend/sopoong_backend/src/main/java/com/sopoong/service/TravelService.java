@@ -14,13 +14,18 @@ import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.FileDto;
+import com.sopoong.model.dto.FollowListRequest;
 import com.sopoong.model.dto.PlaceDto;
 import com.sopoong.model.dto.TravelDto;
+import com.sopoong.model.entity.Alarm;
 import com.sopoong.model.dto.TravelList;
 import com.sopoong.model.entity.Image;
+import com.sopoong.model.entity.Relation;
 import com.sopoong.model.entity.Travel;
+import com.sopoong.repository.AlarmRepository;
 import com.sopoong.repository.GoodRepository;
 import com.sopoong.repository.ImageRepository;
+import com.sopoong.repository.RelationRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
 
@@ -36,6 +41,12 @@ public class TravelService {
 	@Autowired
 	private ImageRepository imageRepository;
 	
+	@Autowired
+	private AlarmRepository alarmRepository;
+	
+	@Autowired
+	private RelationRepository relationRepository;
+
 	@Autowired
 	private GoodRepository goodRepository;
 
@@ -103,6 +114,21 @@ public class TravelService {
 
 		// travel 테이블에 저장
 		updateTravel(travel, travelImage);
+		
+		// 알람
+		long index= travel.getTravelIdx();		
+		List<Relation> followedList= userRepository.findByUserId(travelDto.getUserId()).get().getRelationFollowed();
+		
+		for (int i=0; i<followedList.size(); i++) {
+			if (String.format("%03d", Integer.parseInt(Integer.toBinaryString(userRepository.findByUserId(followedList.get(i).getRelationFollowed().getUserId()).get().getUserAlarm()))).charAt(0)=='1') {
+				alarmRepository.save(Alarm.builder()
+						.user(followedList.get(i).getRelationFollowing())
+						.alarmCategory(3)
+						.alarmCheck(0)
+						.travel(travelRepository.findById(index).get())
+						.build());
+			}
+		}
 
 		System.out.println("끄읕");
 		return new BaseMessage(HttpStatus.OK, "성공");
