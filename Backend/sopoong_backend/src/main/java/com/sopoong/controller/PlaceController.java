@@ -26,7 +26,7 @@ public static final Logger logger = LoggerFactory.getLogger(AuthController.class
 	private PlaceService placeService;
 	
 	@ApiOperation(value = "위치 일지 삭제")
-	@DeleteMapping("/place/delete")
+	@DeleteMapping("/place/delete") 
 	public ResponseEntity<BaseMessage> deletePlace(@RequestParam long placeIdx) {
 		BaseMessage bm = placeService.deletePlace(placeIdx);
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());

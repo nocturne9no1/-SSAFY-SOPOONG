@@ -244,7 +244,7 @@ public class TravelService {
 		Optional<Travel> delTravel= travelRepository.findBytravelIdx(travelIdx);
 		
 		if (delTravel.isPresent()) {
-			travelRepository.delete(delTravel.get());
+			travelRepository.delete(delTravel.get()); 
 			
 			resultMap.put("success", "Travel 삭제 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);

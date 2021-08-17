@@ -55,7 +55,7 @@ public class TravelController {
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), travelDetail), bm.getHeaders(), bm.getHttpStatus());
 	}
 	
-	@ApiOperation(value = "여행 일지 삭제")
+	@ApiOperation(value = "여행 일지 삭제") 
 	@DeleteMapping("/travel/delete")
 	public ResponseEntity<BaseMessage> deleteTravel(@RequestParam long travelIdx) {
 		BaseMessage bm = travelService.deleteTravel(travelIdx);
