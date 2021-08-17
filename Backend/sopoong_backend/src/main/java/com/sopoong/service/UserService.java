@@ -35,6 +35,7 @@ public class UserService {
 		if (user.isPresent()) {
 			getUser.setUserId(user.get().getUserId());
 			getUser.setUserNickname(user.get().getUserNickname());
+			getUser.setUserIsVisible(user.get().getUserIsVisible());
 			getUser.setUserComment(user.get().getUserComment());
 			getUser.setImage(user.get().getImage());
 			getUser.setFollowings(user.get().getRelationFollowing().size());
