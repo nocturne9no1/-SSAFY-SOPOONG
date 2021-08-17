@@ -8,20 +8,28 @@
       <br />
       <br />
       <span>
-        <input
-          v-model="email"
-          :class="{ invalidEmail: error.email }"
-          id="email"
-          pattern="/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/"
-          placeholder="Email"
-          type="text"
-        />
+        <div>
+          <input
+            v-model="email"
+            :class="{ invalidEmail: error.email }"
+            id="email"
+            pattern="/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/"
+            placeholder="Email"
+            type="text"
+          />
+          <div class="error-text" v-show="error.email">
+            {{ error.email }}
+          </div>
+        </div>
         <!-- <button @click="existed()" v-show="!error.email">
           확인
         </button> -->
-        <button @click="existed()" id="confirmBtn" disabled>
-          확인
-        </button>
+        <!-- <button @click="existed()" id="confirmBtn"> -->
+          <div>
+            <button @click="existed(email)" id="confirmBtn" disabled>
+              확인
+            </button>
+          </div>
       </span>
     </div>
 
@@ -36,14 +44,14 @@
         <span>
           <input
             v-model="authKey"
-            @keyup.enter="requestEmailAuth(authKey)"
+            @keyup.enter="findIdConfirmAuthKey({email, authKey})"
             id="authkey"
             placeholder="인증코드"
             type="text"
           />
           <button
-            @click="requestEmailAuth(authKey), existed()"
-            @keyup.enter="requestEmailAuth(authKey)"
+            @click="findIdConfirmAuthKey({email, authKey})"
+            @keyup.enter="findIdConfirmAuthKey({email, authKey})"
           >
             인증
           </button>
@@ -53,7 +61,7 @@
             <!-- a태그 이용한 새로고침 이용 뒤로 돌아가기 -->
             <a href="">메일 주소 다시 입력</a>
           </p>
-          <p @click="resend">
+          <p @click="resend(email)">
             인증메일 다시 보내기
           </p>
         </span>
@@ -64,6 +72,8 @@
 
 <script>
 import { mapActions } from "vuex";
+import axios from 'axios';
+
 export default {
   name: "FindAccount",
   components: {},
@@ -95,37 +105,42 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["requestEmailAuth"]),
+    ...mapActions(["requestEmailAuth", "findIdConfirmAuthKey"]),
 
     // 이메일 검증
     checkEmail(email) {
       console.log("I am watching !");
-      this.$store.dispatch("checkExistingEmail", email);
-
-      if (!this.validateEmail(this.email) && this.email.length >= 1) {
-        this.error.email = "이메일 형식을 확인해주세요.";
-        const target = document.getElementById('confirmBtn')
-        target.disabled = true;
-      } else if (this.email.length >= 1 && this.validateEmail(this.email)) {
-          // 버튼 활성화 비활성화때문에 else if 추가
+      const target = document.getElementById('confirmBtn')
+      // 이메일 중복검사 이용
+      axios.get('auth/email', { params :{ email: email }})
+        .then(res => {
+        if ( res.data.data.errors && email.length >= 1 ) {
+          // 버튼 활성화 비활성화때문에 else if 추가 + axios문 내에서 이 3개가 주요역할.
           this.error.email = false;
-          const target = document.getElementById('confirmBtn')
           target.disabled = false;
-      } else this.error.email = false;
-    },
-    validateEmail: function(email) {
-      var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-      return regExp.test(email);
+        } else if ( res.data.data.errors && email.length == 0 ) {
+          this.error.email = false;
+          target.disabled = true;
+        } else {
+          this.error.email = '존재하지 않는 이메일입니다.';
+
+          target.disabled = true;
+        } 
+      })
     },
 
-
-    existed() {
+    // 존재했다 !
+    existed(email) {
       this.existingEmail = true;
+      this.$store.dispatch('findIdEmailAuth', email)
     },
-    resend() {
-      alert("인증 메일이 재전송되었습니다.");
-      // 과정 추가
-    },
+    // 다시 보낸다 !
+    resend(email) {
+      alert('메일이 다시 전송되었습니다.')
+      this.existingEmail = true;
+      this.$store.dispatch('findIdEmailAuth', email)
+    }
+
   },
 };
 </script>
@@ -195,7 +210,7 @@ input {
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.6);
 
-  color: white;
+  color: black;
   font-size: 16px;
 
   caret-color: black;

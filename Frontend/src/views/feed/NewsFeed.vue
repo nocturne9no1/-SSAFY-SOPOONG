@@ -47,6 +47,7 @@ export default {
   beforeCreate() {},
   async created() {
     // 기본이 development로 설정되어 있고 , 그 외에도 여러 모드가 있다.
+    console.log(process.env.NODE_ENV)
     if (process.env.NODE_ENV === "production") {
       await this.getRandomImages(DEFAULT_IMAGES_COUNT);
     } else {

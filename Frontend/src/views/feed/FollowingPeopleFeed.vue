@@ -1,36 +1,42 @@
 <template>
   <div style="display: flex;">
+    <profile-box />
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <h1>Masonry MainFeed</h1>
+          <h1>팔로우한 사람 뉴스피드</h1>
           <!-- <button class="filterButton">Filter</button> -->
         </div>
         <div class="cards" v-if="images.length">
-          <main-feed-journal-card
+          <following-people-journal-card
             v-for="image in images"
             :key="image.id"
             :image="image"
           />
         </div>
         <div class="cards-loading" v-else>
-          Loading image....
+          이미지가 없습니다.
         </div>
       </div>
     </div>
+    <FeedFilter />
   </div>
 </template>
 
 <script>
-import MainFeedJournalCard from "@/components/main/MainFeedJournalCard.vue";
+import FollowingPeopleJournalCard from "@/components/feed/FollowingPeopleJournalCard.vue";
 import axios from "axios";
+import ProfileBox from '@/views/accounts/ProfileBox.vue';
+import FeedFilter from '@/components/FeedFilter.vue';
 
 const DEFAULT_IMAGES_COUNT = 30;
 
 export default {
   name: "",
   components: {
-    MainFeedJournalCard,
+    FollowingPeopleJournalCard,
+    ProfileBox,
+    FeedFilter,
   },
   data() {
     return {
@@ -41,15 +47,19 @@ export default {
   beforeCreate() {},
   async created() {
     // 기본이 development로 설정되어 있고 , 그 외에도 여러 모드가 있다.
-    // console.log(process.env.NODE_ENV)
+    console.log(process.env.NODE_ENV)
     if (process.env.NODE_ENV === "production") {
       await this.getRandomImages(DEFAULT_IMAGES_COUNT);
     } else {
       await this.getRandomImagesFromLocal();
     }
+
   },
   beforeMount() {},
-  mounted() {},
+  async mounted() {
+    // Follow한 사람 정보 불러오기
+    await this.$store.dispatch('getFollowingPeopleFeeds')
+  },
   beforeUpdate() {},
   updated() {},
   beforeUnmount() {},
@@ -96,9 +106,9 @@ export default {
 } */
 
 .wrapper {
-  /* margin-left: 10rem;
+  margin-left: 10rem;
   margin-top: 7rem;
-  margin-right: 3rem; */
+  margin-right: 3rem;
 }
 .heading h1 {
   text-align: center;
@@ -124,9 +134,6 @@ export default {
   position: relative;
 }
 
-h1 {
-  font-family: 'Do Hyeon';
-}
 /* .filterButton {
   position: absolute;
   right: 2rem;
