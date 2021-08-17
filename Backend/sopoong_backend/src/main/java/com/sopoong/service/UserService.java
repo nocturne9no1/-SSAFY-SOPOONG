@@ -75,7 +75,7 @@ public class UserService {
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		if (updateUser.isPresent()) {
-			if (updateUser.get().getUserPassword()==request.getUserPassword()) {
+			if (passwordEncoder.matches(request.getUserPassword(), updateUser.get().getUserPassword())) {
 				updateUser.get().setUserPassword(passwordEncoder.encode(request.getChangedPassword()));
 				userRepo.save(updateUser.get());
 				
@@ -85,7 +85,7 @@ public class UserService {
 				resultMap.put("errors", "비밀번호 일치하지 않음");
 			}
 		} else {
-			resultMap.put("errors", "비밀번호 변경 실패");
+			resultMap.put("errors", "비밀번호 변경 실패 (존재하지 않는 아이디)");
 		}
 		return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		
