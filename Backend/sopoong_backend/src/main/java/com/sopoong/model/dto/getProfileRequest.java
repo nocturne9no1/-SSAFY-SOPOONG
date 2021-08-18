@@ -21,6 +21,8 @@ public class getProfileRequest {
 	
 	int userIsVisible;
 	
+	int userAlarm;
+	
 	String userComment;
 	
 	Image image;
