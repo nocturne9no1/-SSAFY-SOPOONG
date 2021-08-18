@@ -117,7 +117,7 @@ public class ImageService {
 		Map<String,Object> resultMap= new HashMap<>();
 		
 		// 파일이 비어있는 경우
-		if (file.isEmpty() || file == null) {
+		if (file == null) {
 			BaseMessage bm = userService.updateImage(2, userId); // 기본이미지 Idx로 User Table 업데이트
 			
 			if (!bm.getHttpStatus().equals(HttpStatus.OK)) {
