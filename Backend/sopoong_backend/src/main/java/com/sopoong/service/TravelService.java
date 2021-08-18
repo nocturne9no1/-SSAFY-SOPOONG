@@ -209,6 +209,7 @@ public class TravelService {
 						.travelLong(travel.get().getTravelLong())
 						.startDate(null)
 						.endDate(null)
+						.isFollow(travel.get().isFollow())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.get().getTravelIdx()))
 						.build();
 		

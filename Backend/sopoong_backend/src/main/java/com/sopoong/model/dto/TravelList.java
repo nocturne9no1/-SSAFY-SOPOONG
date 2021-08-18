@@ -20,6 +20,7 @@ public class TravelList {
 	private double travelLong;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
+	private boolean isFollow;
 	private boolean travelIsVisible;
 	private long totalLike;
 }

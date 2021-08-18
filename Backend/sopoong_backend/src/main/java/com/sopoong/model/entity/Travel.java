@@ -59,6 +59,8 @@ public class Travel implements Serializable{
 	
 	private boolean travelIsVisible;
 	
+	private boolean isFollow;
+	
 	private double travelLat;
 	
 	private double travelLong;
