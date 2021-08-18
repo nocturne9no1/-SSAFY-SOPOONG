@@ -2,17 +2,24 @@ package com.sopoong.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,4 +43,10 @@ public class ImageController {
 		BaseMessage bm = imageService.saveProfile(image, "wpffl3333");
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
 	} */
+	
+	@GetMapping(value = "/image/{filePath}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public @ResponseBody byte[] getImageWithMediaType(@PathVariable(name = "filePath") String filePath) throws IOException {
+		InputStream in = getClass().getResourceAsStream(filePath);
+		return IOUtils.toByteArray(in);
+	}
 }
