@@ -163,21 +163,23 @@ public class UserService {
 		
 	}
 	
-	public BaseMessage deleteUser(String id) {
+	public BaseMessage deleteUser(String id, String password) {
 		
 		Map<String,Object> resultMap= new HashMap<>();
 		Optional<User> deleteUser= userRepo.findByUserId(id);
-
 		
 		if (deleteUser.isPresent()) {
-			userRepo.delete(deleteUser.get());
-			
-			resultMap.put("success", "계정 삭제 성공");
-			return new BaseMessage(HttpStatus.OK, resultMap);
+			if (passwordEncoder.matches(password, deleteUser.get().getUserPassword())) {
+//				userRepo.deleteById(deleteUser.get().getUserIdx())
+				userRepo.delete(deleteUser.get());
+				resultMap.put("success", "계정 삭제 성공");
+				return new BaseMessage(HttpStatus.OK, resultMap);
+			}
+			resultMap.put("errors", "계정 삭제 실패 (비밀번호 일치하지 않음)");
 		} else {
 			resultMap.put("errors", "계정 삭제 실패 (존재하지 않는 아이디)");
-			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
+		return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		
 	}
 	
