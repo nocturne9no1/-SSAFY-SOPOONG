@@ -1,6 +1,8 @@
 package com.sopoong.service;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,6 +31,9 @@ public class PlaceService {
 	
 	@Autowired
 	private TravelRepository travelRepository;
+	
+	@Autowired
+	private TravelService travelService;
 
 	@Transactional
 	public BaseMessage writePlace(PlaceDto placeDto, String userId) {
@@ -51,22 +56,17 @@ public class PlaceService {
 				.placeVisitDate(placeDto.getVisitDate())
 				.build();
 
-		System.out.println("aaa " + place.getPlaceVisitDate());
 		place = placeRepository.save(place);
-		System.out.println("bbb " +place.getPlaceVisitDate());
 		System.out.println("저장 끝");
 		// resultMap.put("success", place);
 		return new BaseMessage(HttpStatus.OK, place.getPlaceIdx());
 	}
 
+	@Transactional
 	public BaseMessage updatePlace(long placeIdx, long travelIdx, Image placeImage) {
 		Map<String, Object> resultMap = new HashMap<>();
 		Optional<Place> updatePlace = placeRepository.findByplaceIdx(placeIdx);
 
-		System.out.println("[updatePlace] " + placeImage.getImageLat());
-		System.out.println("[updatePlace] " + placeImage.getImageLong());
-		System.out.println("[updatePlace] " + placeImage.getImageTime());
-		
 		if (updatePlace.isPresent()) {
 			updatePlace.get().setImage(imageRepository.findByImageIdx(placeImage.getImageIdx()).get());
 			updatePlace.get().setPlaceLat(placeImage.getImageLat());
@@ -86,8 +86,37 @@ public class PlaceService {
 	public BaseMessage deletePlace(long placeIdx) { 
 		Map<String,Object> resultMap= new HashMap<>();
 		Optional<Place> delPlace= placeRepository.findByplaceIdx(placeIdx);
+		List<Image> delImageList = imageRepository.findByPlace_PlaceIdx(placeIdx); // 삭제될 이미지 리스트
+		
+		// Travel 대표 이미지 구하기
+		long travelIdx = delPlace.get().getTravel().getTravelIdx();
+		Optional<Travel> travel = travelRepository.findBytravelIdx(travelIdx);
+		long travelImageIdx = travel.get().getImage().getImageIdx();
 		
 		if (delPlace.isPresent()) {
+			// 삭제될 이미지 검사
+			for(Image i : delImageList) {
+				if(i.getImageIdx() == travelImageIdx) { // 삭제될 이미지가 travel의 대표 이미지인 경우
+					Image im = Image.builder()
+							.imageIdx(1)
+							.imageLat(i.getImageLat())
+							.imageLong(i.getImageLong())
+							.build();
+					
+					travelService.updateTravel(travel.get(), im); // Travel의 image_idx = 1로 변경
+				}
+				
+				// 파일 삭제
+				String path = i.getImagePath();
+				File file = new File(path);
+				System.out.println("[filePath] " + path);
+				if(file.delete()){ // 파일 삭제에 성공하면 true, 실패하면 false
+	                System.out.println("파일을 삭제하였습니다");
+	            }else{
+	                System.out.println("파일 삭제에 실패하였습니다");
+	            }
+			}
+			
 			placeRepository.delete(delPlace.get());
 			
 			resultMap.put("success", "Place 삭제 성공");

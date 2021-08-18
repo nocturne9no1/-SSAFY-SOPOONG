@@ -1,5 +1,6 @@
 package com.sopoong.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -144,10 +145,12 @@ public class TravelService {
 	}
 
 	@Transactional
-	private BaseMessage updateTravel(Travel travel, Image travelImage) {
+	protected BaseMessage updateTravel(Travel travel, Image travelImage) {
 		Map<String, Object> resultMap = new HashMap<>();
 		Optional<Travel> updateTravel = travelRepository.findBytravelIdx(travel.getTravelIdx());
-
+		
+		System.out.println("[travelIdx] " + travel.getTravelIdx());
+		System.out.println("[updateTravel] " + travelImage.getImageIdx() + " " + travelImage.getImageLat());
 		if (updateTravel.isPresent()) {
 			updateTravel.get().setImage(imageRepository.findByImageIdx(travelImage.getImageIdx()).get());
 			updateTravel.get().setTravelLat(travelImage.getImageLat());
@@ -165,14 +168,16 @@ public class TravelService {
 	public BaseMessage selctTravelList(String userId) {
 		List<Travel> tlist = travelRepository.findByUser_UserId(userId);
 		ArrayList<TravelList> travelList = new ArrayList<>();
-
+		for(TravelList t : travelList) {
+			System.out.println(t.toString());
+		}
 		for (Travel travel : tlist) {
 			
 			TravelList t = TravelList.builder()
 						.travelIdx(travel.getTravelIdx())
 						.travelTitle(travel.getTravelTitle())
 						.travelContent(travel.getTravelContent())
-						.imagePath(imageRepository.findByImageIdx(travel.getImage().getImageIdx()).get().getImagePath())
+						.imageOriginTitle(imageRepository.findByImageIdx(travel.getImage().getImageIdx()).get().getImageOriginTitle())
 						.travelLat(travel.getTravelLat())
 						.travelLong(travel.getTravelLong())
 						.startDate(null)
@@ -195,11 +200,12 @@ public class TravelService {
 						.travelIdx(travel.get().getTravelIdx())
 						.travelTitle(travel.get().getTravelTitle())
 						.travelContent(travel.get().getTravelContent())
-						.imagePath(imageRepository.findByImageIdx(travel.get().getImage().getImageIdx()).get().getImagePath())
+						.imageOriginTitle(imageRepository.findByImageIdx(travel.get().getImage().getImageIdx()).get().getImageOriginTitle())
 						.travelLat(travel.get().getTravelLat())
 						.travelLong(travel.get().getTravelLong())
 						.startDate(null)
 						.endDate(null)
+						.isFollow(travel.get().isFollow())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.get().getTravelIdx()))
 						.build();
 		
@@ -222,7 +228,7 @@ public class TravelService {
 						.placeVisitDate(place.getPlaceVisitDate())
 						.placeLat(place.getPlaceLat())
 						.placeLong(place.getPlaceLong())
-						.imagePath(imageRepository.findByImageIdx(place.getImage().getImageIdx()).get().getImagePath())
+						.imageOriginTitle(imageRepository.findByImageIdx(place.getImage().getImageIdx()).get().getImageOriginTitle())
 						.build();
 			
 			placeList.add(p);
@@ -240,7 +246,23 @@ public class TravelService {
 		Map<String,Object> resultMap= new HashMap<>();
 		Optional<Travel> delTravel= travelRepository.findBytravelIdx(travelIdx);
 		
+		List<Image> travelImgList = imageRepository.findByTravel_TravelIdx(travelIdx); // 삭제될 이미지
+		
 		if (delTravel.isPresent()) {
+			// 삭제될 이미지들 파일 삭제
+			for(Image i : travelImgList) {
+				
+				String path = i.getImagePath();
+				File file = new File(path);
+				
+				System.out.println("[filePath] " + path);
+				if(file.delete()){ // 파일 삭제에 성공하면 true, 실패하면 false
+	                System.out.println("파일을 삭제하였습니다");
+	            }else{
+	                System.out.println("파일 삭제에 실패하였습니다");
+	            }
+			}
+			
 			travelRepository.delete(delTravel.get()); 
 			
 			resultMap.put("success", "Travel 삭제 성공");

@@ -66,7 +66,7 @@ public class UserService {
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		long imageIdx = updateUser.get().getImage().getImageIdx();
-		if(imageIdx != 0) { // 프로필 사진이 있는 경우
+		if(imageIdx != 2) { // 프로필 사진이 있는 경우
 			// 파일 제거
 			Optional<Image> image = imageRepo.findByImageIdx(imageIdx);
 			String path = image.get().getImagePath();
