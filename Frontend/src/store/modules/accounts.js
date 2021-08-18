@@ -22,6 +22,7 @@ const getters = {
 }
 const mutations = {
   SET_TOKEN(state, token) {
+    // console.log(token)
     state.authToken = token
   },
   SET_PROFILE(state, userData) {
@@ -44,14 +45,14 @@ const actions = {
     // 로그인시도
     axios.get('auth/login', { params :{ id: signInData.id, password: signInData.password } })
     .then(res => {
-      console.log(res.data)
-      context.commit('SET_TOKEN', res.data.data.seccess) // 보내주는 cookie key 저장? 키값이 이렇게 오는게 맞나?
-      cookies.set('X-AUTH-TOKEN', res.data.data.seccess, "7d") // 키 , 값, 만료일
+      console.log(res.data.data.success)
+      context.commit('SET_TOKEN', res.data.data.success) // 보내주는 cookie key 저장? 키값이 이렇게 오는게 맞나?
+      cookies.set('X-AUTH-TOKEN', res.data.data.success, "7d") // 키 , 값, 만료일
       // this.$cookies.set('auth-token', res.data.key, "7d")  // 글로벌 설정으로 쿠키 가져올때(main.js).
       
       // 프로필 정보 기억
+      // console.log(signInData)
       context.dispatch('getProfile', signInData.id)
-      alert("로그인 성공!!>.<!!!!");
       router.push('/main')
     })
     .catch(err => {console.log(err), alert('아이디와 비밀번호를 확인하세요.')})
@@ -59,9 +60,13 @@ const actions = {
   
   // 로그인시 프로필 데이터 get
   getProfile(context, id) {
-    // axios.get(`user/${id}`) // 이거 각자 정보 불러오는 구조가 어떻게 될지?
-    axios.get(`user`)
-      .then(res => {console.log(id, res.data), context.commit("SET_PROFILE", res.data)})
+    // header에 X-HEADER-TOKEN 넣어 보낼 시, 403에러 해결 가능
+    console.log(context.state.authToken)
+    axios.get(`user`, { params: {id : id}, headers: { 'X-AUTH-TOKEN' : context.state.authToken } })
+      .then(res => {
+        // console.log(id, res.data.data.success);
+        context.commit("SET_PROFILE", res.data.data.success);
+      })
       .catch(err => console.error(err))
   },
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nav-wrap">
     <nav>
       <ul class="nav-container">
         <div class="nav-left">

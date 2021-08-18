@@ -156,6 +156,7 @@
       }
       // 토글 버튼
       .toggle-btn{
+        z-index: 2;
         display: inline-block;
         width: 40px;
         height: 20px;
@@ -199,7 +200,7 @@
           width: 100%;
           height: 100%;
           opacity: 0;
-          z-index: 7;
+          z-index: 2;
           cursor:pointer;
           -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
         }
@@ -282,4 +283,39 @@
     filter: blur(5px);
   }
 
+  // 달력 모듈 styling
+  .range-date-picker-container {
+    cursor: pointer;
+    z-index: 4;
+    font-size: 14px;
+    position: relative;
+    .range-date-picker {
+      position: absolute;
+      top: 50px;
+      left: 0px;
+    }
+    .range-date-input {
+      padding: 10px;
+      width: 300px;
+    }
+    div {
+      .days .active {
+        background-color: $green !important;
+      }
+      .start {
+        .wrapper {
+          background-color: none !important;
+        }
+      }
+    }
+  }
+  .panelIn-enter {
+    transform: translateY(-10px);
+  }
+  .panelIn-enter-active {
+    transition: transform 0.3s ease;
+  }
+  .panelIn-enter-to {
+    transform: translateY(0);
+  }
 }

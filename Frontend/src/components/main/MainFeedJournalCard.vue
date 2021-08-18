@@ -11,7 +11,8 @@
     @click="journalDetail()"
   >
     <div class="image">
-      <img :src="image.urls.small" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
+      <!-- <img :src="image.urls.small" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" /> -->
+      <img :src='imgSrc' alt="travelImage">
     </div>
     <div class="profilePhotoDiv">
           <img class="photo" src="https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/EKE66P73OGOHBUQ4TG5XP6JOTQ.jpg" alt="profile-photo">
@@ -26,7 +27,8 @@
     </div>
     
     <div class="textDiv" v-show="imgHover">
-      <h1>여행일지 제목</h1>
+      <!-- <h1>여행일지 제목</h1> -->
+      <h1>{{ travel.travelTitle }}</h1>
       <!-- 별점 -->
       <span class="fa fa-star" :class="{ checked : checkRating(1) }"></span>
       <span class="fa fa-star" :class="{ checked : checkRating(2) }"></span>
@@ -42,10 +44,11 @@
 
 export default {
   props: {
-    image: {
-      type: Object,
-      required: true,
-    },
+    // image: {
+    //   type: Object,
+    //   required: true,
+    // },
+    travel: Object,
   },
 
   data: () => ({
@@ -57,11 +60,15 @@ export default {
   }),
 
   created() {
-    this.tH = Math.round(this.image.height / (this.image.width / 400));
-    const gap = Math.round(this.tH / 10);
-    this.gap = `span ${gap}`;
+    // this.tH = Math.round(this.image.height / (this.image.width / 400));
+    // const gap = Math.round(this.tH / 10);
+    // this.gap = `span ${gap}`;
   },
-
+  computed: {
+    imgSrc() {
+      return 'https://i5a404.p.ssafy.io/api/image/'+this.travel.imageOriginTitle
+    }
+  },
   methods: {
     imgHoverCheck() {
       this.imgHover = true;

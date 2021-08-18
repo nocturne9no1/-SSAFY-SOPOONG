@@ -142,7 +142,8 @@ export default {
         exifr.parse(image).then((output) => {
           if (output) {
             console.log("I am in !", output.latitude);
-            this.files[i].dateTime = image.lastModifiedDate
+            this.files[i].dateTime = output.CreateDate
+            this.files[i].imageData = output;
             if (output.latitude !== undefined) {
               position = {
                 lat: output.latitude,
@@ -197,9 +198,11 @@ export default {
         var position = new Array();
 
         exifr.parse(image).then((output) => {
+          console.log('들어옴')
+          console.log(output)
           if (output) {
             console.log("I am in !", output.latitude);
-            this.files[this.files.length - this.$refs.files.files.length + i].dateTime = this.files[this.files.length - this.$refs.files.files.length + i].file.lastModifiedDate
+            this.files[this.files.length - this.$refs.files.files.length + i].dateTime = output.CreateDate
             if (output.latitude !== undefined) {
               position = {
                 lat: output.latitude,

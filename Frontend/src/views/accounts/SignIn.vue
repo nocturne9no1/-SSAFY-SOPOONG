@@ -81,8 +81,8 @@ export default {
     },
     signIn(signInData) {
       this.$store.dispatch('signIn', signInData)
-      this.signInData.id = null
-      this.signInData.password = null
+      // this.signInData.id = null
+      // this.signInData.password = null
     },
     signUp() {
       this.$router.push('/signup')

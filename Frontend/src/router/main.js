@@ -2,7 +2,8 @@ import MainPage from '../views/main/MainPage.vue'
 
 export default [
   {
-    path: '/main',
+    path: '/',
+    alias: ['/main'],
     name: 'Main',
     component: MainPage,
   }

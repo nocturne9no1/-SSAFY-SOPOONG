@@ -130,6 +130,25 @@ span {
   color: $gray;
 }
 
+.profile-change {
+  input {
+    display: none;
+  }
+
+  label {
+    
+    width: 100px;
+    background-color: $green;
+  }
+
+  .image-preview-box {
+    width: 30%;
+    img {
+      width: 100%;
+    }
+  }
+}
+
 .btn {
   margin-top: 20px *1.5;
   float: right;

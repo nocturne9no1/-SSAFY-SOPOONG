@@ -2,11 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import PageNotFound from '../views/PageNotFound.vue'
 import CreateJourney from '../views/createJourney/CreateJourney.vue'
-
+import Intro from '../views/Intro.vue'
 
 // 없앨 예정
 import ModalToWriteJournal from '../components/journals/ModalToWriteJournal.vue'
-import test from '../views/test.vue'
+// import test from '../views/test.vue'
 // import Pintest from '../views/Pintest.vue'
 // import completeForm from '../views/completeForm.vue'
 
@@ -48,8 +48,13 @@ const routes = [
   },
   {
     path: '/',
-    name: 'test',
-    component: test,
+    name: 'main',
+    component: main,
+  },
+  {
+    path: '/intro',
+    name: 'intro',
+    component: Intro,
   },
   // {
   //   path: '/pintest',

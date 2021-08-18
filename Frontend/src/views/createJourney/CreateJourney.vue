@@ -101,6 +101,8 @@ export default {
         eachImage.isTravelLeader = false
         eachImage.preview = image.preview
         eachImage.dateTime = image.dateTime
+        eachImage.imageWidth = image.imageData.ExifImageWidth
+        eachImage.imageHeight = image.imageData.ExifImageHeight
         marker.imageList = [
           eachImage
         ]

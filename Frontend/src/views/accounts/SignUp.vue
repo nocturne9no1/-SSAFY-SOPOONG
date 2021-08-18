@@ -213,6 +213,9 @@ export default {
   background-image: url('../../assets/background.jpg');
   /* position: absolute; */
   background-size: cover;
+  position: relative;
+  top: 0;
+
 
 }
 
