@@ -46,6 +46,7 @@ public class UserService {
 			getUser.setUserEmail(user.get().getUserEmail());
 			getUser.setUserNickname(user.get().getUserNickname());
 			getUser.setUserIsVisible(user.get().getUserIsVisible());
+			getUser.setUserAlarm(user.get().getUserAlarm());
 			getUser.setUserComment(user.get().getUserComment());
 			getUser.setImage(user.get().getImage());
 			getUser.setFollowings(user.get().getRelationFollowing().size());
