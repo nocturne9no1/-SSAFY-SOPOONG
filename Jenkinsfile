@@ -47,7 +47,7 @@ pipeline {
 				frontend:latest'
 
 				sh 'docker run -d -p 8080 --name backend \
-		--network jenkinsnetwork backend:latest'
+		-v /home/ubuntu/image:/image --network jenkinsnetwork backend:latest'
 			}
 		}
 	}
