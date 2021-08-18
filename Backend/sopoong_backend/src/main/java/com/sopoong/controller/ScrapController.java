@@ -20,7 +20,7 @@ import com.sopoong.service.ScrapService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 @CrossOrigin(origins = { "*" })
 public class ScrapController {
 	@Autowired
