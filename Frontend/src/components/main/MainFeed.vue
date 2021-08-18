@@ -124,6 +124,9 @@ export default {
   position: relative;
 }
 
+h1 {
+  font-family: 'Do Hyeon';
+}
 /* .filterButton {
   position: absolute;
   right: 2rem;

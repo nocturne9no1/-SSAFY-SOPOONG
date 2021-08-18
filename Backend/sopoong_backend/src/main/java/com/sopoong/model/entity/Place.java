@@ -12,17 +12,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Place {
@@ -65,14 +67,4 @@ public class Place {
 	@Column(insertable = false, updatable = false)
 	private LocalDateTime createdAt;
 
-	@Override
-	public String toString() {
-		return "Place [placeIdx=" + placeIdx + ", travel=" + travel.getTravelIdx() + ", placeTitle=" + placeTitle + ", placeCategory="
-				+ placeCategory + ", placeCategory2=" + placeCategory2 + ", placeRate1=" + placeRate1 + ", placeRate2="
-				+ placeRate2 + ", placeRate3=" + placeRate3 + ", placeTransport=" + placeTransport + ", placeComment="
-				+ placeComment + ", image=" + image.getImageIdx() + ", placeVisitDate=" + placeVisitDate + ", placeLat=" + placeLat
-				+ ", placeLong=" + placeLong + ", createdAt=" + createdAt + "]";
-	}
-	
-	
 }

@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -41,6 +43,20 @@ public class Image {
 	@NotNull
 	private String imagePath; // 파일 저장 경로
 	
+	@NotNull
+	private double imageLat; // 파일 위도
+	
+	@NotNull
+	private double imageLong; // 파일 경도
+	
+	private LocalDateTime imageTime; // 사진 찍은 시각
+	
+	@NotNull
+	private int isPlaceLeader; // 위치 대표사진 여부(0:일반 사진, 1:위치대표이미지)
+	
+	@NotNull
+	private int isTravelLeader; // 여행 대표사진 여부(0:일반 사진, 1:여행대표이미지)
+	
 	@ManyToOne
 	@JoinColumn(name = "travel_idx")
 	private Travel travel;
@@ -59,7 +75,7 @@ public class Image {
 	@Override
 	public String toString() {
 		return "Image [imageIdx=" + imageIdx + ", imageOriginTitle=" + imageOriginTitle + ", imageTitle=" + imageTitle
-				+ ", imagePath=" + imagePath + ", travel=" + travel + ", place=" + place + ", user=" + user
-				+ ", createdAt=" + createdAt + "]";
-	}  
+				+ ", imagePath=" + imagePath + ", imageLat=" + imageLat + ", imageLong=" + imageLong + ", travel="
+				+ travel + ", place=" + place + ", user=" + user + ", createdAt=" + createdAt + "]";
+	}
 }

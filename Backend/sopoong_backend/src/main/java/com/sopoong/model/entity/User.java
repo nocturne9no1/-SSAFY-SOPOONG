@@ -102,9 +102,7 @@ public class User implements Serializable {
 	private List<Good> goods = new ArrayList<>();
 	
 	
-	@OneToMany
-	@Nullable
-	@JoinColumn(name = "user_id")
+	@OneToMany(mappedBy = "user")
 	private List<Scrap> scraps = new ArrayList<>();
 
 	@Override

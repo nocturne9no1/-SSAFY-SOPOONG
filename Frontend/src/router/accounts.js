@@ -28,7 +28,7 @@ export default [
     ]
   },
   {
-    path: '/emailauthentication',
+    path: '/auth',
     component: EmailAuthentication,
   },
   {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background">
     <div class="SignInDiv" v-if="$route.path.length == 8 || $route.path.length == 7">
       <div class="SignInDivBody" @keyup.enter="signIn(signInData)">
         <!-- <h1>Sign In</h1> -->
@@ -96,10 +96,21 @@ div {
   font-family: monospace;
 }
 
+.background {
+  background-image: url('../../assets/background.jpg');
+  /* position: absolute; */
+  background-size: cover;
+  height: 100vh;
+
+}
+
 .SignInDiv {
   /* display: table; */
   /* inline-block 사용시 margin과 함께 사용. inline-block은 가로 중앙정렬만 가능 */
   /* display: inline-block; */
+
+  background-image: url('../../assets/background.jpg');
+  background-size: cover;
 
   /* 다른 중앙정렬 방식 position ~ transform */
   /* body에 overflow:auto 통해 뷰포트가 작아져도 웹사이트 구조는 유지하게 만들 수 있다.(여기선 index.html) */
@@ -157,14 +168,14 @@ input {
   border-radius: 20px;
   background-color: rgba(255, 255, 255, .6);
 
-  color: white;
+  color: black;
   font-size: 16px;
 
 }
   
-input#id:invalid {
+/* input#id:invalid {
   border: 3px solid red;
-}
+} */
 /* input:valid {
     background-color: greenyellow;
   } */
