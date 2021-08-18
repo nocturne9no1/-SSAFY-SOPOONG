@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,16 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.FileDto;
-import com.sopoong.model.dto.ImageDto;
 import com.sopoong.model.entity.Image;
-import com.sopoong.model.entity.User;
 import com.sopoong.repository.ImageRepository;
 import com.sopoong.repository.PlaceRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
 import com.sopoong.util.MD5Generator;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Service
 public class ImageService {
@@ -68,9 +64,9 @@ public class ImageService {
 		// 다중 파일 업로드 처리
 		for (FileDto file : files) {
 			MultipartFile image = file.getFile();
-			if (file.getFile() == null) { // 파일이 빈 파일인 경우
-				System.out.println("FileDto가 NULL");
-				resultMap.put("errors", "FileDto가 비어있음");
+			if (image == null) { // 파일이 빈 파일인 경우
+				System.out.println("image가 NULL");
+				resultMap.put("errors", "image가 null");
 				return new BaseMessage(HttpStatus.NO_CONTENT, resultMap);
 			}
 
@@ -83,6 +79,7 @@ public class ImageService {
 			}
 
 			String imageOriginTitle = System.nanoTime() + image.getOriginalFilename(); // 파일명 중복을 피하기 위해 나노초까지 받아옴
+			imageOriginTitle = imageOriginTitle.replace(" ", ""); // 파일이름 공백제거
 			String imageTitle = new MD5Generator(imageOriginTitle).toString(); // 서버에 저장 값은 MD5의 체크섬 값
 
 			String imagePath = savePath + "/" + imageOriginTitle;
@@ -132,6 +129,7 @@ public class ImageService {
 		}
 
 		String imageOriginTitle = System.nanoTime() + file.getOriginalFilename(); // 파일명 중복을 피하기 위해 나노초까지 받아옴
+		imageOriginTitle = imageOriginTitle.replace(" ", ""); // 파일이름 공백제거
 		String imageTitle = new MD5Generator(imageOriginTitle).toString(); // 서버에 저장 값은 MD5의 체크섬 값
 
 		String imagePath = savePath + "/" + imageOriginTitle;

@@ -70,7 +70,7 @@ public class UserService {
 
 		long imageIdx = updateUser.get().getImage().getImageIdx();
 
-		if (!request.getImage().isEmpty() && request.getImage() != null) { // 파일 변화가 없는 경우, 사진 저장 pass
+		if (request.getImage() != null) { // 파일 변화가 없는 경우, 사진 저장 pass
 			// 파일 제거
 			Optional<Image> image = imageRepo.findByImageIdx(imageIdx);
 			String path = image.get().getImagePath();
