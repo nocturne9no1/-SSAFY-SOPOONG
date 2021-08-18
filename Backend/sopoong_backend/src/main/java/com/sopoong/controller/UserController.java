@@ -80,9 +80,9 @@ public class UserController {
 	
 	@DeleteMapping("/user/delete")
 	@ApiOperation(value = "계정 삭제하기")
-	public ResponseEntity<BaseMessage> deleteUser(@RequestParam String id) {
+	public ResponseEntity<BaseMessage> deleteUser(@RequestParam String id, @RequestParam String password) {
 		
-		BaseMessage bm= userService.deleteUser(id);
+		BaseMessage bm= userService.deleteUser(id, password);
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
 		
 	}

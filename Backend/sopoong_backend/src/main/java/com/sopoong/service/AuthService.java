@@ -62,10 +62,11 @@ public class AuthService {
 		if (!passwordEncoder.matches(password, member.get().getUserPassword())) {
 			resultMap.put("errors","비밀번호 틀림");
 		}
-		if(member.get().getAuthNumber()==null || !member.get().getAuthNumber().equals("AUTH")) {
+		if(member.get().getAuthNumber()==null || !member.get().getAuthNumber().contains("AUTH")) {
 			resultMap.put("errors", "인증못받은 사용자");
+		}else {
+			resultMap.put("success", jwtTokenProvider.createToken(member.get().getUserId()));
 		}
-		resultMap.put("success", jwtTokenProvider.createToken(member.get().getUserId()));
 		return new BaseMessage(HttpStatus.OK,resultMap); 
 	}
 	
