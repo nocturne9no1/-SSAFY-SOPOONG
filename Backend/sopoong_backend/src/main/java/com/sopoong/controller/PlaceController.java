@@ -17,7 +17,7 @@ import com.sopoong.service.PlaceService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @CrossOrigin(origins = { "*" })
 public class PlaceController {
 public static final Logger logger = LoggerFactory.getLogger(AuthController.class);
