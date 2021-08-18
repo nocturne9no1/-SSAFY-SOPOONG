@@ -19,4 +19,6 @@ public class FileDto {
 	private ImagePosition position; // 사진 위도 & 경도
 	private int isPlaceLeader; // 위치대표사진인지
 	private int isTravelLeader; // 여행대표사진인지
+	private int imageWidth;
+	private int imageHeight;
 }

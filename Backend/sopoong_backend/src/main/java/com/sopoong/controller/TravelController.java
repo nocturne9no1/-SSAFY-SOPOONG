@@ -24,7 +24,7 @@ import com.sopoong.service.TravelService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 @CrossOrigin(origins = { "*" })
 public class TravelController {
 	public static final Logger logger = LoggerFactory.getLogger(AuthController.class);

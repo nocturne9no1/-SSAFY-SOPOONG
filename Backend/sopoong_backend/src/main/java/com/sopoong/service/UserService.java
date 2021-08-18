@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,7 +50,7 @@ public class UserService {
 			getUser.setUserIsVisible(user.get().getUserIsVisible());
 			getUser.setUserAlarm(user.get().getUserAlarm());
 			getUser.setUserComment(user.get().getUserComment());
-			getUser.setImage(user.get().getImage());
+			getUser.setImageOriginTitle(user.get().getImage().getImageOriginTitle());
 			getUser.setFollowings(user.get().getRelationFollowing().size());
 			getUser.setFollowers(user.get().getRelationFollowed().size());
 			resultMap.put("success", getUser);
@@ -60,8 +62,8 @@ public class UserService {
 		
 	}
 
+	@Transactional
 	public BaseMessage changeProfile(changeProfileRequest request) throws IllegalStateException, NoSuchAlgorithmException, IOException {
-		
 		Map<String,Object> resultMap= new HashMap<>();
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
@@ -82,14 +84,9 @@ public class UserService {
 			imageService.deleteImage(imageIdx);
 		}
 		
-		// 질문? 프로필 사진을 지운경우, image_idx에 0을 넣어야되는데,,, Image로 되어있어서 불가능...
-		// 어떻게 해야되나..?
-		if(request.getImage().isEmpty()) { // 프로필 사진이 없는 경우
-			
-		}
-		
-		BaseMessage bm = imageService.saveProfile(request.getImage(), request.getUserComment());
-		long imgIdx = (long) bm.getData();
+		BaseMessage bm = imageService.saveProfile(request.getImage(), request.getUserId()); // 사진 파일 저장
+		Image im =  (Image) bm.getData();
+		long imgIdx = im.getImageIdx();
 		
 		if (updateUser.isPresent()) {
 			updateUser.get().setImage(imageRepo.findByImageIdx(imgIdx).get());
@@ -180,5 +177,23 @@ public class UserService {
 		}
 		
 	}
-	
+
+	@Transactional
+	public BaseMessage updateImage(int imageIdx, String userId) {
+		Map<String,Object> resultMap= new HashMap<>();
+		Optional<User> updateUser= userRepo.findByUserId(userId);
+		
+		if (updateUser.isPresent()) {
+			updateUser.get().setImage(imageRepo.findByImageIdx(imageIdx).get());
+			userRepo.save(updateUser.get());
+			
+			Image im = Image.builder().imageIdx(2).build();
+			
+			resultMap.put("success", "프로필 기본이미지로 변경 성공");
+			return new BaseMessage(HttpStatus.OK, im);
+		} else {
+			resultMap.put("errors", "프로필 기본이미지로 변경 실패 (존재하지 않는 아이디)");
+			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
+		}
+	}
 }
