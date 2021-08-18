@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +45,7 @@ public class UserController {
 	
 	@PatchMapping("/user/profile")
 	@ApiOperation(value = "프로필 변경하기")
-	public ResponseEntity<BaseMessage> changeProfile(@Valid @RequestBody changeProfileRequest request) throws IllegalStateException, NoSuchAlgorithmException, IOException {
+	public ResponseEntity<BaseMessage> changeProfile(@ModelAttribute changeProfileRequest request) throws IllegalStateException, NoSuchAlgorithmException, IOException {
 		
 		BaseMessage bm= userService.changeProfile(request);
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());

@@ -25,7 +25,7 @@ public class getProfileRequest {
 	
 	String userComment;
 	
-	Image image;
+	String imageOriginTitle;
 	
 	long followings;
 	
