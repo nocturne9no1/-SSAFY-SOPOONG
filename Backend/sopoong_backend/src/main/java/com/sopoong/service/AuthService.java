@@ -75,10 +75,10 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		if(userRepository.findByUserId(id).isPresent()) {
 			resultMap.put("errors", "아이디 중복");
-			return new BaseMessage(HttpStatus.OK,resultMap);
+			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
 		}else {
 			resultMap.put("success", "아이디 중복검사 통과");
-			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
+			return new BaseMessage(HttpStatus.OK,resultMap);
 		}
 	}
 	
