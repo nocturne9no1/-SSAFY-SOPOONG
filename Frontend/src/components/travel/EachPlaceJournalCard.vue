@@ -12,13 +12,18 @@
     @click="journalDetail()"
   >
     <div class="image">
-      <img :src="image.urls.small" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
+      <img :src="`https://i5a404.p.ssafy.io/api/image/${image.imageOriginTitle}`" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
+    </div>
+    <div class="patchDeleteDiv">
+      <!-- v-bind는 false값도 true로 인식? -->
+      <i class="fas fa-eraser" v-show="imgHover" style="margin-right: 10px"></i>
+      <i class="far fa-trash-alt" v-show="imgHover" @click="deleteTravelDetail(image.placeIdx)"></i>
     </div>
     
     <div class="textDiv" v-show="imgHover">
-      <h2>개별일지 제목</h2>
+      <h2>{{ image.placeTitle }}</h2>
       <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde maiores corporis voluptate? Odit laboriosam ex modi quis accusantium omnis quo dolorum fugit. Itaque alias accusantium quas voluptatem, tempore possimus delectus.
+        {{ image.placeComment }}  
       </p>
       <!-- 별점 -->
       <span class="fa fa-star" :class="{ checked : checkRating(1) }"></span>
@@ -46,13 +51,13 @@ export default {
     tH: null,
     imgHover: false,
     lt: 100,
-    liked: false,
   }),
 
   created() {
     this.tH = Math.round(this.image.height / (this.image.width / 300));
     const gap = Math.round(this.tH / 10);
     this.gap = `span ${gap}`;
+    console.log(this.image)
   },
 
   methods: {
@@ -73,18 +78,17 @@ export default {
       }
       else return 1
     },
-    // 좋아요 버튼 토글 구현. 게시글 내에 좋아요 저장 구현해야 함.
-    likedJournal() {
-      this.liked = !this.liked
-      // 데이터 보내서 수정해야 함.
-      return this.liked
-    },
+
     // 일지 디테일로 연결
     journalDetail() {
       // this.$router.push('/')
       console.log(this.image)
       // 멀티플 파라미터 쏘고 싶을 때
       this.$store.dispatch('', [this.image])
+    },
+
+    deleteTravelDetail(placeIdx) {
+      this.$store.dispatch('deleteTravelDetail', placeIdx)
     }
   }
 };
@@ -113,6 +117,39 @@ img:hover {
 
   text-align: left;
 }
+
+/* 수정과 삭제 */
+.patchDeleteDiv {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+
+  /* width: 100%; */
+  /* height: 60px; */
+
+  text-align: right;
+
+  font-size: 2ex;
+  color: white;
+
+  z-index: 10;
+
+}
+
+i {
+  cursor: pointer;
+}
+
+.fa-trash-alt:hover {
+  color: red;
+  text-shadow: rgb(209, 48, 48) 1px 0 10px;
+}
+
+.fa-eraser:hover {
+  color: pink;
+  text-shadow: rgb(241, 157, 199) 1px 0 10px;
+}
+
 
 /* 이미지 위 출력 div */
 .textDiv {
@@ -167,11 +204,6 @@ p {
 
   /* 기준 넘는 글자 숨기기 */
   overflow: hidden; 
-
-  
-
-
-
 }
 
 /* 별점 */

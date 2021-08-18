@@ -22,10 +22,14 @@
           <div>
             <input
               v-model="signUpData.nickname"
+              :class="{ invalidNickname: error.nickname }"
               id="nickname"
               placeholder="Nickname"
               type="text"
             />
+          </div>
+          <div class="error-text" v-if="error.nickname">
+            {{ error.nickname }}
           </div>
 
           <div>
@@ -87,7 +91,6 @@ export default {
   components: {},
   data() {
     return {
-      sampleData: "abcdef",
       signUpData: {
         id: "",
         nickname: "",
@@ -210,10 +213,18 @@ export default {
 <style scoped>
 
 .background {
-  background-image: url('../../assets/background.jpg');
-  /* position: absolute; */
-  background-size: cover;
+}
 
+.background::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  background-image: url('../../assets/background/DSC04007.jpg');
+  background-size: cover;
+  width: 100%; height: 100%;
+  /* filter: grayscale(100%); */
+  filter: blur(5px);
+  z-index: -1;
 }
 
 div {
@@ -243,6 +254,8 @@ div {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); */
+  background-image: url('../../assets/background/Wonhyeok1.jpg');
+  background-size: cover;
 
   width: 300px;
   height: 500px;

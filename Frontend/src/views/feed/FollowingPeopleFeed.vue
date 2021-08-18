@@ -53,12 +53,11 @@ export default {
     } else {
       await this.getRandomImagesFromLocal();
     }
-
   },
   beforeMount() {},
   async mounted() {
-    // Follow한 사람 정보 불러오기
-    await this.$store.dispatch('getFollowingPeopleFeeds')
+    // Follow한 피드 리스트 불러오기
+    await this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
   },
   beforeUpdate() {},
   updated() {},

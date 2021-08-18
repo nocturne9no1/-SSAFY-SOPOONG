@@ -132,8 +132,9 @@ export default {
         // 스크린샷은 undefined로, exif 없는 경우 조회가 안되는 문제
         exifr.parse(image).then((output) => {
           if (output) {
-            console.log("I am in !", output.latitude);
-            this.files[i].dateTime = image.lastModifiedDate
+            console.log("I am in !", output);
+            this.files[i].dateTime = output.CreateDate;
+            this.files[i].imageData = output;
             if (output.latitude !== undefined) {
               locData = {
                 latitude: output.latitude,
@@ -193,7 +194,8 @@ export default {
         exifr.parse(image).then((output) => {
           if (output) {
             console.log("I am in !", output.latitude);
-            this.files[this.files.length - this.$refs.files.files.length + i].dateTime = this.files[this.files.length - this.$refs.files.files.length + i].file.lastModifiedDate
+            this.files[this.files.length - this.$refs.files.files.length + i].dateTime = output.CreateDate
+            this.files[this.files.length - this.$refs.files.files.length + i].imageData = output;
             if (output.latitude !== undefined) {
               locData = {
                 latitude: output.latitude,

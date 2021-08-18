@@ -4,14 +4,15 @@
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <h1>Masonry NewsFeed</h1>
+          <h1>메인 뉴스 피드</h1>
           <!-- <button class="filterButton">Filter</button> -->
         </div>
         <div class="cards" v-if="images.length">
-          <feed-journal-card
+          <news-feed-journal-card
             v-for="image in images"
             :key="image.id"
             :image="image"
+            @onFollow="onFollow"
           />
         </div>
         <div class="cards-loading" v-else>
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import FeedJournalCard from "@/components/feed/FeedJournalCard.vue";
+import NewsFeedJournalCard from "@/components/feed/NewsFeedJournalCard.vue";
 import axios from "axios";
 import ProfileBox from '@/views/accounts/ProfileBox.vue';
 import FeedFilter from '@/components/FeedFilter.vue';
@@ -34,7 +35,7 @@ const DEFAULT_IMAGES_COUNT = 30;
 export default {
   name: "",
   components: {
-    FeedJournalCard,
+    NewsFeedJournalCard,
     ProfileBox,
     FeedFilter,
   },
@@ -44,6 +45,7 @@ export default {
       images: [],
     };
   },
+
   beforeCreate() {},
   async created() {
     // 기본이 development로 설정되어 있고 , 그 외에도 여러 모드가 있다.
@@ -55,9 +57,14 @@ export default {
     }
   },
   beforeMount() {},
-  mounted() {},
-  beforeUpdate() {},
-  updated() {},
+  async mounted() {
+    // 팔로우 중인 사람의 게시글 내 'follow'버튼을 'following'으로 바꾸기 위해 추가.
+    await this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
+  },
+  beforeUpdate() {
+  },
+  updated() {
+  },
   beforeUnmount() {},
   unmounted() {},
   methods: {
@@ -79,6 +86,7 @@ export default {
         );
         // Binding data to this component data
         this.images = data;
+
       } catch (error) {
         console.error(error);
       }
@@ -87,9 +95,26 @@ export default {
       try {
         const { default: localData } = await import('@/assets/test_data.json')
         this.images = localData
+
       } catch (err) {
         console.error(err)
       }
+    },
+
+    onFollow(data) {
+      for (let image of this.images) {
+        if (image.user.name === data && image.isFollowing) {
+          // isFollowing은 image내에 새 필드를 추가하는건데 , 자식 컴포넌트가 실시간 변화를 감지해 내지 못함.
+          // image.isFollowing = !image.isFollowing
+          image.liked_by_user = !!image.liked_by_user
+        }
+        else if (image.user.name === data) {
+          // image.isFollowing = true
+          // image.liked_by_user = !image.liked_by_user
+        }
+      }
+      // 실시간 변동 체크용
+      this.images[0].liked_by_user = !this.images[0].liked_by_user
     }
   },
 };

@@ -81,8 +81,6 @@ export default {
     },
     signIn(signInData) {
       this.$store.dispatch('signIn', signInData)
-      this.signInData.id = null
-      this.signInData.password = null
     },
     signUp() {
       this.$router.push('/signup')
@@ -96,12 +94,14 @@ div {
   font-family: monospace;
 }
 
-.background {
+.background::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
   background-image: url('../../assets/background.jpg');
-  /* position: absolute; */
-  background-size: cover;
-  height: 100vh;
-
+  width: 100%; height: 100%;
+  /* filter: grayscale(100%); */
+  filter: blur(5px);
 }
 
 .SignInDiv {
