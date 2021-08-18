@@ -52,11 +52,17 @@ public class ImageController {
 	public @ResponseBody byte[] getImage(@PathVariable(name = "imageName") String imageName,
 		HttpServletRequest request) throws IOException {
 		String imagePath = "/image/"+imageName;
-		logger.info("PATH : " + imagePath);
-		InputStream imageStream = new FileInputStream(imagePath);
+		InputStream imageStream;
+		try {
+			imageStream = new FileInputStream(imagePath);
+		} catch (Exception e) {
+			imageStream = new FileInputStream("/profile/"+imageName);
+		}
+		
 		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
 		imageStream.close();
 
 		return imageByteArray;
 	}
+	
 }
