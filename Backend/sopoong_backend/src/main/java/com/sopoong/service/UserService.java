@@ -71,19 +71,21 @@ public class UserService {
 		long imageIdx = updateUser.get().getImage().getImageIdx();
 
 		if (request.getImage() != null) { // 파일 변화가 없는 경우, 사진 저장 pass
-			// 파일 제거
-			Optional<Image> image = imageRepo.findByImageIdx(imageIdx);
-			String path = image.get().getImagePath();
-			File file = new File(path);
+			if (imageIdx != 2) { // 기본이미지가 아닌 경우만 파일 제거
+				// 파일 제거
+				Optional<Image> image = imageRepo.findByImageIdx(imageIdx);
+				String path = image.get().getImagePath();
+				File file = new File(path);
 
-			if (file.delete()) { // 파일 삭제에 성공하면 true, 실패하면 false
-				System.out.println("파일을 삭제하였습니다");
-			} else {
-				System.out.println("파일 삭제에 실패하였습니다");
+				if (file.delete()) { // 파일 삭제에 성공하면 true, 실패하면 false
+					System.out.println("파일을 삭제하였습니다");
+				} else {
+					System.out.println("파일 삭제에 실패하였습니다");
+				}
+				
+				// DB에서 제거
+				imageService.deleteImage(imageIdx);
 			}
-
-			// DB에서 제거
-			imageService.deleteImage(imageIdx);
 
 			BaseMessage bm = imageService.saveProfile(request.getImage(), request.getUserId()); // 사진 파일 저장
 			Image im = (Image) bm.getData();

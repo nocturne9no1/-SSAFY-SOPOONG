@@ -22,6 +22,7 @@ import com.sopoong.model.dto.PlaceRate;
 import com.sopoong.model.dto.TravelDetail;
 import com.sopoong.model.dto.TravelDto;
 import com.sopoong.model.dto.TravelList;
+import com.sopoong.model.dto.changeTravelRequest;
 import com.sopoong.model.entity.Alarm;
 import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Place;
@@ -269,6 +270,26 @@ public class TravelService {
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
 			resultMap.put("errors", "Travel 삭제 실패 (존재하지 않는 travelIdx)");
+			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
+		}
+	}
+
+	public BaseMessage updateTravel(changeTravelRequest travel) {
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<Travel> updateTravel = travelRepository.findBytravelIdx(travel.getTravelIdx());
+		
+		if(updateTravel.isPresent()) {
+			updateTravel.get().setTravelTitle(travel.getTravelTitle());
+			updateTravel.get().setTravelContent(travel.getTravelContent());
+			updateTravel.get().setTravelIsVisible(travel.isTravelIsVisible());
+			updateTravel.get().setStartDate(travel.getStartDate());
+			updateTravel.get().setEndDate(travel.getEndDate());
+			
+			travelRepository.save(updateTravel.get());
+			resultMap.put("success", "Travel 수정 성공");
+			return new BaseMessage(HttpStatus.OK, resultMap);
+		} else {
+			resultMap.put("errors", "Travel 수정 실패 (존재하지 않는 travelIdx)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
 	}
