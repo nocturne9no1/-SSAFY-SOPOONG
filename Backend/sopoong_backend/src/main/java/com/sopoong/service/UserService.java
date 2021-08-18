@@ -27,7 +27,7 @@ import com.sopoong.repository.UserRepository;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
 	private ImageService imageService;
 	@Autowired
@@ -36,13 +36,13 @@ public class UserService {
 	private UserRepository userRepo;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	public BaseMessage getProfile(String id) {
-		
-		Map<String,Object> resultMap= new HashMap<>();
-		Optional<User> user= userRepo.findByUserId(id);
-		getProfileRequest getUser= new getProfileRequest();
-		
+
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<User> user = userRepo.findByUserId(id);
+		getProfileRequest getUser = new getProfileRequest();
+
 		if (user.isPresent()) {
 			getUser.setUserId(user.get().getUserId());
 			getUser.setUserEmail(user.get().getUserEmail());
@@ -59,41 +59,43 @@ public class UserService {
 			resultMap.put("errors", "존재하지 않는 아이디");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
-		
+
 	}
 
 	@Transactional
-	public BaseMessage changeProfile(changeProfileRequest request) throws IllegalStateException, NoSuchAlgorithmException, IOException {
-		Map<String,Object> resultMap= new HashMap<>();
-		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
-		
+	public BaseMessage changeProfile(changeProfileRequest request)
+			throws IllegalStateException, NoSuchAlgorithmException, IOException {
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<User> updateUser = userRepo.findByUserId(request.getUserId());
+
 		long imageIdx = updateUser.get().getImage().getImageIdx();
-		if(imageIdx != 2) { // 프로필 사진이 있는 경우
+
+		if (!request.getImage().isEmpty() && request.getImage() != null) { // 파일 변화가 없는 경우, 사진 저장 pass
 			// 파일 제거
 			Optional<Image> image = imageRepo.findByImageIdx(imageIdx);
 			String path = image.get().getImagePath();
 			File file = new File(path);
-			
-			if(file.delete()){ // 파일 삭제에 성공하면 true, 실패하면 false
-                System.out.println("파일을 삭제하였습니다");
-            }else{
-                System.out.println("파일 삭제에 실패하였습니다");
-            }
-			
+
+			if (file.delete()) { // 파일 삭제에 성공하면 true, 실패하면 false
+				System.out.println("파일을 삭제하였습니다");
+			} else {
+				System.out.println("파일 삭제에 실패하였습니다");
+			}
+
 			// DB에서 제거
 			imageService.deleteImage(imageIdx);
+
+			BaseMessage bm = imageService.saveProfile(request.getImage(), request.getUserId()); // 사진 파일 저장
+			Image im = (Image) bm.getData();
+			imageIdx = im.getImageIdx();
 		}
-		
-		BaseMessage bm = imageService.saveProfile(request.getImage(), request.getUserId()); // 사진 파일 저장
-		Image im =  (Image) bm.getData();
-		long imgIdx = im.getImageIdx();
-		
+
 		if (updateUser.isPresent()) {
-			updateUser.get().setImage(imageRepo.findByImageIdx(imgIdx).get());
+			updateUser.get().setImage(imageRepo.findByImageIdx(imageIdx).get());
 			updateUser.get().setUserNickname(request.getUserNickname());
 			updateUser.get().setUserComment(request.getUserComment());
 			userRepo.save(updateUser.get());
-			
+
 			resultMap.put("success", "프로필 변경 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
@@ -101,17 +103,17 @@ public class UserService {
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
 	}
-	
+
 	public BaseMessage changePassword(changePasswordRequest request) {
-		
-		Map<String,Object> resultMap= new HashMap<>();
-		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
-		
+
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<User> updateUser = userRepo.findByUserId(request.getUserId());
+
 		if (updateUser.isPresent()) {
 			if (passwordEncoder.matches(request.getUserPassword(), updateUser.get().getUserPassword())) {
 				updateUser.get().setUserPassword(passwordEncoder.encode(request.getChangedPassword()));
 				userRepo.save(updateUser.get());
-				
+
 				resultMap.put("success", "비밀번호 변경 성공");
 				return new BaseMessage(HttpStatus.OK, resultMap);
 			} else {
@@ -121,50 +123,50 @@ public class UserService {
 			resultMap.put("errors", "비밀번호 변경 실패 (존재하지 않는 아이디)");
 		}
 		return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
-		
+
 	}
-	
+
 	public BaseMessage changeAlarm(changeAlarmRequest request) {
-		
-		Map<String,Object> resultMap= new HashMap<>();
-		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
-		
+
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<User> updateUser = userRepo.findByUserId(request.getUserId());
+
 		if (updateUser.isPresent()) {
 			updateUser.get().setUserAlarm(request.getUserAlarm());
 			userRepo.save(updateUser.get());
-			
+
 			resultMap.put("success", "알람 범위 변경 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
 			resultMap.put("errors", "알람 범위 변경 실패 (존재하지 않는 아이디)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
-		
+
 	}
-	
+
 	public BaseMessage changeVisible(changeVisibleRequest request) {
-		
-		Map<String,Object> resultMap= new HashMap<>();
-		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
-		
+
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<User> updateUser = userRepo.findByUserId(request.getUserId());
+
 		if (updateUser.isPresent()) {
 			updateUser.get().setUserIsVisible(request.getUserIsVisible());
 			userRepo.save(updateUser.get());
-			
+
 			resultMap.put("success", "계정 공개 범위 변경 성공");
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
 			resultMap.put("errors", "계정 공개 범위 변경 실패 (존재하지 않는 아이디)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
-		
+
 	}
-	
+
 	public BaseMessage deleteUser(String id, String password) {
-		
-		Map<String,Object> resultMap= new HashMap<>();
-		Optional<User> deleteUser= userRepo.findByUserId(id);
-		
+
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<User> deleteUser = userRepo.findByUserId(id);
+
 		if (deleteUser.isPresent()) {
 			if (passwordEncoder.matches(password, deleteUser.get().getUserPassword())) {
 //				userRepo.deleteById(deleteUser.get().getUserIdx())
@@ -177,20 +179,20 @@ public class UserService {
 			resultMap.put("errors", "계정 삭제 실패 (존재하지 않는 아이디)");
 		}
 		return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
-		
+
 	}
 
 	@Transactional
 	public BaseMessage updateImage(int imageIdx, String userId) {
-		Map<String,Object> resultMap= new HashMap<>();
-		Optional<User> updateUser= userRepo.findByUserId(userId);
-		
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<User> updateUser = userRepo.findByUserId(userId);
+
 		if (updateUser.isPresent()) {
 			updateUser.get().setImage(imageRepo.findByImageIdx(imageIdx).get());
 			userRepo.save(updateUser.get());
-			
+
 			Image im = Image.builder().imageIdx(2).build();
-			
+
 			resultMap.put("success", "프로필 기본이미지로 변경 성공");
 			return new BaseMessage(HttpStatus.OK, im);
 		} else {
