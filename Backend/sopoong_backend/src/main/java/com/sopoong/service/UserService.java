@@ -45,6 +45,7 @@ public class UserService {
 			getUser.setUserId(user.get().getUserId());
 			getUser.setUserEmail(user.get().getUserEmail());
 			getUser.setUserNickname(user.get().getUserNickname());
+			getUser.setUserIsVisible(user.get().getUserIsVisible());
 			getUser.setUserComment(user.get().getUserComment());
 			getUser.setImage(user.get().getImage());
 			getUser.setFollowings(user.get().getRelationFollowing().size());
@@ -109,15 +110,19 @@ public class UserService {
 		Optional<User> updateUser= userRepo.findByUserId(request.getUserId());
 		
 		if (updateUser.isPresent()) {
-			updateUser.get().setUserPassword(passwordEncoder.encode(request.getChangedPassword()));
-			userRepo.save(updateUser.get());
-			
-			resultMap.put("success", "비밀번호 변경 성공");
-			return new BaseMessage(HttpStatus.OK, resultMap);
+			if (passwordEncoder.matches(request.getUserPassword(), updateUser.get().getUserPassword())) {
+				updateUser.get().setUserPassword(passwordEncoder.encode(request.getChangedPassword()));
+				userRepo.save(updateUser.get());
+				
+				resultMap.put("success", "비밀번호 변경 성공");
+				return new BaseMessage(HttpStatus.OK, resultMap);
+			} else {
+				resultMap.put("errors", "비밀번호 일치하지 않음");
+			}
 		} else {
-			resultMap.put("errors", "비밀번호 변경 실패");
-			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
+			resultMap.put("errors", "비밀번호 변경 실패 (존재하지 않는 아이디)");
 		}
+		return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		
 	}
 	

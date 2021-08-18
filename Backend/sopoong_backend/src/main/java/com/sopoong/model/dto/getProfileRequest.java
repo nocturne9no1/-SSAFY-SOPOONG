@@ -19,6 +19,8 @@ public class getProfileRequest {
 	
 	String userNickname;
 	
+	int userIsVisible;
+	
 	String userComment;
 	
 	Image image;
