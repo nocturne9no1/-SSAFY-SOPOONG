@@ -36,7 +36,6 @@
         <h2>대표사진 고르기</h2>
         <button class="pick-btn" @click="clickChoice">PICK</button>
       </div>
-      <p></p>
       <div class="public-setting">
         <h2>공개 여부</h2>
 
@@ -131,6 +130,12 @@ export default {
       } else {
         return "";
       }
+    },
+    startDate() {
+      return this.parseTime( this.dates.start, "y-m-d") + ' ' + '00:00:00'
+    },
+    endDate() {
+      return this.parseTime( this.dates.end, "y-m-d") + ' ' + '00:00:00'
     }
   },
 
@@ -227,6 +232,8 @@ methods: {
     travel.append('travelIsVisible', this.travel.travelIsVisible)
     travel.append('travelLat', this.travel.travelLat)
     travel.append('travelLng', this.travel.travelLng)
+    // travel.append('startDate', this.startDate)
+    // travel.append('endDate', this.endDate)
 
     for ( let idx in this.travel.placeList ) {
       travel.append(`placeList[${idx}].title`, this.travel.placeList[idx].title)

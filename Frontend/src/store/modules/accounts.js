@@ -74,6 +74,7 @@ const actions = {
   signOut(context) {
     context.commit('SET_TOKEN', null)  // state에서
     cookies.remove('X-AUTH-TOKEN')  // cookie에서
+    context.commit('SET_ALARMLIST', null)  // 로그아웃 시 알람 리스트 초기화
     router.push({ name:'NewsFeed' })
   },
   

@@ -149,7 +149,6 @@
 import '../../components/css/profilesetting.scss'
 import ProfileBox from './ProfileBox.vue'
 import axios from 'axios'
-
 export default {
   name:'',
   components: {
@@ -259,16 +258,23 @@ export default {
       data.append('userId', userId)
       data.append('userNickname', this.user.nickname)
       data.append('userComment', this.user.introduce)
-      data.append('image', this.profileImageFile)
+      if ( !!this.profileImageFile === true ) { data.append('image', this.profileImageFile) }
+      // else { data.append('image', false) }
+      console.log(this.profileImageFile)
       axios({
         method: 'patch',
-        url: '/user/profile',    
+        url: '/user/profile',
         data: data,
         headers: {
           'X-AUTH-TOKEN' : this.$store.state.accounts.authToken
         },
       })
-        .then(res => console.log(res))
+        .then(res => {
+          console.log(res)
+          // 프로필 정보 갱신
+          this.$store.dispatch('getProfile', userId)
+          // this.$router.go();
+        })
         .catch(err => console.log(err.message))
     },
     changeAlarm() {

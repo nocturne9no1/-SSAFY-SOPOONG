@@ -11,9 +11,6 @@ const getters = {
 const mutations = {
   SET_ALARMLIST(state, alarmData) {
     state.alarmList = alarmData
-    if ( alarmData.length > 0 ) {
-      state.isAlarm = true
-    }
   }
 }
 
@@ -23,11 +20,7 @@ const actions = {
     console.log(alarmData)
     context.commit('SET_ALARMLIST', alarmData)
   },
-  removeAlarmList() {
-    console.log('리무브 알람')
-  }
 }
-
 
 export default {
   state, getters, mutations, actions

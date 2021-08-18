@@ -9,17 +9,17 @@
     </div>
     <div class="container">
       <div class="profile-photo-box">
-        <img class="photo" src="https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/EKE66P73OGOHBUQ4TG5XP6JOTQ.jpg" alt="profile-photo">
+        <img class="photo" :src="imgSrc" alt="profile-photo">
       </div>
       <div class="text-box">
         <div class="nickname">
-          {{nickname}}
+          {{profile.userNickname}}
         </div>
         <div class="email">
-          {{email}}
+          {{profile.userEmail}}
         </div>
         <div class="introduce">
-          {{introduce}}
+          {{profile.userComment}}
         </div>
         <div class="follow">
           <div class="following">
@@ -27,7 +27,7 @@
               following
             </div>
             <div>
-              {{following}}
+              {{profile.followings}}
             </div>
           </div>
           <div class="follower">
@@ -35,7 +35,7 @@
               Followers
             </div>
             <div>
-              {{follower}}
+              {{profile.followers}}
             </div>
           </div>
         </div>
@@ -53,11 +53,14 @@ export default {
   components: {},
   data() {
     return {
+      // 고마웠다 데이터야...
       nickname: 'deriyakki',
       email: 'nocturne9no1@gmail.com',
       introduce: 'hi',
       following: 1,
       follower: 1000,
+
+      profile: this.$store.state.accounts.userProfile
     };
   },
   // 페이지 생성 전, 프로필 데이터 받아와야 함
@@ -69,6 +72,13 @@ export default {
   updated() {},
   beforeUnmount() {}, 
   unmounted() {},
+
+  computed: {
+    imgSrc() {
+      return 'https://i5a404.p.ssafy.io/api/image/'+this.$store.state.accounts.userProfile.imageOriginTitle
+    }
+  },
+
   methods: {}
 }
 </script>

@@ -42,7 +42,7 @@
         <button class="btn">EDIT</button>
       </div>
       <!-- 만약 글이 없다면 첫 글 생성하라 알려줌 -->
-      <div class="first-journal-wrap" v-if="isTravelList">
+      <div class="first-journal-wrap"  v-if="!!!travelList">
       <router-link to="/create">
           <div class="first-journal">
             <div class="plus-btn">

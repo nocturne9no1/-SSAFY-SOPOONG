@@ -58,14 +58,28 @@
       .image {
         margin: auto;
         width: 500px;
+        max-height: 500px;
+        display: flex;
+        z-index: 3;
         .pic {
+          max-width:500px;
+          max-height:500px;
+        }
+      }
+      .image-2 {
+        width: 100px;
+        z-index: 1;
+        .pic {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
+          object-fit: cover;
         }
       }
       .text {
         width: 400px;
-
 
         h3 {
           font-family: $body;

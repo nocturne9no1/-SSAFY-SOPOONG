@@ -24,10 +24,15 @@
           <div v-else class="nav-right">
             <li class="nav-item nav-login" @click="signOut">Logout</li>
             <li class="alarm-wrap">
-              <img src="../assets/alarm-bell.png" alt="" class="alarm-bell">
-              <div class="if-there-alarm"></div>
+              
+              <DropDown/>
+              <div class="if-there-alarm" v-if="isAlarm"/>
             </li>
-            <li class="nav-item">프사</li>
+            <li class="">
+              <div class="profile-image-box">
+                <img :src="imgSrc" alt="profile-image" class="profile-image">
+              </div>
+            </li>
           </div>
         </div>
       </ul>
@@ -39,8 +44,16 @@
 import "./css/navbar.scss"
 import { mapActions, mapGetters } from 'vuex'
 import router from '@/router'
+import DropDown from './Navbar/DropDown.vue'
 
 export default {
+
+  name: 'NavBar',
+
+  components: {
+    DropDown,
+  },
+  
   data() {
     return {
       // 향후 vuex에서 로그인 여부를 가져오는 것으로 바꿔야함
@@ -51,9 +64,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isSignedIn"])
+    ...mapGetters(["isSignedIn", "isAlarm"]),
+    
+    imgSrc() {
+      return 'https://i5a404.p.ssafy.io/api/image/'+this.$store.state.accounts.userProfile.imageOriginTitle
+    }
   },
-  
   methods: {
     ...mapActions(["signOut", "removeAlarmList"]),
 
