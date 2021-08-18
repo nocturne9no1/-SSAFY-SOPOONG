@@ -58,11 +58,9 @@ public class AuthService {
 		Optional<User> member = userRepository.findByUserId(id);
 		if(!member.isPresent()) {
 			resultMap.put("errors","존재하지 않는 아이디");
-			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
 		}
 		if (!passwordEncoder.matches(password, member.get().getUserPassword())) {
 			resultMap.put("errors","비밀번호 틀림");
-			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
 		}
 		if(member.get().getAuthNumber()==null || !member.get().getAuthNumber().contains("AUTH")) {
 			resultMap.put("errors", "인증못받은 사용자");
@@ -77,11 +75,11 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		if(userRepository.findByUserId(id).isPresent()) {
 			resultMap.put("errors", "아이디 중복");
-			return new BaseMessage(HttpStatus.OK,resultMap);
 		}else {
 			resultMap.put("success", "아이디 중복검사 통과");
-			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
 		}
+		
+		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 	
 	@Transactional
@@ -89,11 +87,11 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		if(userRepository.findByUserEmail(email).isPresent()) {
 			resultMap.put("errors", "이메일 중복");
-			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
 		}else {
 			resultMap.put("success", "이메일 중복검사 통과");
-			return new BaseMessage(HttpStatus.OK,resultMap);
 		}
+		
+		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 	
 	@Transactional
@@ -101,11 +99,10 @@ public class AuthService {
 		Map<String,Object> resultMap = new HashMap<>();
 		if(userRepository.findByUserNickname(nickName).isPresent()) {
 			resultMap.put("errors", "닉네임 중복");
-			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
 		}else {
 			resultMap.put("success", "닉네임 중복검사 통과");
-			return new BaseMessage(HttpStatus.OK,resultMap);
 		}
+		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 	
 	public BaseMessage sendEmail(String id) {
@@ -125,7 +122,7 @@ public class AuthService {
 		}else {
 			resultMap.put("errors", "존재하지 않는 아이디"); 
 		}
-		return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
+		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 	//인증키 만들기 8글자
 	public String generAuthKey() {
@@ -169,7 +166,7 @@ public class AuthService {
 		}else {
 			resultMap.put("errors", "아이디 조회 실패");
 		}
-		return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
+		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 	
 	public BaseMessage sendFindIdMail(FindIdRequest findIdRequest) {
@@ -189,7 +186,7 @@ public class AuthService {
 		}else {
 			resultMap.put("errors", "이메일 조회 실패");
 		}
-		return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
+		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 
 	public BaseMessage confirmFindId(ConfirmIdRequest confirmIdRequest) {
@@ -213,7 +210,7 @@ public class AuthService {
 			resultMap.put("errors", "이메일 조회 실패");
 			
 		}
-		return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
+		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 	
 	public BaseMessage changePassword(FindPasswordRequest findPasswordRequest) {
@@ -223,10 +220,9 @@ public class AuthService {
 			userOpt.get().setUserPassword(passwordEncoder.encode(findPasswordRequest.getPassword()));
 			userRepository.save(userOpt.get());
 			resultMap.put("success", "비밀번호 변경 완료");
-			return new BaseMessage(HttpStatus.OK,resultMap);
 		}else {
 			resultMap.put("errors", "아이디 조회 실패");
-			return new BaseMessage(HttpStatus.BAD_REQUEST,resultMap);
 		}
+		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 }

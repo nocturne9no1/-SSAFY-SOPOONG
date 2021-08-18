@@ -53,7 +53,7 @@ public class ImageService {
 		}
 
 		// 실행되는 위치의 images 폴더에 파일이 저장됨
-		String savePath = System.getProperty("user.dir") + "\\image";
+		String savePath = System.getProperty("user.dir") + "/image";
 
 		// 파일이 저장되는 폴더가 없으면 폴더 생성
 		if (!new File(savePath).exists())
@@ -79,7 +79,7 @@ public class ImageService {
 			String imageOriginTitle = System.nanoTime() + image.getOriginalFilename(); // 파일명 중복을 피하기 위해 나노초까지 받아옴
 			String imageTitle = new MD5Generator(imageOriginTitle).toString(); // 서버에 저장 값은 MD5의 체크섬 값
 
-			String imagePath = savePath + "\\" + imageOriginTitle;
+			String imagePath = savePath + "/" + imageOriginTitle;
 			image.transferTo(new File(imagePath));
 
 			Image im = Image.builder()
@@ -114,7 +114,7 @@ public class ImageService {
 		}
 
 		// 실행되는 위치의 images 폴더에 파일이 저장됨
-		String savePath = System.getProperty("user.dir") + "\\profile";
+		String savePath = System.getProperty("user.dir") + "/profile";
 
 		// 파일이 저장되는 폴더가 없으면 폴더 생성
 		if (!new File(savePath).exists())
@@ -131,8 +131,8 @@ public class ImageService {
 		String imageOriginTitle = System.nanoTime() + file.getOriginalFilename(); // 파일명 중복을 피하기 위해 나노초까지 받아옴
 		String imageTitle = new MD5Generator(imageOriginTitle).toString(); // 서버에 저장 값은 MD5의 체크섬 값
 
-		String imagePath = savePath + "\\" + imageOriginTitle;
-		file.transferTo(new File(imagePath));
+		String imagePath = savePath + "/" + imageOriginTitle;
+		file.transferTo(new File(imagePath)	);
 
 		Image im = Image.builder()
 				.travel(null)

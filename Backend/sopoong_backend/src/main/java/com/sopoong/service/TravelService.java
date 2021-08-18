@@ -172,10 +172,6 @@ public class TravelService {
 			System.out.println(t.toString());
 		}
 		for (Travel travel : tlist) {
-			//System.out.println(travel.getTravelTitle());
-			if (travel == null) {
-				return new BaseMessage(HttpStatus.BAD_REQUEST, "error: Travel is null");
-			}
 			
 			TravelList t = TravelList.builder()
 						.travelIdx(travel.getTravelIdx())
