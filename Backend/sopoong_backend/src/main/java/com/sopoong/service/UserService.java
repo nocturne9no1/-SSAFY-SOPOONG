@@ -194,6 +194,7 @@ public class UserService {
 			resultMap.put("success", "프로필 기본이미지로 변경 성공");
 			return new BaseMessage(HttpStatus.OK, im);
 		} else {
+			System.out.print("ASDF");
 			resultMap.put("errors", "프로필 기본이미지로 변경 실패 (존재하지 않는 아이디)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
