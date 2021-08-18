@@ -59,7 +59,7 @@ public class ImageService {
 		}
 
 		// 실행되는 위치의 images 폴더에 파일이 저장됨
-		String savePath = System.getProperty("user.dir") + "/image";
+		String savePath = System.getProperty("user.dir") + "image";
 
 		// 파일이 저장되는 폴더가 없으면 폴더 생성
 		if (!new File(savePath).exists())
@@ -120,14 +120,17 @@ public class ImageService {
 		if (file.isEmpty() || file == null) {
 			BaseMessage bm = userService.updateImage(2, userId); // 기본이미지 Idx로 User Table 업데이트
 			
-			if (!bm.getHttpStatus().equals(HttpStatus.OK))
+			if (!bm.getHttpStatus().equals(HttpStatus.OK)) {
+				System.out.println("123");
 				return new BaseMessage(HttpStatus.BAD_REQUEST, bm.getData());
+			}
+				
 			
 			return new BaseMessage(HttpStatus.OK, bm.getData());
 		}
 
 		// 실행되는 위치의 images 폴더에 파일이 저장됨
-		String savePath = System.getProperty("user.dir") + "/profile";
+		String savePath = System.getProperty("user.dir") + "profile";
 
 		// 파일이 저장되는 폴더가 없으면 폴더 생성
 		if (!new File(savePath).exists())
