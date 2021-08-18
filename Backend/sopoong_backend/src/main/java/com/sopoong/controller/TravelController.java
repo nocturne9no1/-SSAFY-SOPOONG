@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,6 +59,13 @@ public class TravelController {
 	@ApiOperation(value = "여행 일지 삭제") 
 	@DeleteMapping("/travel/delete")
 	public ResponseEntity<BaseMessage> deleteTravel(@RequestParam long travelIdx) {
+		BaseMessage bm = travelService.deleteTravel(travelIdx);
+		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
+	}
+	
+	@ApiOperation(value = "여행 일지 수정") 
+	@PatchMapping("/travel/update")
+	public ResponseEntity<BaseMessage> updateTravel(@RequestParam long travelIdx) {
 		BaseMessage bm = travelService.deleteTravel(travelIdx);
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
 	}
