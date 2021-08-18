@@ -21,5 +21,5 @@ public class PlaceList {
 	private LocalDateTime placeVisitDate;
 	private double placeLat;
 	private double placeLong;
-	private String imagePath;
+	private String imageOriginTitle;
 }

@@ -168,8 +168,11 @@ public class TravelService {
 	public BaseMessage selctTravelList(String userId) {
 		List<Travel> tlist = travelRepository.findByUser_UserId(userId);
 		ArrayList<TravelList> travelList = new ArrayList<>();
-
+		for(TravelList t : travelList) {
+			System.out.println(t.toString());
+		}
 		for (Travel travel : tlist) {
+			//System.out.println(travel.getTravelTitle());
 			if (travel == null) {
 				return new BaseMessage(HttpStatus.BAD_REQUEST, "error: Travel is null");
 			}
@@ -178,7 +181,7 @@ public class TravelService {
 						.travelIdx(travel.getTravelIdx())
 						.travelTitle(travel.getTravelTitle())
 						.travelContent(travel.getTravelContent())
-						.imagePath(imageRepository.findByImageIdx(travel.getImage().getImageIdx()).get().getImagePath())
+						.imageOriginTitle(imageRepository.findByImageIdx(travel.getImage().getImageIdx()).get().getImageOriginTitle())
 						.travelLat(travel.getTravelLat())
 						.travelLong(travel.getTravelLong())
 						.startDate(null)
@@ -201,7 +204,7 @@ public class TravelService {
 						.travelIdx(travel.get().getTravelIdx())
 						.travelTitle(travel.get().getTravelTitle())
 						.travelContent(travel.get().getTravelContent())
-						.imagePath(imageRepository.findByImageIdx(travel.get().getImage().getImageIdx()).get().getImagePath())
+						.imageOriginTitle(imageRepository.findByImageIdx(travel.get().getImage().getImageIdx()).get().getImageOriginTitle())
 						.travelLat(travel.get().getTravelLat())
 						.travelLong(travel.get().getTravelLong())
 						.startDate(null)
@@ -228,7 +231,7 @@ public class TravelService {
 						.placeVisitDate(place.getPlaceVisitDate())
 						.placeLat(place.getPlaceLat())
 						.placeLong(place.getPlaceLong())
-						.imagePath(imageRepository.findByImageIdx(place.getImage().getImageIdx()).get().getImagePath())
+						.imageOriginTitle(imageRepository.findByImageIdx(place.getImage().getImageIdx()).get().getImageOriginTitle())
 						.build();
 			
 			placeList.add(p);
