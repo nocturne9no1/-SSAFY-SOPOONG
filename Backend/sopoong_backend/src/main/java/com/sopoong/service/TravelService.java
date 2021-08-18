@@ -167,9 +167,6 @@ public class TravelService {
 		ArrayList<TravelList> travelList = new ArrayList<>();
 
 		for (Travel travel : tlist) {
-			if (travel == null) {
-				return new BaseMessage(HttpStatus.BAD_REQUEST, "error: Travel is null");
-			}
 			
 			TravelList t = TravelList.builder()
 						.travelIdx(travel.getTravelIdx())
