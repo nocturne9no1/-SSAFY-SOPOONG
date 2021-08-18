@@ -9,17 +9,20 @@
     </div>
     <div class="container">
       <div class="profile-photo-box">
-        <img class="photo" src="https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/EKE66P73OGOHBUQ4TG5XP6JOTQ.jpg" alt="profile-photo">
+        <img class="photo" :src="profileData.image" alt="profile-photo">
       </div>
       <div class="text-box">
         <div class="nickname">
-          {{nickname}}
+          {{ profileData.userNickname }}
         </div>
         <div class="email">
-          {{email}}
+          {{ profileData.userEmail }}
         </div>
-        <div class="introduce">
-          {{introduce}}
+        <div class="introduce" v-if="profileData.userComment">
+          {{ profileData.userComment }}
+        </div>
+        <div class="introduce" v-else>
+          {{ introduce }}
         </div>
         <div class="follow">
           <div class="following">
@@ -27,15 +30,15 @@
               following
             </div>
             <div>
-              {{following}}
+              {{ this.$store.getters['getUserProfile'].followings }}
             </div>
           </div>
           <div class="follower">
             <div>
               Followers
             </div>
-            <div>
-              {{follower}}
+            <div >
+              {{ profileData.followers }}
             </div>
           </div>
         </div>
@@ -53,6 +56,7 @@ export default {
   components: {},
   data() {
     return {
+      profileData: null,
       nickname: 'deriyakki',
       email: 'nocturne9no1@gmail.com',
       introduce: 'hi',
@@ -62,13 +66,21 @@ export default {
   },
   // 페이지 생성 전, 프로필 데이터 받아와야 함
   beforeCreate() {},
-  created() {}, 
+  created() {
+    if ( this.$store.getters['isSignedIn'] ) {
+      this.profileData = this.$store.getters['getUserProfile']
+    }
+  }, 
   beforeMount() {}, 
-  mounted() {}, 
+  mounted() {
+  }, 
   beforeUpdate() {},
-  updated() {},
+  updated() {
+  },
   beforeUnmount() {}, 
   unmounted() {},
+  watch: {
+  },
   methods: {}
 }
 </script>

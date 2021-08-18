@@ -4,6 +4,7 @@
     :style="{
       height: tH + 'px',
       gridRowEnd: gap,
+      backgroundColor: 'gray',
       borderRadius: '20px',
     }"
     @mouseover="imgHoverCheck()"
@@ -11,22 +12,13 @@
     @click="journalDetail()"
   >
     <div class="image">
-      <img :src="image.urls.small" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
+      <img :src="`https://i5a404.p.ssafy.io/api/image/${image.imageOriginTitle}`" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
     </div>
-    <div class="profilePhotoDiv">
-          <img class="photo" src="https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/EKE66P73OGOHBUQ4TG5XP6JOTQ.jpg" alt="profile-photo">
-    </div>
-    <div class="nickFollowDiv">
-      <p>유저아이디</p>
-      <button>following</button>
-    </div>
-    <div class="likeDiv">
-      <!-- v-bind는 false값도 true로 인식? -->
-      <i class="far fa-heart" :class="{ 'fas': liked }" @click="likedJournal()" :v-show="imgHover"></i>
-    </div>
-    
     <div class="textDiv" v-show="imgHover">
-      <h1>여행일지 제목</h1>
+      <h1>{{ image.travelTitle }}</h1>
+      <p>
+        {{ image.travelComment }}
+      </p>
       <!-- 별점 -->
       <span class="fa fa-star" :class="{ checked : checkRating(1) }"></span>
       <span class="fa fa-star" :class="{ checked : checkRating(2) }"></span>
@@ -39,6 +31,7 @@
 
 <script>
 // import { mapGetters } from 'vuex'
+// import router from '@/router'
 
 export default {
   props: {
@@ -80,18 +73,11 @@ export default {
       }
       else return 1
     },
-    // 좋아요 버튼 토글 구현. 게시글 내에 좋아요 저장 구현해야 함.
-    likedJournal() {
-      this.liked = !this.liked
-      // 데이터 보내서 수정해야 함.
-      return this.liked
-    },
+
     // 일지 디테일로 연결
     journalDetail() {
-      // this.$router.push('/')
-      console.log(this.image)
       // 멀티플 파라미터 쏘고 싶을 때
-      this.$store.dispatch('', [this.image])
+      this.$store.dispatch('travelDetail', this.image.travelIdx)
     }
   }
 };
@@ -100,88 +86,15 @@ export default {
 <style scoped>
 .card {
   position: relative;
-  
-  background-color: gray;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-
 }
-.image > img {
+img {
   border-radius: 20px;
 }
 
-.image > img:hover {
+img:hover {
   cursor: pointer;
   filter: blur(4px);
   opacity: .7;
-}
-/* 프로필 이미지 */
-.profilePhotoDiv {
-  position: absolute;
-  top: 1.2rem;
-  left: 1rem;
-
-  /* width: 100%; */
-
-  text-align: left;
-}
-
-.profilePhotoDiv > .photo {
-  width: 50px;
-  height: 60px;
-  border-radius: 70%;
-  overflow: hidden;
-  position: relative;
-  /* display: flex; */
-
-  top : 100%;
-
-  /* width: 100%;
-  height: 100%;
-  object-fit: cover; */
-}
-
-/* 닉네임 + 팔로우 버튼 */
-.nickFollowDiv {
-  position: absolute;
-  top: 1rem;
-  left: calc(80px);
-}
-
-.nickFollowDiv > p {
-  margin-block: 10px 5px;
-
-  font-size: 18px;
-  font-family: 'Do Hyeon';
-  color: #F7F8F4;
-}
-
-.nickFollowDiv > button {
-
-}
-
-
-/* 좋아요 */
-.likeDiv {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-
-  /* width: 100%; */
-  /* height: 60px; */
-
-  text-align: right;
-
-  font-size: 4ex;
-  color: white;
-
-}
-
-i {
-  cursor: pointer;
-}
-
-.fas {
-  color: red;
 }
 
 /* 이미지 위 출력 div */
@@ -213,6 +126,5 @@ h1::after {
 .checked {
   color: orange;
 }
-
-
 </style>
+

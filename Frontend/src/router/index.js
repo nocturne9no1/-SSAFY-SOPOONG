@@ -5,10 +5,9 @@ import CreateJourney from '../views/createJourney/CreateJourney.vue'
 
 
 // 없앨 예정
-import ModalToWriteJournal from '../components/journals/ModalToWriteJournal.vue'
-import test from '../views/test.vue'
 // import Pintest from '../views/Pintest.vue'
 // import completeForm from '../views/completeForm.vue'
+// import test from '../components/dummyFiles(DONOTDELETE)/test'
 
 // modules
 import accounts from './accounts.js'
@@ -23,6 +22,12 @@ const routes = [
   ...main,
   ...feed,
   ...travel,
+
+  {
+    path: '/',
+    redirect: '/main',
+    // component: test,
+  },
 
   // 404
   {
@@ -40,17 +45,6 @@ const routes = [
     component: CreateJourney
   },
 
-  // 개발용 임시 router. 추후 삭제 예정
-  {
-    path: '/123',
-    name: 'ModalToWriteJournal',
-    component: ModalToWriteJournal
-  },
-  {
-    path: '/',
-    name: 'test',
-    component: test,
-  },
   // {
   //   path: '/pintest',
   //   name: 'pintest',
@@ -68,5 +62,13 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// navation duplicate 에러 방지용
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+	return originalPush.call(this, location).catch(err => {
+		if (err.name !== 'NavigationDuplicated') throw err;
+	});
+};
 
 export default router

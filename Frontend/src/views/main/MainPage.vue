@@ -220,9 +220,17 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+  },
   beforeMount() {},
-  mounted() {},
+  mounted() {
+      if ( this.$store.getters['isSignedIn'] ) {
+        console.log('어서 돌아와용')
+      }
+      else {
+        this.$router.push('/feed')
+      }
+  },
   beforeUpdate() {},
   updated() {},
   beforeUnmount() {}, 
