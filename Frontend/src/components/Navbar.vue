@@ -23,7 +23,10 @@
           </div>
           <div v-else class="nav-right">
             <li class="nav-item nav-login" @click="signOut">Logout</li>
-            <li class="nav-item">알람</li>
+            <li class="alarm-wrap">
+              <img src="../assets/alarm-bell.png" alt="" class="alarm-bell">
+              <div class="if-there-alarm"></div>
+            </li>
             <li class="nav-item">프사</li>
           </div>
         </div>
@@ -52,8 +55,7 @@ export default {
   },
   
   methods: {
-    ...mapActions(["signOut"]),
-
+    ...mapActions(["signOut", "removeAlarmList"]),
 
     onEnter() {
       // 향후 검색 페이지로 이동

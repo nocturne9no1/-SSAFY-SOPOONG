@@ -39,21 +39,23 @@
             <h2>Introduce</h2>
             <p><input type="textarea" v-model="user.introduce"></p>
             <h2>Profile Image</h2>
-            <div class="profile-change">
-              <label for="file">프사바꿩</label>
-              <input 
-                type="file"
-                id="file"
-                ref="file"
-                name="file"
-                accept="image/*"
-                @change="uploadProfileImage"
-              >
-              <div class="image-preview-box">
-                <img :src="imagePreview" alt="">
+            <div class="profile-image-button-wrap">
+              <div class="profile-change">
+                <label for="file">프사바꿩</label>
+                <input 
+                  type="file"
+                  id="file"
+                  ref="file"
+                  name="file"
+                  accept="image/*"
+                  @change="uploadProfileImage"
+                >
+                <div class="image-preview-box">
+                  <img :src="imagePreview" alt="">
+                </div>
               </div>
+              <button @click="changeProfile" class="btn">Change</button>
             </div>
-            <button @click="changeProfile" class="btn">Change</button>
           </div>
 
           <div v-if="nowSelect.passwordChange" class="payment">
@@ -183,7 +185,7 @@ export default {
 
       userProfile: '',
 
-      profileImageFile: '',
+      profileImageFile: null,
       imagePreview: '',
     }
   },
@@ -253,7 +255,7 @@ export default {
     changeProfile() {
       console.log(this.$store.state.accounts.authToken)
       const userId = this.$store.state.accounts.userProfile.userId
-      const data = FormData()
+      const data = new FormData()
       data.append('userId', userId)
       data.append('userNickname', this.user.nickname)
       data.append('userComment', this.user.introduce)

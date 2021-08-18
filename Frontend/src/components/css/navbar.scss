@@ -30,8 +30,29 @@
   .nav-item {
     padding: 15px;
     cursor: pointer;
+
+
   }
-  
+
+  .alarm-wrap {
+    height: 51px;
+    .alarm-bell {
+      width: 45px;
+      padding: 0;
+      padding-top: 2px;
+      margin: 0;
+
+    }
+    .if-there-alarm {
+      position: relative;
+      left: 28px;
+      bottom: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #6a68e4;
+    }
+  }
   .nav-left {
     display: flex;
     flex-direction: row;

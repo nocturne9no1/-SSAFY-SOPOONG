@@ -7,6 +7,7 @@ import createPersistedState from "vuex-persistedstate";
 
 import accounts from './modules/accounts'
 import feed from './modules/feed'
+import alarm from './modules/alarm.js'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,8 @@ export default new Vuex.Store({
   modules: {
     accounts,
     feed,
+    alarm,
+    
   },
   plugins: [createPersistedState()] // 미사용시 null값시 데이터 못 불러오는 문제
 })
