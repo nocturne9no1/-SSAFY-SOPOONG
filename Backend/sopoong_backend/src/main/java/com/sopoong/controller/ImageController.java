@@ -1,10 +1,13 @@
 package com.sopoong.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -44,9 +47,16 @@ public class ImageController {
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
 	} */
 	
-	@GetMapping(value = "/image/{filePath}", produces = MediaType.IMAGE_JPEG_VALUE)
-	public @ResponseBody byte[] getImageWithMediaType(@PathVariable(name = "filePath") String filePath) throws IOException {
-		InputStream in = getClass().getResourceAsStream(filePath);
-		return IOUtils.toByteArray(in);
+	@GetMapping(value = "/image/{imageName}", produces = MediaType.IMAGE_PNG_VALUE)
+	@ApiOperation("이미지 불러오기")
+	public @ResponseBody byte[] getImage(@PathVariable(name = "imageName") String imageName,
+		HttpServletRequest request) throws IOException {
+		String imagePath = "/image/"+imageName;
+		logger.info("PATH : " + imagePath);
+		InputStream imageStream = new FileInputStream(imagePath);
+		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+		imageStream.close();
+
+		return imageByteArray;
 	}
 }
