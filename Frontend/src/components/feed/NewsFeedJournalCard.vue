@@ -1,20 +1,5 @@
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!-- 현재 이 페이지 개발은 NewsFeedJournalCard에서 이뤄지고있음ㅇㅇㅇㅇㅇㅇ -->
-
-
 <template>
-  <!--  -->
+  <!-- 클릭 div가 아닌 다른곳으로 옮겨줘야할듯. -->
   <div
     class="card"
     :style="{
@@ -34,13 +19,13 @@
     <div class="nickFollowDiv">
       <p>{{ image.user.name }}</p>
       <!-- 들고있는 자료 쏴주는법 참고! -->
-      <button v-if="!isFollowing" @click="toFollow(image.user.name)" class="followButton">follow</button>
+      <button v-if="!image.liked_by_user" @click="toFollow(image.user.name)" class="followButton">follow</button>
       <button v-else @click="toFollow(image.user.name)" class="unfollowButton">following</button>
     </div>
     <div class="likeBookMarkDiv">
       <!-- v-bind는 false값도 true로 인식? -->
       <i class="far fa-bookmark" :class="{ 'fas': scraped, 'fas-bookmark': scraped }" @click="scrapedJournal()" :v-show="imgHover" style="margin-right: 10px"></i>
-      <i class="far fa-heart" :class="{ 'fas': liked, 'fas-heart': liked }" @click="likedJournal()" :v-show="imgHover"></i>
+      <i class="far fa-heart" :class="{ 'fas': liked, 'fas-heart': liked }" @click="likedJournal(image.user.name)" :v-show="imgHover"></i>
     </div>
     <div class="textDiv" v-show="imgHover" @click="journalDetail()">
       <h1>여행일지 제목</h1>
@@ -57,6 +42,7 @@
 </template>
 
 <script>
+// import { mapActions } from 'vuex';
 // import { mapGetters } from 'vuex'
 
 export default {
@@ -79,10 +65,38 @@ export default {
 
   }),
 
+  watch: {
+    image: {
+      deep: true,
+      immediate: true,
+      handler() {
+        console.log("하위 컴포넌트에서 watch체크")
+      }
+    }
+  },
+
   created() {
     this.tH = Math.round(this.image.height / (this.image.width / 400));
     const gap = Math.round(this.tH / 10);
     this.gap = `span ${gap}`;
+  },
+
+  async updated() {
+    // // 팔로우한 사람 동시에 버튼 바꾸기 위해 사용
+    // this.$store.dispatch('followingPeopleList', this.$store.getters['getUserProfile'].userId)
+    // // 값 가져오기
+    // this.$store.getters['getFollowingPeopleList']
+    // // 팔로잉한 유저 정보를 확인해서 일치한다면 following 버튼을 토글하기.
+    // // followingUser목록을 돌면서, 현재 이미지 전체 목록도 돌아서 following 버튼을 동시에 토글해줘야 하는데..
+    // // v-for마다 v-if줘서, image에 새 항목을 하나 준 후, 새 항목이 true라면 보이게 하고 전체 이미지 for문 돌면서 이미지에 저장된 닉네임 in FollowingList면 그거 그대로 다른 버튼도 true될수있또록!
+    // for (var followingUser of this.$store.getters['getFollowingPeopleList']) {
+    //   // if (this.image.user.name === 'Bundo Kim')
+    //   console.log(this.image.user.name, '내가 마우스 올린 이미지 사용자')
+    //   console.log(followingUser.userNickname, '팔로잉하는 사용자 닉네임 for문돌며 하나씩 출력')
+    //   var followingButton = document.querySelector('.followButton')
+    //   console.log(followingButton)
+      
+    // }
   },
 
   methods: {
@@ -104,9 +118,10 @@ export default {
       else return 1
     },
     // 좋아요 버튼 토글 구현. 게시글 내에 좋아요 저장 구현해야 함.
-    likedJournal() {
+    likedJournal(userId) {
       this.liked = !this.liked
       // 데이터 보내서 수정해야 함.
+      this.$store.dispatch('like', [userId, 'long travelIdx']);
     },
     scrapedJournal() {
       this.scraped = !this.scraped
@@ -122,8 +137,12 @@ export default {
     // 팔로우
     toFollow(userId) {
       this.isFollowing = !this.isFollowing;
+      // 팔로우하기
       this.$store.dispatch('follow',[this.$store.getters['getUserProfile'].userId, userId]);
-    }
+      // 상위로 데이터 쏘기
+      this.$emit('onFollow', userId);
+    },
+
   }
 };
 </script>

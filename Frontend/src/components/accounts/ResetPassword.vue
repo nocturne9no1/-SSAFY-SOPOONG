@@ -120,7 +120,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["signUp", "requestEmailAuth", "resetPassword"]),
+    ...mapActions(["resetPassword"]),
 
     // 검증
     checkForm() {

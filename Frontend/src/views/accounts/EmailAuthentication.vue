@@ -1,4 +1,5 @@
 <template>
+<div class="background">
   <div class="EmailAuthDiv">
     <div>
       <h1>이메일 인증</h1>
@@ -27,6 +28,7 @@
       </p>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -60,8 +62,11 @@ export default {
 </script>
 
 <style scoped>
-div {
-  font-family: monospace;
+.background {
+  background-image: url('../../assets/background.jpg');
+  /* position: absolute; */
+  background-size: cover;
+  height: 100vh;
 }
 
 .EmailAuthDiv {
@@ -93,6 +98,8 @@ div {
 }
 
 h1 {
+  margin-top: 0;
+
   color: #707070;
 }
 
@@ -107,7 +114,7 @@ input {
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.6);
 
-  color: white;
+  color: black;
   font-size: 16px;
 
   caret-color: black;
@@ -120,7 +127,7 @@ input:focus {
 input::placeholder {
   color: rgba(237, 119, 102, 1);
   font-weight: bold;
-  font-family: monospace;
+  /* font-family: monospace; */
 }
 
 button {
@@ -136,7 +143,7 @@ button {
   color: rgba(237, 119, 102, 1);
   font-size: 20px;
   font-weight: bold;
-  font-family: monospace;
+  /* font-family: monospace; */
   text-decoration: none;
 
   cursor: pointer;
@@ -146,10 +153,12 @@ span {
   display: flex;
   justify-content: space-around;
   align-items: center;
+
 }
 
 p {
   margin: 0px;
+  cursor: pointer;
 }
 
 a {

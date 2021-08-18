@@ -16,6 +16,8 @@ const getters = {
       "X-AUTH-TOKEN": `Token ${state.authToken}`
     }
   }),
+  getToken: state => state.authToken,
+  getUserProfile: state => state.userProfile,
   getEmailAuthId: state => state.emailAuthId,
   getPasswordResetInfo: state => state.passwordResetInfo,
 
@@ -41,12 +43,12 @@ const actions = {
   
   // 로그인
   signIn(context, signInData) {
+    console.log(signInData)
     // 로그인시도
     axios.get('auth/login', { params :{ id: signInData.id, password: signInData.password } })
     .then(res => {
-      console.log(res.data)
-      context.commit('SET_TOKEN', res.data.data.seccess) // 보내주는 cookie key 저장? 키값이 이렇게 오는게 맞나?
-      cookies.set('X-AUTH-TOKEN', res.data.data.seccess, "7d") // 키 , 값, 만료일
+      context.commit('SET_TOKEN', res.data.data.success) // 보내주는 cookie key 저장? 키값이 이렇게 오는게 맞나?
+      cookies.set('X-AUTH-TOKEN', res.data.data.success, "7d") // 키 , 값, 만료일
       // this.$cookies.set('auth-token', res.data.key, "7d")  // 글로벌 설정으로 쿠키 가져올때(main.js).
       
       // 프로필 정보 기억
@@ -59,9 +61,11 @@ const actions = {
   
   // 로그인시 프로필 데이터 get
   getProfile(context, id) {
-    // axios.get(`user/${id}`) // 이거 각자 정보 불러오는 구조가 어떻게 될지?
-    axios.get(`user`)
-      .then(res => {console.log(id, res.data), context.commit("SET_PROFILE", res.data)})
+    // header에 X-HEADER-TOKEN 넣어 보낼 시, 403에러 해결 가능
+    axios.get(`user`, { params: {id : id}, headers: { 'X-AUTH-TOKEN' : context.state.authToken, 'Access-Control-Allow-Origin': '*' } })
+      .then(res => {
+        context.commit("SET_PROFILE", res.data.data.success);
+      })
       .catch(err => console.error(err))
   },
 
@@ -78,8 +82,6 @@ const actions = {
     context.commit('SET_EMAIL_AUTH_ID', signUpData.id)
     // 회원가입 실행
     context.dispatch('postSignUpData', signUpData)
-    // 인증 메일 발송
-    context.dispatch('requestEmailAuth', signUpData.id)
   },
   
   postSignUpData(context, signUpData) {
@@ -90,20 +92,21 @@ const actions = {
       console.log(res)  // 회원가입시 받아오는 모든것들.
       console.log(context)
       router.push('/auth')
+      // 인증 메일 발송. 순서상 문제로 바로 발송되지 않는 문제 발생
+      context.dispatch('requestEmailAuth', signUpData.id)
     })
     .catch(err => console.error(err))
   },
   
   // 가입시 이메일 인증 요청
   requestEmailAuth(context, id) {
-    console.log("이메일 인증까지 잘 들어왔습니다.")
     const url = 'auth/email'
     axios.post(url, { id: id, headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Accept": "application/json; charset=utf-8"
       }})
       .then(res => {
-        console.log("성공했습니다!", res.data)
+        res.data
       })
       .catch(err => {
         console.log(err)
@@ -118,7 +121,7 @@ const actions = {
         alert('회원가입이 완료되었습니다.')
         router.push('/signin')
       })
-      .catch(err => err, alert('인증키를 확인해주세요.'))
+      .catch(err => {err, alert('인증키를 확인해주세요.')})
   },
 
   // 아이디 찾기 이메일 인증 요청
@@ -148,7 +151,7 @@ const actions = {
         // vue 데이터 초기화
         context.commit('RESET_SET_PASSWORD_RESET_INFO')
       })
-      .catch(err => {err, ('비밀번호 양식을 확인해주세요.')})    
+      .catch(err => {err, alert('비밀번호 양식을 확인해주세요.')})    
   },
 }
 

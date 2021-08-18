@@ -23,9 +23,7 @@
 
 <script>
 import MainFeedJournalCard from "@/components/main/MainFeedJournalCard.vue";
-import axios from "axios";
-
-const DEFAULT_IMAGES_COUNT = 30;
+// import axios from "axios";
 
 export default {
   name: "",
@@ -40,13 +38,9 @@ export default {
   },
   beforeCreate() {},
   async created() {
-    // 기본이 development로 설정되어 있고 , 그 외에도 여러 모드가 있다.
-    // console.log(process.env.NODE_ENV)
-    if (process.env.NODE_ENV === "production") {
-      await this.getRandomImages(DEFAULT_IMAGES_COUNT);
-    } else {
-      await this.getRandomImagesFromLocal();
-    }
+    this.$store.dispatch('travelJournalList', this.$store.getters['getUserProfile'].userId)
+    this.images = this.$store.getters['getMyTravelJournal']
+    console.log(this.images)
   },
   beforeMount() {},
   mounted() {},
@@ -55,36 +49,6 @@ export default {
   beforeUnmount() {},
   unmounted() {},
   methods: {
-    /**
-     * @param {number} count
-     */
-    async getRandomImages(count) {
-      try {
-        const { data } = await axios.get(
-          process.env.VUE_APP_URL + "/photos/random",
-          {
-            headers: {
-              Authorization: "Client-ID " + process.env.VUE_APP_ACCESS_KEY,
-            },
-            params: {
-              count,
-            },
-          }
-        );
-        // Binding data to this component data
-        this.images = data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async getRandomImagesFromLocal() {
-      try {
-        const { default: localData } = await import('@/assets/test_data.json')
-        this.images = localData
-      } catch (err) {
-        console.error(err)
-      }
-    }
   },
 };
 </script>

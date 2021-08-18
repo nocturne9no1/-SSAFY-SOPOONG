@@ -40,7 +40,10 @@ export default {
 <style scoped>
   .pageNotFoundDiv {
     padding: 100px;
+    
+    text-align: center;
     font-family: 'Do Hyeon';
+
   }
 
   .pageNotFoundDiv > div > button {
