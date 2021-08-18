@@ -44,6 +44,8 @@ public class AuthService {
 				userEmail(requestUser.getEmail())
 				.userPassword(passwordEncoder.encode(requestUser.getPassword())).
 				userNickname(requestUser.getNickname())// 최초.																									// 설정
+				.userIsVisible(1)
+				.userAlarm(7)
 				.build());
 		
 		resultMap.put("success", "회원가입 성공");
