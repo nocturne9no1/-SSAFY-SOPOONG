@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
 import com.sopoong.util.MD5Generator;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 @Service
 public class ImageService {
 	
@@ -40,6 +43,9 @@ public class ImageService {
 	
 	@Autowired
 	private PlaceRepository placeRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	@Transactional
 	public BaseMessage saveImage(List<FileDto> files, String userId, long travelIdx, long placeIdx) throws Exception {
@@ -94,6 +100,8 @@ public class ImageService {
 					.isPlaceLeader(file.getIsPlaceLeader())
 					.isTravelLeader(file.getIsTravelLeader())
 					.user(userRepository.findByUserId(userId).get())
+					.imageWidth(file.getImageWidth())
+					.imageHeight(file.getImageHeight())
 					.build();
 
 			im = imageRepository.save(im);
@@ -104,13 +112,18 @@ public class ImageService {
 	}
 
 
+	@Transactional
 	public BaseMessage saveProfile(MultipartFile file, String userId) throws IllegalStateException, IOException, NoSuchAlgorithmException {
 		Map<String,Object> resultMap= new HashMap<>();
 		
 		// 파일이 비어있는 경우
-		if (file.isEmpty()) {
-			System.out.println("파일 비어있음");
-			return new BaseMessage(HttpStatus.NO_CONTENT);
+		if (file.isEmpty() || file == null) {
+			BaseMessage bm = userService.updateImage(2, userId); // 기본이미지 Idx로 User Table 업데이트
+			
+			if (!bm.getHttpStatus().equals(HttpStatus.OK))
+				return new BaseMessage(HttpStatus.BAD_REQUEST, bm.getData());
+			
+			return new BaseMessage(HttpStatus.OK, bm.getData());
 		}
 
 		// 실행되는 위치의 images 폴더에 파일이 저장됨
@@ -148,13 +161,13 @@ public class ImageService {
 				.user(userRepository.findByUserId(userId).get())
 				.build();
 
-		imageRepository.save(im);
-		resultMap.put("success", im);
+		im = imageRepository.save(im);
 		System.out.println("프로필 파일 저장 성공");
 		
-		return new BaseMessage(HttpStatus.OK, resultMap);
+		return new BaseMessage(HttpStatus.OK, im);
 	}
 
+	@Transactional
 	public BaseMessage deleteImage(long imageIdx) {
 		Map<String,Object> resultMap= new HashMap<>();
 		Optional<Image> delImg = imageRepository.findByImageIdx(imageIdx);

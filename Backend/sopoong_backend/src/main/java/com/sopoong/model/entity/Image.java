@@ -49,6 +49,10 @@ public class Image {
 	@NotNull
 	private double imageLong; // 파일 경도
 	
+	private int imageWidth;
+	
+	private int imageHeight;
+	
 	private LocalDateTime imageTime; // 사진 찍은 시각
 	
 	@NotNull
