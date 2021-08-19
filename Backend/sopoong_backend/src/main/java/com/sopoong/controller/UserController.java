@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sopoong.common.BaseMessage;
+import com.sopoong.model.dto.DeleteUserRequest;
 import com.sopoong.model.dto.changeAlarmRequest;
 import com.sopoong.model.dto.changePasswordRequest;
 import com.sopoong.model.dto.changeProfileRequest;
@@ -81,9 +82,9 @@ public class UserController {
 	
 	@DeleteMapping("/user/delete")
 	@ApiOperation(value = "계정 삭제하기")
-	public ResponseEntity<BaseMessage> deleteUser(@RequestParam String id, @RequestParam String password) {
+	public ResponseEntity<BaseMessage> deleteUser(@RequestBody DeleteUserRequest request) {
 		
-		BaseMessage bm= userService.deleteUser(id, password);
+		BaseMessage bm= userService.deleteUser(request);
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
 		
 	}
