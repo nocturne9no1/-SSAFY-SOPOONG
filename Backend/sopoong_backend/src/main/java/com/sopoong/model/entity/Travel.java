@@ -55,7 +55,7 @@ public class Travel implements Serializable{
 	
 	private String travelContent;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "image_idx")
 	private Image image;
 	

@@ -8,15 +8,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
-import com.sopoong.model.dto.FeedDto;
 import com.sopoong.model.dto.TravelList;
+import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Relation;
 import com.sopoong.model.entity.Travel;
 import com.sopoong.model.entity.User;
@@ -41,7 +39,6 @@ public class FeedService {
 	
 	public BaseMessage getFollowList(String id, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
-		System.out.println(pageable.getSort());
 		Optional<User> optUsers = userRepository.findByUserId(id);
 		List<Relation> followings = new ArrayList<>();
 		if(optUsers.isPresent()) {
@@ -59,26 +56,28 @@ public class FeedService {
 		Page<Travel> travels = travelRepository.findByUser_UserIdInAndTravelIsVisible(userIds, 1,pageable);
 		List<TravelList> feeds = new ArrayList<>();
 		for(Travel travel : travels) {
+			Image image = travel.getImage();
+			User user = travel.getUser();
 			TravelList t = TravelList.builder()
 					.travelIdx(travel.getTravelIdx())
 					.travelTitle(travel.getTravelTitle())
 					.travelContent(travel.getTravelContent())
-					.imageOriginTitle(travel.getImage().getImageOriginTitle())
-					.profileOriginTitle(travel.getUser().getImage().getImageOriginTitle())
+					.imageOriginTitle(image.getImageOriginTitle())
+					.profileOriginTitle(image.getImageOriginTitle())
 					.travelLat(travel.getTravelLat())
 					.travelLong(travel.getTravelLong())
 					.startDate(travel.getStartDate())
 					.endDate(travel.getEndDate())
-					.imageWidth(travel.getImage().getImageWidth())
-					.imageHeight(travel.getImage().getImageHeight())
-					.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
-					.userId(travel.getUser().getUserId())
-					.userNickname(travel.getUser().getUserNickname())
+					.imageWidth(image.getImageWidth())
+					.imageHeight(image.getImageHeight())
+					.totalLike(travel.getGoods().size())
+					.userId(user.getUserId())
+					.userNickname(user.getUserNickname())
 					.build();
 			if(goodRepository.findByUser_UserIdAndTravel_TravelIdx(id, travel.getTravelIdx()).isPresent()) t.setIsLike(1);
 			else t.setIsLike(0);
 			
-			if(relationRepository.findByRelationFollowingAndRelationFollowed(userRepository.findByUserId(id).get(),travel.getUser()).isPresent()) {
+			if(relationRepository.findByRelationFollowingAndRelationFollowed(optUsers.get(),user).isPresent()) {
 				t.setIsFollow(1);
 			}else {
 				t.setIsFollow(0);
@@ -93,31 +92,33 @@ public class FeedService {
 
 	public BaseMessage getAllList(String userId, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
-		
+		User loginUser = userRepository.findByUserId(userId).get();
 		Page<Travel> travels = travelRepository.findAll(pageable);
 		List<TravelList> feeds = new ArrayList<>();
-		for(Travel travel : travels) {
+		for(Travel travel : travels.getContent()) {
+			Image image = travel.getImage();
+			User user = travel.getUser();
 			TravelList t = TravelList.builder()
 					.travelIdx(travel.getTravelIdx())
 					.travelTitle(travel.getTravelTitle())
 					.travelContent(travel.getTravelContent())
-					.imageOriginTitle(travel.getImage().getImageOriginTitle())
-					.profileOriginTitle(travel.getUser().getImage().getImageOriginTitle())
+					.imageOriginTitle(image.getImageOriginTitle())
+					.profileOriginTitle(image.getImageOriginTitle())
 					.travelLat(travel.getTravelLat())
 					.travelLong(travel.getTravelLong())
 					.startDate(travel.getStartDate())
 					.endDate(travel.getEndDate())
-					.imageWidth(travel.getImage().getImageWidth())
-					.imageHeight(travel.getImage().getImageHeight())
-					.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
-					.userId(travel.getUser().getUserId())
-					.userNickname(travel.getUser().getUserNickname())
+					.imageWidth(image.getImageWidth())
+					.imageHeight(image.getImageHeight())
+					.totalLike(travel.getGoods().size())
+					.userId(user.getUserId())
+					.userNickname(user.getUserNickname())
 					.build();
 			if(userId!=null) {
 				if(goodRepository.findByUser_UserIdAndTravel_TravelIdx(userId, travel.getTravelIdx()).isPresent()) t.setIsLike(1);
 				else t.setIsLike(0);
 				
-				if(relationRepository.findByRelationFollowingAndRelationFollowed(userRepository.findByUserId(userId).get(),travel.getUser()).isPresent()) t.setIsFollow(1);
+				if(relationRepository.findByRelationFollowingAndRelationFollowed(loginUser,user).isPresent()) t.setIsFollow(1);
 				else t.setIsFollow(0);
 			}
 			feeds.add(t);
