@@ -67,6 +67,8 @@ public class FeedService {
 					.imageWidth(travel.getImage().getImageWidth())
 					.imageHeight(travel.getImage().getImageHeight())
 					.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
+					.userId(travel.getUser().getUserId())
+					.userNickname(travel.getUser().getUserNickname())
 					.build();
 			feeds.add(t);
 		}
@@ -93,6 +95,8 @@ public class FeedService {
 					.imageWidth(travel.getImage().getImageWidth())
 					.imageHeight(travel.getImage().getImageHeight())
 					.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
+					.userId(travel.getUser().getUserId())
+					.userNickname(travel.getUser().getUserNickname())
 					.build();
 			feeds.add(t);
 		}

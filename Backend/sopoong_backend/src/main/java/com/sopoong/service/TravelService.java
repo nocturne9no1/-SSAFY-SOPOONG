@@ -193,6 +193,8 @@ public class TravelService {
 						.imageWidth(travel.getImage().getImageWidth())
 						.imageHeight(travel.getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
+						.userId(travel.getUser().getUserId())
+						.userNickname(travel.getUser().getUserNickname())
 						.build();
 			
 			System.out.println(t.toString());
@@ -219,6 +221,8 @@ public class TravelService {
 						.imageWidth(travel.get().getImage().getImageWidth())
 						.imageHeight(travel.get().getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.get().getTravelIdx()))
+						.userId(travel.get().getUser().getUserId())
+						.userNickname(travel.get().getUser().getUserNickname())
 						.build();
 		
 		// PlaceList[] 정보 저장
