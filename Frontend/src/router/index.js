@@ -14,6 +14,7 @@ import accounts from './accounts.js'
 import main from './main.js'
 import feed from './feed.js'
 import travel from './travel.js'
+import personal from './personal.js'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,7 @@ const routes = [
   ...main,
   ...feed,
   ...travel,
+  ...personal,
 
   {
     path: '/',
