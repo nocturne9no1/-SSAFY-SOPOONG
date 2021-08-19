@@ -31,12 +31,17 @@ const actions = {
   },
 
   // 팔로우 언팔로우
-  follow(context, data) {
-    axios.post('follow', { relationFollowing: data[0], relationFollowed: 'rlaghtjr2' }, { headers: { 'X-AUTH-TOKEN' : context.rootGetters.getToken } })
+  follow(context, idData) {
+    axios.post('follow', { relationFollowing: idData[0], relationFollowed: idData[1] }, { headers: { 'X-AUTH-TOKEN' : context.rootGetters.getToken } })
       .then(res =>
-        console.log(res.data)
+        console.log(res.data, idData)
       )
       .catch(err => console.error(err))
+  },
+
+  // 좋아요
+  like(context, idTravelIdx) {
+    axios.post('good', { id: idTravelIdx[0], travelIdx: idTravelIdx[1] }, { headers: { 'X-AUTH-TOKEN' : context.rootGetters.getToken }})
   }
 }
 

@@ -37,14 +37,20 @@ export default {
       images: [],
     };
   },
-  beforeCreate() {},
-  async created() {
-    for (let x of this.$store.getters['getMyTravelJournal']) {
-      if (x.travelIdx === this.$store.getters['getPresentTravelIdx']) {
-        this.travel = x
+  watch: {
+    images: {
+      deep: true,
+      immediate: true,
+      handler() {
+        // 이미지들에 변동이 있을 경우(삭제 등), 다시 이미지 카드들 가져오기 위함.
+        this.getTravelJournalDetail()
       }
     }
-    this.images = this.$store.getters['getTravelDetail']
+  },
+
+  beforeCreate() {},
+  async created() {
+    this.getTravelJournalDetail();
   },
   beforeMount() {},
   mounted() {},
@@ -53,6 +59,16 @@ export default {
   beforeUnmount() {},
   unmounted() {},
   methods: {
+    getTravelJournalDetail() {
+      // 현재 여행정보 가져오기 위함.
+      for (let x of this.$store.getters['getMyTravelJournal']) {
+        if (x.travelIdx === this.$store.getters['getPresentTravelIdx']) {
+          this.travel = x
+        }
+      }
+      // 이미지 가져오기.
+      this.images = this.$store.getters['getTravelDetail']
+    }
   },
 };
 </script>

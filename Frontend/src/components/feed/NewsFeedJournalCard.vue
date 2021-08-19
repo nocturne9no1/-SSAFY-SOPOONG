@@ -25,7 +25,7 @@
     <div class="likeBookMarkDiv">
       <!-- v-bind는 false값도 true로 인식? -->
       <i class="far fa-bookmark" :class="{ 'fas': scraped, 'fas-bookmark': scraped }" @click="scrapedJournal()" :v-show="imgHover" style="margin-right: 10px"></i>
-      <i class="far fa-heart" :class="{ 'fas': liked, 'fas-heart': liked }" @click="likedJournal(image.user.name)" :v-show="imgHover"></i>
+      <i class="far fa-heart" :class="{ 'fas': liked, 'fas-heart': liked }" @click="likedJournal([id, travelIdx])" :v-show="imgHover"></i>
     </div>
     <div class="textDiv" v-show="imgHover" @click="journalDetail()">
       <h1>여행일지 제목</h1>
@@ -118,10 +118,10 @@ export default {
       else return 1
     },
     // 좋아요 버튼 토글 구현. 게시글 내에 좋아요 저장 구현해야 함.
-    likedJournal(userId) {
+    likedJournal(idTravelIdx) {
       this.liked = !this.liked
       // 데이터 보내서 수정해야 함.
-      this.$store.dispatch('like', [userId, 'long travelIdx']);
+      this.$store.dispatch('like', idTravelIdx);
     },
     scrapedJournal() {
       this.scraped = !this.scraped
@@ -264,7 +264,7 @@ i {
 }
 
 .fas-heart {
-  color: red;
+  color: rgba(237, 119, 102, 1);
   text-shadow: rgb(209, 48, 48) 1px 0 10px;
 }
 

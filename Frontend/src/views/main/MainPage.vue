@@ -249,12 +249,12 @@ export default {
   },
   beforeMount() {},
   mounted() {
-      if ( this.$store.getters['isSignedIn'] ) {
-        console.log()
-      }
-      else {
-        this.$router.push('/feed')
-      }
+    if ( this.$store.getters['isSignedIn'] ) {
+      console.log()
+    }
+    else {
+      this.$router.push('/feed')
+    }
   },
   beforeUpdate() {},
   updated() {},

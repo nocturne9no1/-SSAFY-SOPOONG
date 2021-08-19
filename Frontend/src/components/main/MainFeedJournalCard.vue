@@ -9,22 +9,19 @@
     }"
     @mouseover="imgHoverCheck()"
     @mouseout="mouseOutCheck()"
-    @click="journalDetail()"
   >
-    <div class="image">
+    <div class="image" @click="journalDetail()">
       <img :src="imgSrc" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
     </div>
-    <div class="textDiv" v-show="imgHover">
+    <div class="deleteDiv">
+      <i class="far fa-trash-alt" v-show="imgHover" @click="deleteTravel(travel.travelIdx)"></i>
+    </div>
+    <div class="textDiv" v-show="imgHover" @click="journalDetail()">
       <h1>{{ travel.travelTitle }}</h1>
       <p>
         {{ travel.travelComment }}
       </p>
-      <!-- 별점 -->
-      <span class="fa fa-star" :class="{ checked : checkRating(1) }"></span>
-      <span class="fa fa-star" :class="{ checked : checkRating(2) }"></span>
-      <span class="fa fa-star" :class="{ checked : checkRating(3) }"></span>
-      <span class="fa fa-star" :class="{ checked : checkRating(4) }" ></span>
-      <span class="fa fa-star" :class="{ checked : checkRating(5) }"></span>
+
     </div>
   </div>
 </template>
@@ -83,7 +80,12 @@ export default {
     // 일지 디테일로 연결
     journalDetail() {
       // 멀티플 파라미터 쏘고 싶을 때
-      this.$store.dispatch('travelDetail', this.travel.travelIdx)
+      this.$store.dispatch('travelDetail', this.travel)
+    },
+
+    // 여행일지 삭제
+    deleteTravel(travelIdx) {
+      this.$store.dispatch('deleteTravel', travelIdx)
     }
   }
 };
@@ -120,6 +122,32 @@ img:hover {
   cursor: pointer;
 }
 
+.deleteDiv {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+
+  /* width: 100%; */
+  /* height: 60px; */
+
+  text-align: right;
+
+  font-size: 2ex;
+  color: white;
+
+  z-index: 1000;
+
+}
+
+i {
+  cursor: pointer;
+}
+
+.fa-trash-alt:hover {
+  color: red;
+  text-shadow: rgb(209, 48, 48) 1px 0 10px;
+}
+
 /* 글 div위에 mouse hover시에도 작동할 수 있도록 */
 .imgBlur {
   filter: blur(4px);
@@ -130,9 +158,6 @@ h1::after {
   content: "  ♥";
 }
 
-/* 별점 */
-.checked {
-  color: orange;
-}
+
 </style>
 

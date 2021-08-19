@@ -26,7 +26,7 @@
         {{ image.placeComment }}  
       </p>
       <p v-else>
-        아무거나 말해주세요
+        여기는 개별 일지 확인하는 여행 일지 디테일!
       </p>
       <!-- 별점 -->
       <span class="fa fa-star" :class="{ checked : checkRating(1) }"></span>
@@ -56,10 +56,19 @@ export default {
     lt: 100,
   }),
 
+  watch: {
+    image: {
+      deep: true,
+      immediate: true,
+      handler() {
+        // 이미지 삭제 등 변동이 일어난 경우 이미지 사이즈 재측정 위함.
+        this.getImageSize()
+      }
+    }
+  },
+
   created() {
-    this.tH = Math.round(this.image.imageHeight / (this.image.imageWidth / 300));
-    const gap = Math.round(this.tH / 10);
-    this.gap = `span ${gap}`;
+    this.getImageSize();
   },
 
   methods: {
@@ -92,6 +101,12 @@ export default {
 
     deleteTravelDetail(placeIdx) {
       this.$store.dispatch('deleteTravelDetail', placeIdx)
+    },
+
+    getImageSize() {
+      this.tH = Math.round(this.image.imageHeight / (this.image.imageWidth / 300));
+      const gap = Math.round(this.tH / 10);
+      this.gap = `span ${gap}`;
     }
   }
 };
@@ -135,7 +150,7 @@ img:hover {
   font-size: 2ex;
   color: white;
 
-  z-index: 10;
+  z-index: 1000;
 
 }
 
