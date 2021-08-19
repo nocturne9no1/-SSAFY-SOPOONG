@@ -12,12 +12,12 @@
     @click="journalDetail()"
   >
     <div class="image">
-      <img :src="`https://i5a404.p.ssafy.io/api/image/${image.imageOriginTitle}`" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
+      <img :src="imgSrc" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
     </div>
     <div class="textDiv" v-show="imgHover">
-      <h1>{{ image.travelTitle }}</h1>
+      <h1>{{ travel.travelTitle }}</h1>
       <p>
-        {{ image.travelComment }}
+        {{ travel.travelComment }}
       </p>
       <!-- 별점 -->
       <span class="fa fa-star" :class="{ checked : checkRating(1) }"></span>
@@ -82,7 +82,7 @@ export default {
     // 일지 디테일로 연결
     journalDetail() {
       // 멀티플 파라미터 쏘고 싶을 때
-      this.$store.dispatch('travelDetail', this.image.travelIdx)
+      this.$store.dispatch('travelDetail', this.travel.travelIdx)
     }
   }
 };

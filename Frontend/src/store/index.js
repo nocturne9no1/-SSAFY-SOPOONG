@@ -22,7 +22,7 @@ export default new Vuex.Store({
   modules: {
     accounts,
     feed,
-    travel
+    travel,
     alarm,
     
   },
