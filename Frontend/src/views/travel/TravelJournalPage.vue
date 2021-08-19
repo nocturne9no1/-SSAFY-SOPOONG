@@ -1,6 +1,7 @@
 <template>
   <div style="display:flex;" v-if="test()">
     <profile-box />
+    <TravelMap />
     <each-place-journal-card-list />
   </div>
 </template>
@@ -8,14 +9,14 @@
 <script>
 import ProfileBox from '../../views/accounts/ProfileBox.vue';
 import EachPlaceJournalCardList from './EachPlaceJournalCardList.vue';
-
+import TravelMap from './TravelMap.vue';
 
 export default {
   name:'',
   components: {
     ProfileBox,
     EachPlaceJournalCardList,
-    
+    TravelMap,
   },
   data() {
     return {
@@ -23,12 +24,12 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {}, 
-  beforeMount() {}, 
-  mounted() {}, 
+  created() {},
+  beforeMount() {},
+  mounted() {},
   beforeUpdate() {},
   updated() {},
-  beforeUnmount() {}, 
+  beforeUnmount() {},
   unmounted() {},
   methods: {
     test() {
