@@ -40,7 +40,7 @@ public class Good {
 	private User user;
 	
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "travel_idx")
 	private Travel travel;
 	

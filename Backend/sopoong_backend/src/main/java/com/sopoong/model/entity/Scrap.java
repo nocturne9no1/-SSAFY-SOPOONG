@@ -39,7 +39,7 @@ public class Scrap {
 	private User user;
 	
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "travel_idx")
 	private Travel travel;
 	
