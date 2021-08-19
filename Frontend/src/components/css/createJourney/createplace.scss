@@ -128,25 +128,37 @@
         flex-direction: column;
         align-items: center;
         .category-btns {
-            button {
-              width: 100px;
-              height: 50px;
+          button {
+            width: 90px;
+            height: 50px;
 
-              img {
-                height: 100%;
-              }
-            }
-            .hotel {
-              background-color: #b7dccc;
-            }
-            .res {
-              background-color: #ed7766;
-            }
-            .activity {
-              background-color: #2f3d63;
+            img {
+              height: 100%;
             }
           }
+          .hotel {
+            border-radius: 15px 5px 5px 15px;
+            background-color: #b7dccc;
+            border: none;
+            cursor: pointer;
+            box-shadow: 1px 2px 5px rgba($gray, .8);
+          }
+          .res {
+            border-radius: 5px 5px 5px 5px;
+            background-color: #ed7766;
+            border: none;
+            cursor: pointer;
+            box-shadow: 1px 2px 5px rgba($gray, .8);
+          }
+          .activity {
+            border-radius: 5px 15px 15px 5px;
+            background-color: #2f3d63;
+            border: none;
+            cursor: pointer;
+            box-shadow: 1px 2px 5px rgba($gray, .8);
+          }
         }
+      }
 
         .sub-category {
           select {

@@ -7,7 +7,7 @@
         :options="options"
         class="google-map"
     >
-      <div v-for="(nowPlace, idx) in marekrs" :key="idx">
+      <div v-for="(nowPlace, idx) in markers" :key="idx">
         <!-- 현재 카테고리에 따른 icon 랜더링 -->
         <div v-if="nowPlace.category.main === 'hotel'">
           <gmap-marker
@@ -44,11 +44,11 @@
         </div>
       </div>
 
-      <div v-for="(eachPath, idx) in paths" :key="idx">
+      <!-- <div v-for="(eachPath, idx) in path" :key="idx">
         <EachPolyline
           :eachPath="eachPath"
         />
-      </div>
+      </div> -->
       <gmap-polyline v-bind:path.sync="path" v-bind:options="{ strokeColor:'#000000'}"/> 
     </GmapMap>
   </div>
