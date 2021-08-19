@@ -21,6 +21,7 @@ import com.sopoong.model.entity.Relation;
 import com.sopoong.model.entity.Travel;
 import com.sopoong.model.entity.User;
 import com.sopoong.repository.GoodRepository;
+import com.sopoong.repository.RelationRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
 
@@ -34,6 +35,9 @@ public class FeedService {
 	
 	@Autowired
 	private GoodRepository goodRepository;
+	
+	@Autowired
+	private RelationRepository relationRepository;
 	
 	public BaseMessage getFollowList(String id, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
@@ -60,6 +64,7 @@ public class FeedService {
 					.travelTitle(travel.getTravelTitle())
 					.travelContent(travel.getTravelContent())
 					.imageOriginTitle(travel.getImage().getImageOriginTitle())
+					.profileOriginTitle(travel.getUser().getImage().getImageOriginTitle())
 					.travelLat(travel.getTravelLat())
 					.travelLong(travel.getTravelLong())
 					.startDate(travel.getStartDate())
@@ -70,6 +75,15 @@ public class FeedService {
 					.userId(travel.getUser().getUserId())
 					.userNickname(travel.getUser().getUserNickname())
 					.build();
+			if(goodRepository.findByUser_UserIdAndTravel_TravelIdx(id, travel.getTravelIdx()).isPresent()) t.setIsLike(1);
+			else t.setIsLike(0);
+			
+			if(relationRepository.findByRelationFollowingAndRelationFollowed(userRepository.findByUserId(id).get(),travel.getUser()).isPresent()) {
+				t.setIsFollow(1);
+			}else {
+				t.setIsFollow(0);
+			}
+			
 			feeds.add(t);
 		}
 		resultMap.put("success", feeds);
@@ -77,7 +91,7 @@ public class FeedService {
 		return new BaseMessage(HttpStatus.OK,resultMap);
 	}
 
-	public BaseMessage getAllList(Pageable pageable) {
+	public BaseMessage getAllList(String userId, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
 		
 		Page<Travel> travels = travelRepository.findAll(pageable);
@@ -88,6 +102,7 @@ public class FeedService {
 					.travelTitle(travel.getTravelTitle())
 					.travelContent(travel.getTravelContent())
 					.imageOriginTitle(travel.getImage().getImageOriginTitle())
+					.profileOriginTitle(travel.getUser().getImage().getImageOriginTitle())
 					.travelLat(travel.getTravelLat())
 					.travelLong(travel.getTravelLong())
 					.startDate(travel.getStartDate())
@@ -98,6 +113,13 @@ public class FeedService {
 					.userId(travel.getUser().getUserId())
 					.userNickname(travel.getUser().getUserNickname())
 					.build();
+			if(userId!=null) {
+				if(goodRepository.findByUser_UserIdAndTravel_TravelIdx(userId, travel.getTravelIdx()).isPresent()) t.setIsLike(1);
+				else t.setIsLike(0);
+				
+				if(relationRepository.findByRelationFollowingAndRelationFollowed(userRepository.findByUserId(userId).get(),travel.getUser()).isPresent()) t.setIsFollow(1);
+				else t.setIsFollow(0);
+			}
 			feeds.add(t);
 		}
 		resultMap.put("success", feeds);
