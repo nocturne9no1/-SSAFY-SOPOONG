@@ -28,10 +28,18 @@ public class FeedController {
 	@Autowired
 	private FeedService feedService;
 	
-	@GetMapping("feed/list")
-	@ApiOperation("좋아요 누른사람 리스트 가져오기")
-	public ResponseEntity getList(@RequestParam(required = true) final String userId, @PageableDefault(sort = {"createdAt"},direction = Direction.DESC) Pageable pageable) throws Exception {
-		BaseMessage bm = feedService.getList(userId,pageable);
+	@GetMapping("feed/follow")
+	@ApiOperation("팔로워 피드 가져오기")
+	public ResponseEntity getFollowerList(@RequestParam(required = true) final String userId, @PageableDefault(sort = {"createdAt"},direction = Direction.DESC) Pageable pageable) throws Exception {
+		BaseMessage bm = feedService.getFollowList(userId,pageable);
+		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
+
+	}
+	
+	@GetMapping("feed/all")
+	@ApiOperation("전체 피드 가져오기")
+	public ResponseEntity getAllList(@PageableDefault(sort = {"createdAt"},direction = Direction.DESC) Pageable pageable) throws Exception {
+		BaseMessage bm = feedService.getAllList(pageable);
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 
 	}

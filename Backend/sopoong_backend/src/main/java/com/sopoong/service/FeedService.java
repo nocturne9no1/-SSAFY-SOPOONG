@@ -30,7 +30,7 @@ public class FeedService {
 	@Autowired
 	private TravelRepository travelRepository;
 	
-	public BaseMessage getList(String id, Pageable pageable) {
+	public BaseMessage getFollowList(String id, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
 		System.out.println(pageable.getSort());
 		Optional<User> optUsers = userRepository.findByUserId(id);
@@ -48,6 +48,19 @@ public class FeedService {
 		}
 		
 		Page<Travel> travels = travelRepository.findByUser_UserIdInAndTravelIsVisible(userIds, 1,pageable);
+		List<FeedDto> feeds = new ArrayList<>();
+		for(int i=0;i<travels.getContent().size();i++) {
+			feeds.add(new FeedDto(travels.getContent().get(i)));
+		}
+		resultMap.put("success", feeds);
+		resultMap.put("isLast", travels.isLast());
+		return new BaseMessage(HttpStatus.OK,resultMap);
+	}
+
+	public BaseMessage getAllList(Pageable pageable) {
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		Page<Travel> travels = travelRepository.findAll(pageable);
 		List<FeedDto> feeds = new ArrayList<>();
 		for(int i=0;i<travels.getContent().size();i++) {
 			feeds.add(new FeedDto(travels.getContent().get(i)));
