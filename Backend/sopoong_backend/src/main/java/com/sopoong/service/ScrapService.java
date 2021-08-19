@@ -15,9 +15,13 @@ import org.springframework.stereotype.Service;
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.ScrapDto;
 import com.sopoong.model.dto.ScrapRequest;
+import com.sopoong.model.dto.TravelList;
+import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Scrap;
 import com.sopoong.model.entity.Travel;
 import com.sopoong.model.entity.User;
+import com.sopoong.repository.GoodRepository;
+import com.sopoong.repository.RelationRepository;
 import com.sopoong.repository.ScrapRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
@@ -33,21 +37,50 @@ public class ScrapService {
 	@Autowired
 	private TravelRepository travelRepository;
 	
+	@Autowired
+	private GoodRepository goodRepository;
+	
+	@Autowired
+	private RelationRepository relationRepository;
+	
 	public BaseMessage getScraps(String id, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
+		User loginUser = userRepository.findByUserId(id).get();
 		Page<Scrap> scraps;
 		Optional<User> userOpt = userRepository.findByUserId(id);
 		if(userOpt.isPresent()) {
 			scraps = scrapRepository.findByUser_UserId(id, pageable);
-			List<ScrapDto> scrapDtos = new ArrayList<>();
-			for(int i=0;i<scraps.getContent().size();i++) {
-				Scrap scrap = scraps.getContent().get(i);
-				scrapDtos.add(ScrapDto.builder().travelIdx(scrap.getTravel().getTravelIdx())
-						.userId(scrap.getUser().getUserId()).userNickname(scrap.getUser().getUserNickname())
-						.profileImagePath(scrap.getUser().getImage().getImagePath())
-						.travelTitle(scrap.getTravel().getTravelTitle()).travelComment(scrap.getTravel().getTravelContent())
-						.travelImagePath(scrap.getTravel().getImage().getImageTitle())
-						.travelIsVisible(scrap.getTravel().getTravelIsVisible()).build());
+			List<TravelList> scrapDtos = new ArrayList<>();
+			for(Scrap scrap : scraps.getContent()) {
+				Travel travel = scrap.getTravel();
+				Image image = travel.getImage();
+				User user = travel.getUser();
+				TravelList t = TravelList.builder()
+						.travelIdx(travel.getTravelIdx())
+						.travelTitle(travel.getTravelTitle())
+						.travelContent(travel.getTravelContent())
+						.imageOriginTitle(image.getImageOriginTitle())
+						.profileOriginTitle(user.getImage().getImageOriginTitle())
+						.travelLat(travel.getTravelLat())
+						.travelLong(travel.getTravelLong())
+						.startDate(travel.getStartDate())
+						.endDate(travel.getEndDate())
+						.imageWidth(image.getImageWidth())
+						.imageHeight(image.getImageHeight())
+						.totalLike(travel.getGoods().size())
+						.userId(user.getUserId())
+						.userNickname(user.getUserNickname())
+						.build();
+				if(goodRepository.findByUser_UserIdAndTravel_TravelIdx(id, travel.getTravelIdx()).isPresent()) t.setIsLike(1);
+				else t.setIsLike(0);
+					
+				if(relationRepository.findByRelationFollowingAndRelationFollowed(loginUser,user).isPresent()) t.setIsFollow(1);
+				else t.setIsFollow(0);
+					
+				if(scrapRepository.findByUser_UserIdAndTravel_TravelIdx(loginUser.getUserId(), travel.getTravelIdx()).isPresent()) t.setIsScrap(1);
+				else t.setIsScrap(0);
+				
+				scrapDtos.add(t);
 			}
 			resultMap.put("success", scrapDtos);
 			resultMap.put("isLast", scraps.isLast());
