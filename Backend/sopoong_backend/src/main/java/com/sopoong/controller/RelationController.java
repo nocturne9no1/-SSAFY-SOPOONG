@@ -32,13 +32,7 @@ public class RelationController {
 	@PostMapping("follow")
 	@ApiOperation("팔로우 및 취소")
 	public ResponseEntity<Relation> follow(@RequestBody followRequest request) throws Exception {
-		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
-		SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
-		String format_time1 = format1.format (System.currentTimeMillis());
-		System.out.println(request.getRelationFollowed()+" "+"팔로우 시  작 " + format_time1);
 		BaseMessage bm= relationService.follow(request);
-		String format_time2 = format1.format (System.currentTimeMillis());
-		System.out.println(request.getRelationFollowed()+" "+"팔로우 끝 " + format_time2);
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 		
 	}
