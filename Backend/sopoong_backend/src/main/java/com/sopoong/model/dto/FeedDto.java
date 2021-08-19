@@ -28,7 +28,7 @@ public class FeedDto {
 		travelTitle = travel.getTravelTitle();
 		travelContent = travel.getTravelContent();
 		imagePath = travel.getImage().getImagePath();
-		imageTitle = travel.getImage().getImageTitle();
+		imageTitle = travel.getImage().getImageOriginTitle();
 		createdAt = travel.getCreatedAt();
 	}
 }
