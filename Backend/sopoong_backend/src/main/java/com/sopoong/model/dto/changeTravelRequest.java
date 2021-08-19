@@ -13,7 +13,7 @@ public class changeTravelRequest {
 	private long travelIdx;
 	private String travelTitle;
 	private String travelContent;
-	private boolean travelIsVisible;
+	private int travelIsVisible;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 }

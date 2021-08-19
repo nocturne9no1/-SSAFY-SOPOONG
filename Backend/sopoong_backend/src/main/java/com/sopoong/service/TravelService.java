@@ -81,7 +81,7 @@ public class TravelService {
 				.user(userRepository.findByUserId(travelDto.getUserId()).get())
 				.travelTitle(travelDto.getTravelTitle())
 				.travelContent(travelDto.getTravelContent())
-				.travelIsVisible(travelDto.isTravelIsVisible())
+				.travelIsVisible(travelDto.getTravelIsVisible())
 				.startDate(travelDto.getStartDate())
 				.endDate(travelDto.getEndDate())
 				.image(null)
@@ -185,7 +185,7 @@ public class TravelService {
 						.travelIdx(travel.getTravelIdx())
 						.travelTitle(travel.getTravelTitle())
 						.travelContent(travel.getTravelContent())
-						.imageOriginTitle(imageRepository.findByImageIdx(travel.getImage().getImageIdx()).get().getImageOriginTitle())
+						.imageOriginTitle(travel.getImage().getImageOriginTitle())
 						.travelLat(travel.getTravelLat())
 						.travelLong(travel.getTravelLong())
 						.startDate(travel.getStartDate())
@@ -210,12 +210,12 @@ public class TravelService {
 						.travelIdx(travel.get().getTravelIdx())
 						.travelTitle(travel.get().getTravelTitle())
 						.travelContent(travel.get().getTravelContent())
-						.imageOriginTitle(imageRepository.findByImageIdx(travel.get().getImage().getImageIdx()).get().getImageOriginTitle())
+						.imageOriginTitle(travel.get().getImage().getImageOriginTitle())
 						.travelLat(travel.get().getTravelLat())
 						.travelLong(travel.get().getTravelLong())
 						.startDate(travel.get().getStartDate())
 						.endDate(travel.get().getEndDate())
-						.isFollow(travel.get().isFollow())
+						.isFollow(travel.get().getIsFollow())
 						.imageWidth(travel.get().getImage().getImageWidth())
 						.imageHeight(travel.get().getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.get().getTravelIdx()))
@@ -294,7 +294,7 @@ public class TravelService {
 		if(updateTravel.isPresent()) {
 			updateTravel.get().setTravelTitle(travel.getTravelTitle());
 			updateTravel.get().setTravelContent(travel.getTravelContent());
-			updateTravel.get().setTravelIsVisible(travel.isTravelIsVisible());
+			updateTravel.get().setTravelIsVisible(travel.getTravelIsVisible());
 			updateTravel.get().setStartDate(travel.getStartDate());
 			updateTravel.get().setEndDate(travel.getEndDate());
 			

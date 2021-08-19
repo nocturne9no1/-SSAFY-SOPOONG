@@ -19,7 +19,7 @@ public class TravelDto {
 	private String userId;
 	private String travelTitle;
 	private String travelContent;
-	private boolean travelIsVisible;
+	private int travelIsVisible;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime startDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

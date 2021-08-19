@@ -59,9 +59,11 @@ public class Travel implements Serializable{
 	@JoinColumn(name = "image_idx")
 	private Image image;
 	
-	private boolean travelIsVisible;
+	@Column(name="travel_is_visible", columnDefinition = "TINYINT", length=1)
+	private int travelIsVisible;
 	
-	private boolean isFollow;
+	@Column(name="is_follow", columnDefinition = "TINYINT", length=1)
+	private int isFollow;
 	
 	private double travelLat;
 	
