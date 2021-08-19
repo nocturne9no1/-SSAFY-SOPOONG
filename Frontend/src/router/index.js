@@ -11,21 +11,22 @@ import Intro from '../views/Intro.vue'
 
 // modules
 import accounts from './accounts.js'
-import main from './main.js'
+// import main from './main.js'
 import feed from './feed.js'
 import travel from './travel.js'
+import main from '../views/main/MainPage.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   ...accounts,
-  ...main,
+  // ...main,
   ...feed,
   ...travel,
 
   {
-    path: '/',
-    redirect: '/main',
+    path: '',
+    redirect: '/intro',
     // component: test,
   },
 
@@ -47,7 +48,7 @@ const routes = [
 
   // 개발용 임시 router. 추후 삭제 예정
   {
-    path: '/',
+    path: '/main',
     name: 'main',
     component: main,
   },

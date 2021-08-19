@@ -91,8 +91,10 @@
 
 <script>
 import '../components/css/intro.scss'
+import { mapGetters } from 'vuex'
 
 export default {
+
   name:'',
   components: {},
   data() {
@@ -118,9 +120,14 @@ export default {
   },
   created() {
     window.addEventListener('scroll', this.handleScroll);
+    console.log(this.isSignedIn)
+    if ( this.$store.getters.isSignedIn === true ) { this.$router.push('/main') }
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
+  },
+  computed: {
+    ...mapGetters['isSignedIn']
   },
   methods: {
     handleScroll() {
