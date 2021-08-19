@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -79,24 +80,24 @@ public class User implements Serializable {
 	
 	private String userComment;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="image_idx")
 	private Image image;
 	
 	@Column(insertable = false, updatable = false)
 	private LocalDateTime createdAt;
 	
-	@OneToMany(mappedBy = "relationFollowing")
+	@OneToMany(mappedBy = "relationFollowing", fetch = FetchType.LAZY)
 	private List<Relation> relationFollowing = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "relationFollowed")
+	@OneToMany(mappedBy = "relationFollowed", fetch = FetchType.LAZY)
 	private List<Relation> relationFollowed = new ArrayList<>();
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private List<Travel> travels = new ArrayList<>();
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.LAZY)
 	@Nullable
 	@JoinColumn(name = "user_id")
 	private List<Good> goods = new ArrayList<>();
