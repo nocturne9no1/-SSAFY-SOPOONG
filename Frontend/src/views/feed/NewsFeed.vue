@@ -4,15 +4,16 @@
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <h1>메인 뉴스 피드</h1>
+          <h1>SoPoong 소식</h1>
           <!-- <button class="filterButton">Filter</button> -->
         </div>
         <div class="cards" v-if="images.length">
           <news-feed-journal-card
             v-for="image in images"
-            :key="image.id"
+            :key="image.travelIdx"
             :image="image"
             @onFollow="onFollow"
+            @onLike="onLike"
           />
         </div>
         <div class="cards-loading" v-else>
@@ -30,8 +31,6 @@ import axios from "axios";
 import ProfileBox from '@/views/accounts/ProfileBox.vue';
 import FeedFilter from '@/components/FeedFilter.vue';
 
-const DEFAULT_IMAGES_COUNT = 30;
-
 export default {
   name: "",
   components: {
@@ -43,23 +42,77 @@ export default {
     return {
       sampleData: "",
       images: [],
+      like: false,
+      // watch에서 like반복 막기 위함
+      likeData: null,
+      follow: false,
+      // watch에서 follow반복 막기 위함
+      followData: null,
     };
   },
 
-  beforeCreate() {},
-  async created() {
-    // 기본이 development로 설정되어 있고 , 그 외에도 여러 모드가 있다.
-    // console.log(process.env.NODE_ENV)
-    if (process.env.NODE_ENV === "production") {
-      await this.getRandomImages(DEFAULT_IMAGES_COUNT);
-    } else {
-      await this.getRandomImagesFromLocal();
+  watch: {
+    follow: {
+      deep: true,
+      immediate: true,
+      async handler() {
+        // this.getAllFeedsList()
+        // setTimeout(() => this.getAllFeedsList(), 1000)
+        if ( this.followData !== null) {
+          await axios.post('follow', { relationFollowing: this.followData[0], relationFollowed: this.followData[1] }, { headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              res
+          })
+          await axios.get('feed/all', { params: { page:0, size:30, userId: this.$store.getters['getUserProfile'].userId} })
+            .then(res => {
+                this.images = res.data.data.success
+                this.$store.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
+          })
+          // 다른 페이지도 입히기
+          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
+          })
+        }
+      }
+    },
+
+    like: {
+      deep: true,
+      immediate: true,
+      async handler() {
+        if ( this.likeData !== null) {
+          await axios.post('good', { userId: this.likeData[0], travelIdx: this.likeData[1] }, { headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              console.log(res.data)
+          })
+          await axios.get('feed/all', { params: { page:0, size:30, userId: this.$store.getters['getUserProfile'].userId} })
+            .then(res => {
+                this.images = res.data.data.success
+                this.$store.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
+          })
+          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
+          })
+        }
+      }
     }
+  
+  },
+
+  beforeCreate() {},
+  created() {
+    console.log('생성')
+    this.getAllFeedsList();
   },
   beforeMount() {},
-  async mounted() {
+  mounted() {
     // 팔로우 중인 사람의 게시글 내 'follow'버튼을 'following'으로 바꾸기 위해 추가.
-    await this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
+    // 여기 필요없을듯
+    if (this.$store.getters['getUserProfile'].userId) {
+      this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
+    }
   },
   beforeUpdate() {
   },
@@ -68,55 +121,29 @@ export default {
   beforeUnmount() {},
   unmounted() {},
   methods: {
-    /**
-     * @param {number} count
-     */
-    async getRandomImages(count) {
-      try {
-        const { data } = await axios.get(
-          process.env.VUE_APP_URL + "/photos/random",
-          {
-            headers: {
-              Authorization: "Client-ID " + process.env.VUE_APP_ACCESS_KEY,
-            },
-            params: {
-              count,
-            },
-          }
-        );
-        // Binding data to this component data
-        this.images = data;
-
-      } catch (error) {
-        console.error(error);
+    // 전체 피드 가져와서 카드 적용
+    getAllFeedsList() {
+      // 로그인 유저
+      if (this.$store.getters['isSignedIn']) {
+        this.$store.dispatch('allFeedsList', this.$store.getters['getUserProfile'].userId)
+      } else {
+        this.$store.dispatch('allFeedsList', null)
       }
-    },
-    async getRandomImagesFromLocal() {
-      try {
-        const { default: localData } = await import('@/assets/test_data.json')
-        this.images = localData
-
-      } catch (err) {
-        console.error(err)
-      }
+      // setTimeout(() => this.images = this.$store.getters['getAllFeedsList'], 1000)
+      this.images = this.$store.getters['getAllFeedsList']
+      // console.log(this.images)
     },
 
     onFollow(data) {
-      for (let image of this.images) {
-        if (image.user.name === data && image.isFollowing) {
-          // isFollowing은 image내에 새 필드를 추가하는건데 , 자식 컴포넌트가 실시간 변화를 감지해 내지 못함.
-          // image.isFollowing = !image.isFollowing
-          image.liked_by_user = !!image.liked_by_user
-        }
-        else if (image.user.name === data) {
-          // image.isFollowing = true
-          // image.liked_by_user = !image.liked_by_user
-        }
-      }
-      // 실시간 변동 체크용
-      this.images[0].liked_by_user = !this.images[0].liked_by_user
+      this.follow = !this.follow
+      this.followData = data
+    },
+
+    onLike(data) {
+      this.like = !this.like
+      this.likeData = data
     }
-  },
+  }
 };
 </script>
 

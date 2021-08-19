@@ -13,7 +13,7 @@
       </div>
       <div class="text-box">
         <div class="nickname">
-          {{profile.userNickname}}
+          {{ profile.userNickname }}
         </div>
         <div class="email">
           {{profile.userEmail}}
@@ -60,13 +60,13 @@ export default {
 
   // 페이지 생성 전, 프로필 데이터 받아와야 함
   beforeCreate() {},
-  async created() {
+  created() {
     // if ( this.$store.getters['isSignedIn'] ) {
     //   this.profile = this.$store.getters['getUserProfile']
     // }
     if ( this.$store.getters['isSignedIn']) {
       this.$store.dispatch('getProfile', this.$store.getters['getUserProfile'].userId)
-      this.profile = await this.$store.getters['getUserProfile']
+      this.profile = this.$store.getters['getUserProfile']
     }
   }, 
   beforeMount() {}, 
