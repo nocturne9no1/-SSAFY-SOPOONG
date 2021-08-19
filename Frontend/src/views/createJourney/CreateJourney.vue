@@ -65,7 +65,7 @@ export default {
       travel: {
         travelTitle: '',
         travelContent: '',
-        travelIsVisible: true,
+        travelIsVisible: 1,
         placeList: [],
         imageIdx: '',
         travelLat: '',
