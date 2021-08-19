@@ -45,12 +45,10 @@ public class ImageService {
 
 	@Transactional
 	public BaseMessage saveImage(List<FileDto> files, String userId, long travelIdx, long placeIdx) throws Exception {
-		System.out.println("이미지 저장 들어옴");
 		Map<String,Object> resultMap= new HashMap<>();
 		
 		// 파일리스트가 비어있는 경우
 		if (files.isEmpty()) {
-			System.out.println("파일리스트 비어있음");
 			return new BaseMessage(HttpStatus.NO_CONTENT);
 		}
 
@@ -65,7 +63,6 @@ public class ImageService {
 		for (FileDto file : files) {
 			MultipartFile image = file.getFile();
 			if (image == null) { // 파일이 빈 파일인 경우
-				System.out.println("image가 NULL");
 				resultMap.put("errors", "image가 null");
 				return new BaseMessage(HttpStatus.NO_CONTENT, resultMap);
 			}
@@ -73,7 +70,6 @@ public class ImageService {
 			String contentType = image.getContentType();
 
 			if (contentType == null) { // 파일 확장자가 없는 경우
-				System.out.println("확장자 없음");
 				resultMap.put("errors", "파일 확장자가 없음");
 				return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 			}
@@ -103,7 +99,6 @@ public class ImageService {
 
 			im = imageRepository.save(im);
 			resultMap.put("success", im.getImageIdx());
-			System.out.println("파일 저장 성공");
 		}
 		return new BaseMessage(HttpStatus.OK, resultMap);
 	}
@@ -123,7 +118,6 @@ public class ImageService {
 		String contentType = file.getContentType();
 
 		if (contentType == null) { // 파일 확장자가 없는 경우
-			System.out.println("확장자 없음");
 			resultMap.put("errors", "파일 확장자가 없음");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
@@ -150,7 +144,6 @@ public class ImageService {
 				.build();
 
 		im = imageRepository.save(im);
-		System.out.println("프로필 파일 저장 성공");
 		
 		return new BaseMessage(HttpStatus.OK, im);
 	}
