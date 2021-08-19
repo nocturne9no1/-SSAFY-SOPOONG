@@ -39,10 +39,6 @@ public class PlaceService {
 
 	@Transactional
 	public BaseMessage writePlace(PlaceDto placeDto, String userId) {
-		System.out.println("writePlace 들어옴");
-		System.out.println("[placeDto visitDate] " + placeDto.getVisitDate());
-		// Map<String,Object> resultMap= new HashMap<>();
-		System.out.println(placeDto.getTitle() + " " + placeDto.getComment());
 		Place place = Place.builder()
 				.placeTitle(placeDto.getTitle())
 				.placeCategory(placeDto.getCategory().getMain())
@@ -59,7 +55,6 @@ public class PlaceService {
 				.build();
 
 		place = placeRepository.save(place);
-		System.out.println("저장 끝");
 		// resultMap.put("success", place);
 		return new BaseMessage(HttpStatus.OK, place.getPlaceIdx());
 	}
@@ -111,11 +106,10 @@ public class PlaceService {
 				// 파일 삭제
 				String path = i.getImagePath();
 				File file = new File(path);
-				System.out.println("[filePath] " + path);
 				if(file.delete()){ // 파일 삭제에 성공하면 true, 실패하면 false
-	                System.out.println("파일을 삭제하였습니다");
+//	                System.out.println("파일을 삭제하였습니다");
 	            }else{
-	                System.out.println("파일 삭제에 실패하였습니다");
+//	                System.out.println("파일 삭제에 실패하였습니다");
 	            }
 			}
 			

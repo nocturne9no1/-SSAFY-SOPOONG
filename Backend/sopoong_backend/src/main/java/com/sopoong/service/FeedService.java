@@ -20,6 +20,7 @@ import com.sopoong.model.entity.Travel;
 import com.sopoong.model.entity.User;
 import com.sopoong.repository.GoodRepository;
 import com.sopoong.repository.RelationRepository;
+import com.sopoong.repository.ScrapRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
 
@@ -36,6 +37,9 @@ public class FeedService {
 	
 	@Autowired
 	private RelationRepository relationRepository;
+	
+	@Autowired
+	private ScrapRepository scrapRepository;
 	
 	public BaseMessage getFollowList(String id, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
@@ -77,11 +81,11 @@ public class FeedService {
 			if(goodRepository.findByUser_UserIdAndTravel_TravelIdx(id, travel.getTravelIdx()).isPresent()) t.setIsLike(1);
 			else t.setIsLike(0);
 			
-			if(relationRepository.findByRelationFollowingAndRelationFollowed(optUsers.get(),user).isPresent()) {
-				t.setIsFollow(1);
-			}else {
-				t.setIsFollow(0);
-			}
+			if(relationRepository.findByRelationFollowingAndRelationFollowed(optUsers.get(),user).isPresent()) t.setIsFollow(1);
+			else t.setIsFollow(0);
+			
+			if(scrapRepository.findByUser_UserIdAndTravel_TravelIdx(optUsers.get().getUserId(), travel.getTravelIdx()).isPresent()) t.setIsScrap(1);
+			else t.setIsScrap(0);
 			
 			feeds.add(t);
 		}
@@ -92,7 +96,9 @@ public class FeedService {
 
 	public BaseMessage getAllList(String userId, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
-		User loginUser = userRepository.findByUserId(userId).get();
+		User loginUser = new User();
+		if(userId!=null) loginUser = userRepository.findByUserId(userId).get();
+		
 		Page<Travel> travels = travelRepository.findAll(pageable);
 		List<TravelList> feeds = new ArrayList<>();
 		for(Travel travel : travels.getContent()) {
@@ -120,6 +126,9 @@ public class FeedService {
 				
 				if(relationRepository.findByRelationFollowingAndRelationFollowed(loginUser,user).isPresent()) t.setIsFollow(1);
 				else t.setIsFollow(0);
+				
+				if(scrapRepository.findByUser_UserIdAndTravel_TravelIdx(loginUser.getUserId(), travel.getTravelIdx()).isPresent()) t.setIsScrap(1);
+				else t.setIsScrap(0);
 			}
 			feeds.add(t);
 		}
