@@ -76,7 +76,7 @@ export default {
   beforeUpdate() {},
   updated() {
   },
-  beforeUnmount() {}, 
+  beforeUnmount() {},
   unmounted() {},
 
   computed: {
