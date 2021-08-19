@@ -84,9 +84,9 @@ public class UserService {
 				File file = new File(path);
 
 				if (file.delete()) { // 파일 삭제에 성공하면 true, 실패하면 false
-					System.out.println("파일을 삭제하였습니다");
+//					System.out.println("파일을 삭제하였습니다");
 				} else {
-					System.out.println("파일 삭제에 실패하였습니다");
+//					System.out.println("파일 삭제에 실패하였습니다");
 				}
 				
 				// DB에서 제거
@@ -206,7 +206,6 @@ public class UserService {
 			resultMap.put("success", "프로필 기본이미지로 변경 성공");
 			return new BaseMessage(HttpStatus.OK, im);
 		} else {
-			System.out.print("ASDF");
 			resultMap.put("errors", "프로필 기본이미지로 변경 실패 (존재하지 않는 아이디)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}

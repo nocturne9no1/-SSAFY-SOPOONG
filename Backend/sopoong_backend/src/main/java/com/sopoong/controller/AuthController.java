@@ -38,7 +38,6 @@ public class AuthController {
 	@ApiOperation("로그인")
 	public ResponseEntity login(@RequestParam(required = true) final String id,
             @RequestParam(required = true) final String password) throws Exception {
-		System.out.println(id + " " + password);
 		BaseMessage bm = authService.login(id,password);
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 
@@ -47,7 +46,6 @@ public class AuthController {
 	@PostMapping("api/auth/register")
 	@ApiOperation("회원가입")
 	public ResponseEntity join(@RequestBody SignupRequest requestUser) {
-		System.out.println(requestUser.toString());
 		BaseMessage bm = authService.joinUser(requestUser); 
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 	}

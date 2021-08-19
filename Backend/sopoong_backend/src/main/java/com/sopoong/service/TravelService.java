@@ -28,11 +28,13 @@ import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Place;
 import com.sopoong.model.entity.Relation;
 import com.sopoong.model.entity.Travel;
+import com.sopoong.model.entity.User;
 import com.sopoong.repository.AlarmRepository;
 import com.sopoong.repository.GoodRepository;
 import com.sopoong.repository.ImageRepository;
 import com.sopoong.repository.PlaceRepository;
 import com.sopoong.repository.RelationRepository;
+import com.sopoong.repository.ScrapRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
 
@@ -65,7 +67,10 @@ public class TravelService {
 
 	@Autowired
 	private ImageService imageService;
-
+	
+	@Autowired
+	private ScrapRepository scrapRepository;
+	
 	@Transactional
 	public BaseMessage writeTravel(TravelDto travelDto) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
@@ -73,8 +78,6 @@ public class TravelService {
 		String userId = travelDto.getUserId();
 		long travelIdx;
 		long placeIdx;
-		System.out.println("[userId] " + travelDto.getUserId());
-		System.out.println(travelDto.getTravelTitle() + " " + travelDto.getTravelContent());
 
 		/* 1. 여행 기록 */
 		Travel travel = Travel.builder()
@@ -96,21 +99,17 @@ public class TravelService {
 
 		// 여행 기록 idx 가져오기
 		travelIdx = travel.getTravelIdx();
-		System.out.println("[travelIdx] " + travelIdx);
 
 		/* 2. 위치 기록 */
 		List<PlaceDto> places = travelDto.getPlaceList();
 		for (PlaceDto place : places) {
-			System.out.println("[DateTime] " + place.getVisitDate());
 			// 위치기록 저장
 			BaseMessage bmPlace = placeService.writePlace(place, userId);
 			if (!bmPlace.getHttpStatus().equals(HttpStatus.OK))
 				return new BaseMessage(HttpStatus.BAD_REQUEST, bmPlace.getData());
-			System.out.println("위치 저장 끝");
 
 			// 위치 기록 idx를 사진 테이블에 저장
 			placeIdx = (long) bmPlace.getData();
-			System.out.println("[placeIdx] " + placeIdx);
 
 			/* 3. 사진 기록 */
 			List<FileDto> files = place.getImageList();
@@ -124,7 +123,6 @@ public class TravelService {
 
 			// place 테이블에 저장
 			bmPlace = placeService.updatePlace(placeIdx, travelIdx, placeImage);
-			System.out.println("place 대표 이미지 저장 완료");
 		}
 
 		/* travel 대표사진 idx 구하기 */
@@ -148,7 +146,6 @@ public class TravelService {
 			}
 		}
 
-		System.out.println("끄읕");
 		return new BaseMessage(HttpStatus.OK, "성공");
 	}
 
@@ -157,8 +154,6 @@ public class TravelService {
 		Map<String, Object> resultMap = new HashMap<>();
 		Optional<Travel> updateTravel = travelRepository.findBytravelIdx(travel.getTravelIdx());
 		
-		System.out.println("[travelIdx] " + travel.getTravelIdx());
-		System.out.println("[updateTravel] " + travelImage.getImageIdx() + " " + travelImage.getImageLat());
 		if (updateTravel.isPresent()) {
 			updateTravel.get().setImage(imageRepository.findByImageIdx(travelImage.getImageIdx()).get());
 			updateTravel.get().setTravelLat(travelImage.getImageLat());
@@ -176,11 +171,10 @@ public class TravelService {
 	public BaseMessage selctTravelList(String userId) {
 		List<Travel> tlist = travelRepository.findByUser_UserId(userId);
 		ArrayList<TravelList> travelList = new ArrayList<>();
-		for(TravelList t : travelList) {
-			System.out.println(t.toString());
-		}
+		User loginUser = userRepository.findByUserId(userId).get();
+		
 		for (Travel travel : tlist) {
-			
+			Image image = travel.getImage();
 			TravelList t = TravelList.builder()
 						.travelIdx(travel.getTravelIdx())
 						.travelTitle(travel.getTravelTitle())
@@ -202,7 +196,9 @@ public class TravelService {
 			
 			if(relationRepository.findByRelationFollowingAndRelationFollowed(userRepository.findByUserId(userId).get(),travel.getUser()).isPresent()) t.setIsFollow(1);
 			else t.setIsFollow(0);
-			System.out.println(t.toString());
+			
+			if(scrapRepository.findByUser_UserIdAndTravel_TravelIdx(loginUser.getUserId(), travel.getTravelIdx()).isPresent()) t.setIsScrap(1);
+			else t.setIsScrap(0);
 			travelList.add(t);
 		}
 		return new BaseMessage(HttpStatus.OK, travelList);
@@ -277,11 +273,10 @@ public class TravelService {
 				String path = i.getImagePath();
 				File file = new File(path);
 				
-				System.out.println("[filePath] " + path);
 				if(file.delete()){ // 파일 삭제에 성공하면 true, 실패하면 false
-	                System.out.println("파일을 삭제하였습니다");
+//	                System.out.println("파일을 삭제하였습니다");
 	            }else{
-	                System.out.println("파일 삭제에 실패하였습니다");
+//	                System.out.println("파일 삭제에 실패하였습니다");
 	            }
 			}
 			

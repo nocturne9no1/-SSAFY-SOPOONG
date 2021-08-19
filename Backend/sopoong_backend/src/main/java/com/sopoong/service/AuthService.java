@@ -116,7 +116,6 @@ public class AuthService {
 		if(userOpt.isPresent()) {
 			if(userOpt.get().getAuthNumber() == null || !userOpt.get().getAuthNumber().contains("AUTH")) {
 				userOpt.get().setAuthNumber(generAuthKey());
-				System.out.println(userOpt.get().getAuthNumber());
 				emailService.sendMail(userOpt.get());
 				userRepository.save(userOpt.get());
 				resultMap.put("success", "이메일 보내기 완료");
