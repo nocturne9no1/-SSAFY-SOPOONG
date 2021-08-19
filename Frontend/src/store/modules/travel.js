@@ -9,6 +9,7 @@ const state = {
   presentTravel: null,
   presentTravelIdx: null,
   travelDetailList: null,
+  nowTravel: null,
 }
 const getters = {
   // 뉴스피드 전체 여행일지
@@ -25,6 +26,7 @@ const getters = {
   getTravelDetail: state => state.travelDetailList,
   // 현재 보고 있는 여행일지 인덱스
   getPresentTravelIdx: state => state.presentTravelIdx,
+  getNowTravel: state => state.nowTravel
 }
 
 const mutations = {
@@ -44,6 +46,9 @@ const mutations = {
     state.presentTravel = travelDetail[0]
     state.presentTravelIdx = travelDetail[1]
     state.travelDetailList = travelDetail[2]
+  },
+  SET_NOW_TRAVEL(state, nowTravel) {
+    state.nowTravel = nowTravel
   }
 }
 const actions = {
@@ -125,6 +130,10 @@ const actions = {
         }
         // router.go();
       })
+  },
+
+  nowTravel(context, nowTravel) {
+    context.commit("SET_NOW_TRAVEL", nowTravel)
   }
 }
 
