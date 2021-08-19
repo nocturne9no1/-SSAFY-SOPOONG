@@ -40,7 +40,6 @@ export default {
   beforeCreate() {},
   async created() {
     for (let x of this.$store.getters['getMyTravelJournal']) {
-      console.log(x)
       if (x.travelIdx === this.$store.getters['getPresentTravelIdx']) {
         this.travel = x
       }
