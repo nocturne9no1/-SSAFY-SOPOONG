@@ -63,7 +63,7 @@ public class GoodService {
 					.travel(travelRepository.findById(goodRequest.getTravelIdx()).get()).build()).getGoodIdx();
 			if (String.format("%03d", Integer.parseInt(Integer.toBinaryString(userRepository.findByUserId(goodRequest.getUserId()).get().getUserAlarm()))).charAt(2)=='1') {
 				alarmRepository.save(Alarm.builder()
-					.user(userRepository.findByUserId(goodRequest.getUserId()).get())
+					.user(travelRepository.findBytravelIdx(goodRequest.getTravelIdx()).get().getUser())
 					.alarmCategory(1)
 					.alarmCheck(0)
 					.good(goodRepository.findById(index).get())
