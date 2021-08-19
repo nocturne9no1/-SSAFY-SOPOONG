@@ -28,7 +28,6 @@ import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Place;
 import com.sopoong.model.entity.Relation;
 import com.sopoong.model.entity.Travel;
-import com.sopoong.model.entity.User;
 import com.sopoong.repository.AlarmRepository;
 import com.sopoong.repository.GoodRepository;
 import com.sopoong.repository.ImageRepository;
@@ -189,8 +188,8 @@ public class TravelService {
 						.imageOriginTitle(imageRepository.findByImageIdx(travel.getImage().getImageIdx()).get().getImageOriginTitle())
 						.travelLat(travel.getTravelLat())
 						.travelLong(travel.getTravelLong())
-						.startDate(null)
-						.endDate(null)
+						.startDate(travel.getStartDate())
+						.endDate(travel.getEndDate())
 						.imageWidth(travel.getImage().getImageWidth())
 						.imageHeight(travel.getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
@@ -214,8 +213,8 @@ public class TravelService {
 						.imageOriginTitle(imageRepository.findByImageIdx(travel.get().getImage().getImageIdx()).get().getImageOriginTitle())
 						.travelLat(travel.get().getTravelLat())
 						.travelLong(travel.get().getTravelLong())
-						.startDate(null)
-						.endDate(null)
+						.startDate(travel.get().getStartDate())
+						.endDate(travel.get().getEndDate())
 						.isFollow(travel.get().isFollow())
 						.imageWidth(travel.get().getImage().getImageWidth())
 						.imageHeight(travel.get().getImage().getImageHeight())

@@ -20,7 +20,9 @@ public class TravelDto {
 	private String travelTitle;
 	private String travelContent;
 	private boolean travelIsVisible;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime startDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime endDate;
 	private List<PlaceDto> placeList;
 }
