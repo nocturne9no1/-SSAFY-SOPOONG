@@ -128,7 +128,10 @@ export default {
     },
 
     async personalPage() {
-      await this.$store.dispatch('personalTravelJournalList', this.image.userId)
+      await axios.get('travel/travelList', { params: {userId : userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'], 'Access-Control-Allow-Origin': '*' } })
+      .then(res => {
+        context.commit("SET_PERSONAL_TRAVEL_JOURNAL", res.data.data)
+      })
       await this.$router.push(`/travellist/${this.image.userId}`)
     }
 
