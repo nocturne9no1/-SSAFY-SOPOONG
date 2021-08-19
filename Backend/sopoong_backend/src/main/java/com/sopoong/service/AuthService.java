@@ -58,11 +58,9 @@ public class AuthService {
 		Optional<User> member = userRepository.findByUserId(id);
 		if(!member.isPresent()) {
 			resultMap.put("errors","존재하지 않는 아이디");
-		}
-		if (!passwordEncoder.matches(password, member.get().getUserPassword())) {
+		}else if (!passwordEncoder.matches(password, member.get().getUserPassword())) {
 			resultMap.put("errors","비밀번호 틀림");
-		}
-		if(member.get().getAuthNumber()==null || !member.get().getAuthNumber().contains("AUTH")) {
+		}else if(member.get().getAuthNumber()==null || !member.get().getAuthNumber().contains("AUTH")) {
 			resultMap.put("errors", "인증못받은 사용자");
 		}else {
 			resultMap.put("success", jwtTokenProvider.createToken(member.get().getUserId()));
