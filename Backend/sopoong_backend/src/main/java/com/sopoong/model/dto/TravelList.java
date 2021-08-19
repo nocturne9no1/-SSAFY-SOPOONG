@@ -20,11 +20,13 @@ public class TravelList {
 	private String travelTitle;
 	private String travelContent;
 	private String imageOriginTitle;
+	private String profileOriginTitle;
 	private double travelLat;
 	private double travelLong;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	private int isFollow;
+	private int isLike;
 	private int travelIsVisible;
 	private long totalLike;
 	private int imageWidth;

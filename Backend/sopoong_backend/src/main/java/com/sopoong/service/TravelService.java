@@ -186,6 +186,7 @@ public class TravelService {
 						.travelTitle(travel.getTravelTitle())
 						.travelContent(travel.getTravelContent())
 						.imageOriginTitle(travel.getImage().getImageOriginTitle())
+						.profileOriginTitle(travel.getUser().getImage().getImageOriginTitle())
 						.travelLat(travel.getTravelLat())
 						.travelLong(travel.getTravelLong())
 						.startDate(travel.getStartDate())
@@ -196,7 +197,11 @@ public class TravelService {
 						.userId(travel.getUser().getUserId())
 						.userNickname(travel.getUser().getUserNickname())
 						.build();
+			if(goodRepository.findByUser_UserIdAndTravel_TravelIdx(userId, travel.getTravelIdx()).isPresent()) t.setIsLike(1);
+			else t.setIsLike(0);
 			
+			if(relationRepository.findByRelationFollowingAndRelationFollowed(userRepository.findByUserId(userId).get(),travel.getUser()).isPresent()) t.setIsFollow(1);
+			else t.setIsFollow(0);
 			System.out.println(t.toString());
 			travelList.add(t);
 		}
@@ -217,7 +222,6 @@ public class TravelService {
 						.travelLong(travel.get().getTravelLong())
 						.startDate(travel.get().getStartDate())
 						.endDate(travel.get().getEndDate())
-						.isFollow(travel.get().getIsFollow())
 						.imageWidth(travel.get().getImage().getImageWidth())
 						.imageHeight(travel.get().getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.get().getTravelIdx()))
