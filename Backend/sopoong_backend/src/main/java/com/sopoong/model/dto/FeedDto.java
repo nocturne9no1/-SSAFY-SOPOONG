@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class FeedDto {
 	private Long travelIdx;
 	private String userId;
+	private String userNickname;
 	private String travelTitle;
 	private String travelContent;
 	private String imagePath;
@@ -25,6 +26,7 @@ public class FeedDto {
 	public FeedDto(Travel travel) {
 		travelIdx = travel.getTravelIdx();
 		userId = travel.getUser().getUserId();
+		userNickname = travel.getUser().getUserNickname();
 		travelTitle = travel.getTravelTitle();
 		travelContent = travel.getTravelContent();
 		imagePath = travel.getImage().getImagePath();
