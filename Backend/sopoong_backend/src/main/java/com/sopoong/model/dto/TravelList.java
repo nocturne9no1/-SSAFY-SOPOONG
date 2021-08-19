@@ -23,4 +23,6 @@ public class TravelList {
 	private boolean isFollow;
 	private boolean travelIsVisible;
 	private long totalLike;
+	private int imageWidth;
+	private int imageHeight;
 }

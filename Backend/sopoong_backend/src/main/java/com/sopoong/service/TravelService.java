@@ -78,11 +78,19 @@ public class TravelService {
 		System.out.println(travelDto.getTravelTitle() + " " + travelDto.getTravelContent());
 
 		/* 1. 여행 기록 */
-		Travel travel = Travel.builder().user(userRepository.findByUserId(travelDto.getUserId()).get())
-				.travelTitle(travelDto.getTravelTitle()).travelContent(travelDto.getTravelContent())
-				.travelIsVisible(travelDto.isTravelIsVisible()).startDate(travelDto.getStartDate())
-				.endDate(travelDto.getEndDate()).image(null).travelLat(0.0).travelLong(0.0)
-				.startDate(travelDto.getStartDate()).endDate(travelDto.getEndDate()).build();
+		Travel travel = Travel.builder()
+				.user(userRepository.findByUserId(travelDto.getUserId()).get())
+				.travelTitle(travelDto.getTravelTitle())
+				.travelContent(travelDto.getTravelContent())
+				.travelIsVisible(travelDto.isTravelIsVisible())
+				.startDate(travelDto.getStartDate())
+				.endDate(travelDto.getEndDate())
+				.image(null)
+				.travelLat(0.0)
+				.travelLong(0.0)
+				.startDate(travelDto.getStartDate())
+				.endDate(travelDto.getEndDate())
+				.build();
 
 		travel = travelRepository.save(travel);
 		resultMap.put("success", travel);
@@ -183,6 +191,8 @@ public class TravelService {
 						.travelLong(travel.getTravelLong())
 						.startDate(null)
 						.endDate(null)
+						.imageWidth(travel.getImage().getImageWidth())
+						.imageHeight(travel.getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
 						.build();
 			
@@ -207,6 +217,8 @@ public class TravelService {
 						.startDate(null)
 						.endDate(null)
 						.isFollow(travel.get().isFollow())
+						.imageWidth(travel.get().getImage().getImageWidth())
+						.imageHeight(travel.get().getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.get().getTravelIdx()))
 						.build();
 		
@@ -229,6 +241,8 @@ public class TravelService {
 						.placeVisitDate(place.getPlaceVisitDate())
 						.placeLat(place.getPlaceLat())
 						.placeLong(place.getPlaceLong())
+						.imageWidth(place.getImage().getImageWidth())
+						.imageHeight(place.getImage().getImageHeight())
 						.imageOriginTitle(imageRepository.findByImageIdx(place.getImage().getImageIdx()).get().getImageOriginTitle())
 						.build();
 			
