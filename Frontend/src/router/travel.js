@@ -6,5 +6,5 @@ export default [
     path: '/travel',
     name: 'TravelJournalPage',
     component: TravelJournalPage,
-  }
+  },
 ]

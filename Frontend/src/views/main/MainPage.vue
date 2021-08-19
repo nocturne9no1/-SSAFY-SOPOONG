@@ -227,7 +227,6 @@ export default {
   beforeCreate() {},
   created() {
     const userId = this.$store.state.accounts.userProfile.userId
-    console.log(this.$store.state.accounts.authToken)
     axios.get('/travel/travelList', { params : { userId: userId }, headers: { 'X-AUTH-TOKEN' : this.$store.state.accounts.authToken } })
       .then(res => {
         // 리스트 받아오기
@@ -251,7 +250,7 @@ export default {
   beforeMount() {},
   mounted() {
       if ( this.$store.getters['isSignedIn'] ) {
-        console.log('어서 돌아와용')
+        console.log()
       }
       else {
         this.$router.push('/feed')

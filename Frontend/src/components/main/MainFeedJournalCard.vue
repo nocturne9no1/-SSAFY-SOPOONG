@@ -51,9 +51,10 @@ export default {
   }),
 
   created() {
-    // this.tH = Math.round(this.image.height / (this.image.width / 400));
-    // const gap = Math.round(this.tH / 10);
-    // this.gap = `span ${gap}`;
+    console.log(this.travel)
+    this.tH = Math.round(this.travel.imageHeight / (this.travel.imageWidth / 400));
+    const gap = Math.round(this.tH / 10);
+    this.gap = `span ${gap}`;
   },
   computed: {
     imgSrc() {
@@ -89,6 +90,7 @@ export default {
 </script>
 
 <style scoped>
+
 .card {
   position: relative;
 }
@@ -108,6 +110,7 @@ img:hover {
   bottom: 5%;
 
   width: 100%;
+  /* height: 100%; */
 
   text-align: center;
 

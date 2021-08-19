@@ -53,21 +53,19 @@ export default {
   components: {},
   data() {
     return {
-      // 고마웠다 데이터야...
-      nickname: 'deriyakki',
-      email: 'nocturne9no1@gmail.com',
-      introduce: 'hi',
-      following: 1,
-      follower: 1000,
-
-      profile: this.$store.state.accounts.userProfile
+      // profile: this.$store.state.accounts.userProfile
+      profile: null,
     };
   },
+
   // 페이지 생성 전, 프로필 데이터 받아와야 함
   beforeCreate() {},
   created() {
-    if ( this.$store.getters['isSignedIn'] ) {
-      this.profileData = this.$store.getters['getUserProfile']
+    // if ( this.$store.getters['isSignedIn'] ) {
+    //   this.profile = this.$store.getters['getUserProfile']
+    // }
+    if ( this.$store.getters['isSignedIn']) {
+      this.profile = this.$store.getters['getUserProfile']
     }
   }, 
   beforeMount() {}, 
@@ -85,6 +83,7 @@ export default {
     }
   },
 
-  methods: {}
+  methods: {
+  }
 }
 </script>

@@ -3,7 +3,7 @@
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <!-- <h1>Masonry MainFeed</h1> -->
+          <h1>{{ this.$store.getters['getUserProfile'].userNickname }}'s Journal</h1>
           <!-- <button class="filterButton">Filter</button> -->
         </div>
         <!-- <div class="cards" v-if="images.length"> -->

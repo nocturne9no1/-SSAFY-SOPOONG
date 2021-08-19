@@ -55,7 +55,6 @@ const actions = {
       // 프로필 정보 기억
       // console.log(signInData)
       context.dispatch('getProfile', signInData.id)
-      router.push('/main')
     })
     .catch(err => {console.log(err), alert('아이디와 비밀번호를 확인하세요.')})
   },
@@ -66,6 +65,9 @@ const actions = {
     axios.get(`user`, { params: {id : id}, headers: { 'X-AUTH-TOKEN' : context.state.authToken, 'Access-Control-Allow-Origin': '*' } })
       .then(res => {
         context.commit("SET_PROFILE", res.data.data.success);
+        if ( router.history.current.name === 'SignIn' ) {
+          router.push('/main')
+        }
       })
       .catch(err => console.error(err))
   },
@@ -73,6 +75,10 @@ const actions = {
   // 로그아웃
   signOut(context) {
     context.commit('SET_TOKEN', null)  // state에서
+    context.commit('SET_PROFILE', null)
+    context.commit('SET_FOLLOWING_LIST', null)
+    context.commit('SET_MY_TRAVEL_JOURNAL', null)
+    context.commit('SET_TRAVEL_DETAIL', [null, null])
     cookies.remove('X-AUTH-TOKEN')  // cookie에서
     context.commit('SET_ALARMLIST', null)  // 로그아웃 시 알람 리스트 초기화
     router.push({ name:'NewsFeed' })
