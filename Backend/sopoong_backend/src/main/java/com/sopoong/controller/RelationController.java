@@ -1,5 +1,7 @@
 package com.sopoong.controller;
 
+import java.text.SimpleDateFormat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,6 @@ public class RelationController {
 	@PostMapping("follow")
 	@ApiOperation("팔로우 및 취소")
 	public ResponseEntity<Relation> follow(@RequestBody followRequest request) throws Exception {
-		
 		BaseMessage bm= relationService.follow(request);
 		return new ResponseEntity(new BaseMessage(bm.getHttpStatus(),bm.getData()),bm.getHeaders(),bm.getHttpStatus());
 		
