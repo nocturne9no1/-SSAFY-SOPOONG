@@ -3,19 +3,24 @@ package com.sopoong.service;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.DeleteUserRequest;
+import com.sopoong.model.dto.UserListDto;
 import com.sopoong.model.dto.changeAlarmRequest;
 import com.sopoong.model.dto.changePasswordRequest;
 import com.sopoong.model.dto.changeProfileRequest;
@@ -205,5 +210,18 @@ public class UserService {
 			resultMap.put("errors", "프로필 기본이미지로 변경 실패 (존재하지 않는 아이디)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
+	}
+
+	public BaseMessage getUserList(String id, Pageable pageable) {
+		Map<String, Object> resultMap = new HashMap<>();
+		Page<User> users = userRepo.findByUserIdStartingWith(id,pageable);
+		List<UserListDto> userList = new ArrayList<>();
+		for(int i=0;i<users.getContent().size();i++) {
+			UserListDto userListDto = UserListDto.builder().userId(users.getContent().get(i).getUserId())
+										.userNickname(users.getContent().get(i).getUserNickname()).build();
+			userList.add(userListDto);
+		}
+		resultMap.put("success", userList);
+		return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 	}
 }

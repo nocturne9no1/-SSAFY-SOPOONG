@@ -6,6 +6,9 @@ import java.security.NoSuchAlgorithmException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -89,4 +92,12 @@ public class UserController {
 		
 	}
 	
+	@GetMapping("/user/list")
+	@ApiOperation(value = "아이디 포함 리스트 불러오기")
+	public ResponseEntity<BaseMessage> getUserList(@RequestParam String id , Pageable pageable) {
+		
+		BaseMessage bm= userService.getUserList(id,pageable);
+		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
+		
+	}
 }
