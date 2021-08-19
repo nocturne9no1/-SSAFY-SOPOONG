@@ -127,14 +127,6 @@ export default {
       this.$store.dispatch('deleteTravel', travelIdx)
     },
 
-    async personalPage() {
-      await axios.get('travel/travelList', { params: {userId : userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'], 'Access-Control-Allow-Origin': '*' } })
-      .then(res => {
-        context.commit("SET_PERSONAL_TRAVEL_JOURNAL", res.data.data)
-      })
-      await this.$router.push(`/travellist/${this.image.userId}`)
-    }
-
   }
 };
 </script>
