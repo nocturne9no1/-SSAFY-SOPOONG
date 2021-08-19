@@ -21,9 +21,6 @@
         <div class="introduce">
           {{profile.userComment}}
         </div>
-        <div class="introduce" v-else>
-          {{ introduce }}
-        </div>
         <div class="follow">
           <div class="following">
             <div>
