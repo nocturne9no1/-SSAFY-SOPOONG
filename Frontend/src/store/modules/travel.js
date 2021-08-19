@@ -5,11 +5,13 @@ const state = {
   myTravelJournal: null,
   presentTravelIdx: null,
   travelDetailList: null,
+  nowTravel: null,
 }
 const getters = {
   getMyTravelJournal: state => state.myTravelJournal,
   getTravelDetail: state => state.travelDetailList,
   getPresentTravelIdx: state => state.presentTravelIdx,
+  getNowTravel: state => state.nowTravel
 }
 
 const mutations = {
@@ -19,6 +21,9 @@ const mutations = {
   SET_TRAVEL_DETAIL(state, travelDetail) {
     state.travelDetailList = travelDetail[1]
     state.presentTravelIdx = travelDetail[0]
+  },
+  SET_NOW_TRAVEL(state, nowTravel) {
+    state.nowTravel = nowTravel
   }
 }
 const actions = {
@@ -43,6 +48,10 @@ const actions = {
       .then(res => {
         console.log(res.data)
       })
+  },
+
+  nowTravel(context, nowTravel) {
+    context.commit("SET_NOW_TRAVEL", nowTravel)
   }
 }
 

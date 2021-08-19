@@ -38,27 +38,27 @@ export default ({
           },
         })
           .then(res => {
-            const temp = [
-              {
-                "alarmIdx": 19,
-                "userNickname": "sense168",
-                "alarmCategory": 2,
-                "alarmCheck": 0,
-                "connectIdx": 41,
-                "travelTitle": null
-              },
-              {
-                "alarmIdx": 20,
-                "userNickname": "sense168",
-                "alarmCategory": 2,
-                "alarmCheck": 0,
-                "connectIdx": 39,
-                "travelTitle": null
-              }
-            ]
+            // const temp = [
+            //   {
+            //     "alarmIdx": 19,
+            //     "userNickname": "sense168",
+            //     "alarmCategory": 2,
+            //     "alarmCheck": 0,
+            //     "connectIdx": 41,
+            //     "travelTitle": null
+            //   },
+            //   {
+            //     "alarmIdx": 20,
+            //     "userNickname": "sense168",
+            //     "alarmCategory": 2,
+            //     "alarmCheck": 0,
+            //     "connectIdx": 39,
+            //     "travelTitle": null
+            //   }
+            // ]
             console.log(res)
-            // this.$store.dispatch('getAlarm', res.data.data.success)
-            this.$store.dispatch('getAlarm', temp)
+            this.$store.dispatch('getAlarm', res.data.data.success)
+            // this.$store.dispatch('getAlarm', temp)
 
           })
           .catch(err => console.log(err))

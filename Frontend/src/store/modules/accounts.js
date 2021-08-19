@@ -120,7 +120,7 @@ const actions = {
     axios.post('auth/confirm/account', { id: context.getters['getEmailAuthId'], authNumber : authKey})
       .then(res => {
         res,
-        alert('회원가입이 완료되었습니다.')
+        // alert('회원가입이 완료되었습니다.')
         router.push('/signin')
       })
       .catch(err => {err, alert('인증키를 확인해주세요.')})
