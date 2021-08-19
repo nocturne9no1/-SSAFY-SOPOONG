@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.FeedDto;
+import com.sopoong.model.dto.TravelList;
 import com.sopoong.model.entity.Relation;
 import com.sopoong.model.entity.Travel;
 import com.sopoong.model.entity.User;
+import com.sopoong.repository.GoodRepository;
 import com.sopoong.repository.TravelRepository;
 import com.sopoong.repository.UserRepository;
 
@@ -29,6 +31,9 @@ public class FeedService {
 	private UserRepository userRepository;
 	@Autowired
 	private TravelRepository travelRepository;
+	
+	@Autowired
+	private GoodRepository goodRepository;
 	
 	public BaseMessage getFollowList(String id, Pageable pageable) {
 		Map<String,Object> resultMap = new HashMap<>();
@@ -48,9 +53,22 @@ public class FeedService {
 		}
 		
 		Page<Travel> travels = travelRepository.findByUser_UserIdInAndTravelIsVisible(userIds, 1,pageable);
-		List<FeedDto> feeds = new ArrayList<>();
-		for(int i=0;i<travels.getContent().size();i++) {
-			feeds.add(new FeedDto(travels.getContent().get(i)));
+		List<TravelList> feeds = new ArrayList<>();
+		for(Travel travel : travels) {
+			TravelList t = TravelList.builder()
+					.travelIdx(travel.getTravelIdx())
+					.travelTitle(travel.getTravelTitle())
+					.travelContent(travel.getTravelContent())
+					.imageOriginTitle(travel.getImage().getImageOriginTitle())
+					.travelLat(travel.getTravelLat())
+					.travelLong(travel.getTravelLong())
+					.startDate(travel.getStartDate())
+					.endDate(travel.getEndDate())
+					.imageWidth(travel.getImage().getImageWidth())
+					.imageHeight(travel.getImage().getImageHeight())
+					.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
+					.build();
+			feeds.add(t);
 		}
 		resultMap.put("success", feeds);
 		resultMap.put("isLast", travels.isLast());
@@ -61,9 +79,22 @@ public class FeedService {
 		Map<String,Object> resultMap = new HashMap<>();
 		
 		Page<Travel> travels = travelRepository.findAll(pageable);
-		List<FeedDto> feeds = new ArrayList<>();
-		for(int i=0;i<travels.getContent().size();i++) {
-			feeds.add(new FeedDto(travels.getContent().get(i)));
+		List<TravelList> feeds = new ArrayList<>();
+		for(Travel travel : travels) {
+			TravelList t = TravelList.builder()
+					.travelIdx(travel.getTravelIdx())
+					.travelTitle(travel.getTravelTitle())
+					.travelContent(travel.getTravelContent())
+					.imageOriginTitle(travel.getImage().getImageOriginTitle())
+					.travelLat(travel.getTravelLat())
+					.travelLong(travel.getTravelLong())
+					.startDate(travel.getStartDate())
+					.endDate(travel.getEndDate())
+					.imageWidth(travel.getImage().getImageWidth())
+					.imageHeight(travel.getImage().getImageHeight())
+					.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
+					.build();
+			feeds.add(t);
 		}
 		resultMap.put("success", feeds);
 		resultMap.put("isLast", travels.isLast());

@@ -17,5 +17,5 @@ public class ScrapDto {
 	private String travelTitle;
 	private String travelComment;
 	private String travelImagePath;
-	private boolean travelIsVisible;
+	private int travelIsVisible;
 }

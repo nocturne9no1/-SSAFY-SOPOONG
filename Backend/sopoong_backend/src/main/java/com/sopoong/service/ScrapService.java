@@ -47,7 +47,7 @@ public class ScrapService {
 						.profileImagePath(scrap.getUser().getImage().getImagePath())
 						.travelTitle(scrap.getTravel().getTravelTitle()).travelComment(scrap.getTravel().getTravelContent())
 						.travelImagePath(scrap.getTravel().getImage().getImageTitle())
-						.travelIsVisible(scrap.getTravel().isTravelIsVisible()).build());
+						.travelIsVisible(scrap.getTravel().getTravelIsVisible()).build());
 			}
 			resultMap.put("success", scrapDtos);
 			resultMap.put("isLast", scraps.isLast());
