@@ -229,11 +229,12 @@ methods: {
     travel.append('travelTitle', this.travel.travelTitle)
     travel.append('userId', this.$store.state.accounts.userProfile.userId)
     travel.append('travelContent', this.travel.travelContent)
-    travel.append('travelIsVisible', this.travel.travelIsVisible)
+    if ( this.travel.travelIsVisible === true ) { travel.append('travelIsVisible', 1) }
+    else { travel.append('travelIsVisible', 0) }
     travel.append('travelLat', this.travel.travelLat)
     travel.append('travelLng', this.travel.travelLng)
-    // travel.append('startDate', this.startDate)
-    // travel.append('endDate', this.endDate)
+    travel.append('startDate', this.startDate)
+    travel.append('endDate', this.endDate)
 
     for ( let idx in this.travel.placeList ) {
       travel.append(`placeList[${idx}].title`, this.travel.placeList[idx].title)
@@ -281,7 +282,7 @@ methods: {
     })
       .then(res => {
         console.log(res)
-        console.log("와!")
+        this.$router.push('/main')
       })
       .catch(err => {
         console.log(err)

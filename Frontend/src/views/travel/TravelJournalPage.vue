@@ -2,7 +2,7 @@
   <div style="display:flex;" v-if="test()">
     <profile-box />
     <TravelMap />
-    <each-place-journal-card-list />
+    <each-place-journal-card-list v-if="false"/>
   </div>
 </template>
 
