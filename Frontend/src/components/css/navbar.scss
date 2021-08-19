@@ -1,3 +1,6 @@
+.nav-wrap {
+  padding-bottom: 51px;
+}
 .nav-container {
   width: 100%;
   margin: 0;
@@ -27,8 +30,30 @@
   .nav-item {
     padding: 15px;
     cursor: pointer;
+
+
   }
-  
+
+  .alarm-wrap {
+    height: 51px;
+    margin-left: 10px;
+    .alarm-bell {
+      width: 45px;
+      padding: 0;
+      padding-top: 2px;
+      margin: 0;
+
+    }
+    .if-there-alarm {
+      position: relative;
+      left: 14px;
+      bottom: 2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #6a68e4;
+    }
+  }
   .nav-left {
     display: flex;
     flex-direction: row;
@@ -143,6 +168,21 @@
     }
     #demo-2 input::-webkit-input-placeholder {
       color: transparent;
+    }
+  }
+
+  .profile-image-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    margin-left: 10px;
+    .profile-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
     }
   }
 }
