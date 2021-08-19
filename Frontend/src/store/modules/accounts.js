@@ -78,7 +78,7 @@ const actions = {
     context.commit('SET_PROFILE', null)
     context.commit('SET_FOLLOWING_LIST', null)
     context.commit('SET_MY_TRAVEL_JOURNAL', null)
-    context.commit('SET_TRAVEL_DETAIL', [null, null])
+    context.commit('SET_TRAVEL_DETAIL', [null, null, null])
     cookies.remove('X-AUTH-TOKEN')  // cookie에서
     context.commit('SET_ALARMLIST', null)  // 로그아웃 시 알람 리스트 초기화
     router.push({ name:'NewsFeed' })

@@ -3,12 +3,18 @@ import router from '@/router'
 
 const state = {
   myTravelJournal: null,
+  presentTravel: null,
   presentTravelIdx: null,
   travelDetailList: null,
 }
 const getters = {
+  // 나의 전체 여행일지
   getMyTravelJournal: state => state.myTravelJournal,
+  // 현재 보고있는 여행일지 총정보
+  getTravel: state => state.presentTravel,
+  // 현재 여행일지의 모든 위치일지
   getTravelDetail: state => state.travelDetailList,
+  // 현재 보고 있는 여행일지 인덱스
   getPresentTravelIdx: state => state.presentTravelIdx,
 }
 
@@ -17,8 +23,9 @@ const mutations = {
     state.myTravelJournal = journals
   },
   SET_TRAVEL_DETAIL(state, travelDetail) {
-    state.travelDetailList = travelDetail[1]
-    state.presentTravelIdx = travelDetail[0]
+    state.presentTravel = travelDetail[0]
+    state.presentTravelIdx = travelDetail[1]
+    state.travelDetailList = travelDetail[2]
   }
 }
 const actions = {
@@ -29,19 +36,50 @@ const actions = {
       })
   },
   
-  travelDetail(context, travelIdx) {
-    axios.get('travel/travelDetail', { params: {travelIdx : travelIdx}, headers: { 'X-AUTH-TOKEN' : context.rootState.accounts.authToken } })
+  travelDetail(context, travel) {
+    axios.get('travel/travelDetail', { params: {travelIdx : travel.travelIdx}, headers: { 'X-AUTH-TOKEN' : context.rootState.accounts.authToken } })
       .then(res => {
         // 현재 여행일지 인덱스 기억하기.
-        context.commit('SET_TRAVEL_DETAIL', [travelIdx, res.data.data.placeList])
+        console.log(travel)
+        context.commit('SET_TRAVEL_DETAIL', [travel, travel.travelIdx, res.data.data.placeList])
         router.push('/travel')
+      })
+  },
+  
+  deleteTravel(context, travelIdx) {
+    axios.delete('travel/delete', { params: { travelIdx : travelIdx }, headers: { 'X-AUTH-TOKEN' : context.rootState.accounts.authToken } })
+      .then(res => {
+        console.log("삭제성공", res.data)
+        if (context.state.myTravelJournal) {
+          for (let idx in context.state.myTravelJournal) {
+            if ( context.state.myTravelJournal[idx].travelIdx === travelIdx) {
+              context.state.myTravelJournal.splice(idx, 1)
+            }
+          }
+        }
+        router.go();
       })
   },
 
   deleteTravelDetail(context, placeIdx) {
-    axios.delete('travel/delete', { params: { placeIdx : placeIdx }, headers: { 'X-AUTH-TOKEN' : context.rootState.accounts.authToken } })
+    axios.delete('place/delete', { params: { placeIdx : placeIdx }, headers: { 'X-AUTH-TOKEN' : context.rootState.accounts.authToken } })
       .then(res => {
-        console.log(res.data)
+        console.log("삭제오나료",res.data)
+        if (context.state.travelDetailList) {
+          for (let idx in context.state.travelDetailList) {
+            if ( context.state.travelDetailList[idx].placeIdx === placeIdx ) {
+              context.state.travelDetailList.splice(idx, 1)
+              console.log("확인", context.state.travelDetailList)
+              if (context.state.travelDetailList.length === 0) {
+                // 상세 일지가 없으니 현재 일지도 지워버리기
+                // context.dispatch('deleteTravel', context.state.presentTravelIdx)
+                // 여행일지로 내보낼까?
+                // router.push('/main');
+              } 
+            }
+          }
+        }
+        // router.go();
       })
   }
 }

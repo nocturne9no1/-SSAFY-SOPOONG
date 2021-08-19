@@ -48,6 +48,16 @@ export default {
       images: [],
     };
   },
+  watch: {
+    // travelList: {
+    //   deep: true,
+    //   immediate: true,
+    //   handler() {
+    //     console.log('변화 감지')
+    //   }
+    // }
+  },
+
   beforeCreate() {},
   async created() {
     this.$store.dispatch('travelJournalList', this.$store.getters['getUserProfile'].userId)
@@ -55,9 +65,11 @@ export default {
     console.log(this.images)
   },
   beforeMount() {},
-  mounted() {},
+  mounted() {
+  },
   beforeUpdate() {},
-  updated() {},
+  updated() {
+  },
   beforeUnmount() {},
   unmounted() {},
   methods: {
