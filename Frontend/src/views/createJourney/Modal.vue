@@ -3,9 +3,9 @@
     <div class="image">
       <img :src="nowImage" alt="" class="pic">
     </div>
-    <div class="image-2">
+    <!-- <div class="image-2">
       <img :src="nowImage" alt="" class="pic">
-    </div>
+    </div> -->
 
     <!-- 글 작성 부분 -->
     <div class="text">

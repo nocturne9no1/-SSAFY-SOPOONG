@@ -1,8 +1,31 @@
 <template>
   <div class="createjourney-wrap">
     <!-- 현재 스텝 표시 -->
-    <div>
-      {{nowStep}}
+    <div class="now-step-wrap">
+      <div class="circles">
+        <div class="step-wrap">
+          <div class="circle step-1"></div>
+          <div class="words">
+              <p>step 1. upload photos</p>
+          </div>
+        </div>
+        <div class="step-wrap">
+          <div class="circle step-2"></div>
+          <div class="words">
+            <p>step 2. wirte journey</p>
+          </div>
+        </div>
+        <div class="step-wrap">
+          <div class="circle step-3"></div>
+          <div class="words">
+              <p>step 3. package journey</p>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="words">
+        
+      </div> -->
+      <!-- {{nowStep}} -->
     </div>
     <div>
       <UploadImage
@@ -28,6 +51,7 @@
 import UploadImage from './UploadImage.vue'
 import CreatePlace from './CreatePlace.vue'
 import PackageJourney from './PackageJourney.vue'
+import '../../components/css/createJourney/createjourney.scss'
 
 
 export default {

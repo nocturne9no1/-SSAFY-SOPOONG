@@ -1,5 +1,10 @@
 .dropdown {
 
+:root {
+  --font-primary: 'Open Sans', sans-serif;
+  --color-gray: #dadce0;
+}
+
     :root {
       --font-primary: 'Open Sans', sans-serif;
       --color-gray: #dadce0;
@@ -169,4 +174,6 @@
         }
       }
     }
+}
+
 }

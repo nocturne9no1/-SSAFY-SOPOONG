@@ -25,7 +25,7 @@
             <li class="nav-item nav-login" @click="signOut">Logout</li>
             <li class="alarm-wrap">
               
-              <DropDown class="dropDown"/>
+              <DropDown class="dropdown"/>
               <div class="if-there-alarm" v-if="isAlarm"/>
             </li>
             <li class="">
