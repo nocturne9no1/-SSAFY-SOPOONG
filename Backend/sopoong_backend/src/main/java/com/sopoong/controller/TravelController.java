@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.TravelDetail;
 import com.sopoong.model.dto.TravelDto;
 import com.sopoong.model.dto.TravelList;
+import com.sopoong.model.dto.changeTravelRequest;
 import com.sopoong.service.TravelService;
 
 import io.swagger.annotations.ApiOperation;
@@ -65,8 +67,8 @@ public class TravelController {
 	
 	@ApiOperation(value = "여행 일지 수정") 
 	@PatchMapping("/travel/update")
-	public ResponseEntity<BaseMessage> updateTravel(@RequestParam long travelIdx) {
-		BaseMessage bm = travelService.deleteTravel(travelIdx);
+	public ResponseEntity<BaseMessage> updateTravel(@RequestBody changeTravelRequest travel) {
+		BaseMessage bm = travelService.updateTravel(travel);
 		return new ResponseEntity<BaseMessage>(new BaseMessage(bm.getHttpStatus(), bm.getData()), bm.getHeaders(), bm.getHttpStatus());
 	}
 }

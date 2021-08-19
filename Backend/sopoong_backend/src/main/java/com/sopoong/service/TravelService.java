@@ -22,6 +22,7 @@ import com.sopoong.model.dto.PlaceRate;
 import com.sopoong.model.dto.TravelDetail;
 import com.sopoong.model.dto.TravelDto;
 import com.sopoong.model.dto.TravelList;
+import com.sopoong.model.dto.changeTravelRequest;
 import com.sopoong.model.entity.Alarm;
 import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Place;
@@ -77,11 +78,19 @@ public class TravelService {
 		System.out.println(travelDto.getTravelTitle() + " " + travelDto.getTravelContent());
 
 		/* 1. 여행 기록 */
-		Travel travel = Travel.builder().user(userRepository.findByUserId(travelDto.getUserId()).get())
-				.travelTitle(travelDto.getTravelTitle()).travelContent(travelDto.getTravelContent())
-				.travelIsVisible(travelDto.isTravelIsVisible()).startDate(travelDto.getStartDate())
-				.endDate(travelDto.getEndDate()).image(null).travelLat(0.0).travelLong(0.0)
-				.startDate(travelDto.getStartDate()).endDate(travelDto.getEndDate()).build();
+		Travel travel = Travel.builder()
+				.user(userRepository.findByUserId(travelDto.getUserId()).get())
+				.travelTitle(travelDto.getTravelTitle())
+				.travelContent(travelDto.getTravelContent())
+				.travelIsVisible(travelDto.isTravelIsVisible())
+				.startDate(travelDto.getStartDate())
+				.endDate(travelDto.getEndDate())
+				.image(null)
+				.travelLat(0.0)
+				.travelLong(0.0)
+				.startDate(travelDto.getStartDate())
+				.endDate(travelDto.getEndDate())
+				.build();
 
 		travel = travelRepository.save(travel);
 		resultMap.put("success", travel);
@@ -182,6 +191,8 @@ public class TravelService {
 						.travelLong(travel.getTravelLong())
 						.startDate(null)
 						.endDate(null)
+						.imageWidth(travel.getImage().getImageWidth())
+						.imageHeight(travel.getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.getTravelIdx()))
 						.build();
 			
@@ -206,6 +217,8 @@ public class TravelService {
 						.startDate(null)
 						.endDate(null)
 						.isFollow(travel.get().isFollow())
+						.imageWidth(travel.get().getImage().getImageWidth())
+						.imageHeight(travel.get().getImage().getImageHeight())
 						.totalLike(goodRepository.countByTravel_TravelIdx(travel.get().getTravelIdx()))
 						.build();
 		
@@ -228,6 +241,8 @@ public class TravelService {
 						.placeVisitDate(place.getPlaceVisitDate())
 						.placeLat(place.getPlaceLat())
 						.placeLong(place.getPlaceLong())
+						.imageWidth(place.getImage().getImageWidth())
+						.imageHeight(place.getImage().getImageHeight())
 						.imageOriginTitle(imageRepository.findByImageIdx(place.getImage().getImageIdx()).get().getImageOriginTitle())
 						.build();
 			
@@ -269,6 +284,26 @@ public class TravelService {
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
 			resultMap.put("errors", "Travel 삭제 실패 (존재하지 않는 travelIdx)");
+			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
+		}
+	}
+
+	public BaseMessage updateTravel(changeTravelRequest travel) {
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<Travel> updateTravel = travelRepository.findBytravelIdx(travel.getTravelIdx());
+		
+		if(updateTravel.isPresent()) {
+			updateTravel.get().setTravelTitle(travel.getTravelTitle());
+			updateTravel.get().setTravelContent(travel.getTravelContent());
+			updateTravel.get().setTravelIsVisible(travel.isTravelIsVisible());
+			updateTravel.get().setStartDate(travel.getStartDate());
+			updateTravel.get().setEndDate(travel.getEndDate());
+			
+			travelRepository.save(updateTravel.get());
+			resultMap.put("success", "Travel 수정 성공");
+			return new BaseMessage(HttpStatus.OK, resultMap);
+		} else {
+			resultMap.put("errors", "Travel 수정 실패 (존재하지 않는 travelIdx)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
 	}
