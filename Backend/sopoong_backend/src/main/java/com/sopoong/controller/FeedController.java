@@ -42,8 +42,8 @@ public class FeedController {
 	public ResponseEntity getAllList(@RequestParam(required = false) final String userId, @PageableDefault(sort = {"createdAt"},direction = Direction.DESC) Pageable pageable) throws Exception {
 		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
 		SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
-		String format_time1 = format1.format (userId+" "+"피드 보내주기 시  작 " + System.currentTimeMillis());
-		System.out.println(format_time1);
+		String format_time1 = format1.format (System.currentTimeMillis());
+		System.out.println(userId+" "+"피드 보내주기 시  작 " + format_time1);
 		BaseMessage bm = feedService.getAllList(userId,pageable);
 		String format_time2 = format1.format (System.currentTimeMillis());
 		System.out.println(userId+" "+"피드 보내주기 끝  " + format_time2);
