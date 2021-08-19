@@ -11,6 +11,7 @@
             v-for="image in images"
             :key="image.id"
             :image="image"
+            :userId="userId"
           />
         </div>
         <div class="cards-loading" v-else>
@@ -23,6 +24,7 @@
 
 <script>
 import EachPlaceJournalCard from "@/components/travel/EachPlaceJournalCard.vue";
+// import router from '@/router'
 // import axios from "axios";
 
 export default {
@@ -35,6 +37,7 @@ export default {
       sampleData: "",
       travel: null,
       images: [],
+      userId: '',
     };
   },
   watch: {
@@ -60,10 +63,34 @@ export default {
   unmounted() {},
   methods: {
     getTravelJournalDetail() {
-      // 현재 여행정보 가져오기 위함.
-      for (let x of this.$store.getters['getMyTravelJournal']) {
+      // 뉴스피드에서 온거면
+      // if ( router.history._startLocation === '/feed' ) {
+      //   for (let x of this.$store.getters['getAllFeedsList']) {
+      //     if (x.travelIdx === this.$store.getters['getPresentTravelIdx']) {
+      //       this.travel = x
+      //       console.log(this.travel)
+      //     }
+      //   }
+      // } else if ( router.history._startLocation === '/feed/follow') {
+      //   for (let x of this.$store.getters['getAllFeedsList']) {
+      //     if (x.travelIdx === this.$store.getters['getPresentTravelIdx']) {
+      //       this.travel = x
+      //       console.log(this.travel)
+      //     }
+      //   }
+      // } else {
+      //   // 현재 여행정보 가져오기 위함.
+      //   for (let x of this.$store.getters['getMyTravelJournal']) {
+      //     if (x.travelIdx === this.$store.getters['getPresentTravelIdx']) {
+      //       this.travel = x
+      //     }
+      //   }
+      // }
+      for (let x of this.$store.getters['getAllFeedsList']) {
         if (x.travelIdx === this.$store.getters['getPresentTravelIdx']) {
           this.travel = x
+          console.log(this.travel)
+          this.userId = this.travel.userId
         }
       }
       // 이미지 가져오기.

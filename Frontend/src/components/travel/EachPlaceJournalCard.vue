@@ -14,7 +14,7 @@
     <div class="image">
       <img :src="`https://i5a404.p.ssafy.io/api/image/${image.imageOriginTitle}`" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
     </div>
-    <div class="patchDeleteDiv">
+    <div class="patchDeleteDiv" v-if="(this.$store.getters['isSignedIn']) && (userId === this.$store.getters['getUserProfile'].userId)">
       <!-- v-bind는 false값도 true로 인식? -->
       <i class="fas fa-eraser" v-show="imgHover" style="margin-right: 10px"></i>
       <i class="far fa-trash-alt" v-show="imgHover" @click="deleteTravelDetail(image.placeIdx)"></i>
@@ -47,6 +47,9 @@ export default {
       type: Object,
       required: true,
     },
+    userId: {
+      type: String,
+    }
   },
 
   data: () => ({
@@ -69,6 +72,7 @@ export default {
 
   created() {
     this.getImageSize();
+    console.log(this.image);
   },
 
   methods: {
@@ -194,9 +198,9 @@ h2 {
   /* font-size: 3vh; */
   margin-bottom: 10px;
 }
-h2::after {
+/* h2::after {
   content: " ★";
-}
+} */
 
 p {
   text-align: center;

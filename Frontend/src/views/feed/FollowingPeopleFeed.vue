@@ -10,8 +10,10 @@
         <div class="cards" v-if="images.length">
           <following-people-journal-card
             v-for="image in images"
-            :key="image.id"
+            :key="image.travelIdx"
             :image="image"
+            @onFollow="onFollow"
+            @onLike="onLike"
           />
         </div>
         <div class="cards-loading" v-else>
@@ -29,8 +31,6 @@ import axios from "axios";
 import ProfileBox from '@/views/accounts/ProfileBox.vue';
 import FeedFilter from '@/components/FeedFilter.vue';
 
-const DEFAULT_IMAGES_COUNT = 30;
-
 export default {
   name: "",
   components: {
@@ -42,58 +42,91 @@ export default {
     return {
       sampleData: "",
       images: [],
+      like: false,
+      likeData: null,
+      follow: false,
+      followData: null,
     };
   },
-  beforeCreate() {},
-  async created() {
-    // 기본이 development로 설정되어 있고 , 그 외에도 여러 모드가 있다.
-    // console.log(process.env.NODE_ENV)
-    if (process.env.NODE_ENV === "production") {
-      await this.getRandomImages(DEFAULT_IMAGES_COUNT);
-    } else {
-      await this.getRandomImagesFromLocal();
+
+  watch: {
+    follow: {
+      deep: true,
+      immediate: true,
+      async handler() {
+        if ( this.followData !==null ) {
+          await axios.post('follow', { relationFollowing: this.followData[0], relationFollowed: this.followData[1] }, { headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+              .then(res => {
+              console.log(res.data)
+          })
+          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              this.images = res.data.data.success
+              this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
+          })
+          // 다른 페이지도 입히기
+          await axios.get('feed/all', { params: { page:0, size:30, userId: this.$store.getters['getUserProfile'].userId} })
+            .then(res => {
+                this.$store.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
+          })
+        }
+      }
+    },
+
+    like: {
+      deep: true,
+      immediate: true,
+      async handler() {
+        if (this.likeData !== null) {
+          await axios.post('good', { userId: this.likeData[0], travelIdx: this.likeData[1] }, { headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+              .then(res => {
+                console.log(res.data)
+          })
+          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+              .then(res => {
+                this.images = res.data.data.success
+                this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
+            })
+            // 다른 페이지도 입히기
+          await axios.get('feed/all', { params: { page:0, size:30, userId: this.$store.getters['getUserProfile'].userId} })
+            .then(res => {
+                this.$store.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
+          })
+        }
+      }
     }
   },
+
+  beforeCreate() {},
+  created() {
+    this.getFollowingPeopleFeedsList();
+  },
   beforeMount() {},
-  async mounted() {
+  mounted() {
     // Follow한 피드 리스트 불러오기
-    await this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
+    this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
   },
   beforeUpdate() {},
   updated() {},
   beforeUnmount() {},
   unmounted() {},
   methods: {
-    /**
-     * @param {number} count
-     */
-    async getRandomImages(count) {
-      try {
-        const { data } = await axios.get(
-          process.env.VUE_APP_URL + "/photos/random",
-          {
-            headers: {
-              Authorization: "Client-ID " + process.env.VUE_APP_ACCESS_KEY,
-            },
-            params: {
-              count,
-            },
-          }
-        );
-        // Binding data to this component data
-        this.images = data;
-      } catch (error) {
-        console.error(error);
-      }
+    async getFollowingPeopleFeedsList() {
+      this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
+      this.images = this.$store.getters['getFollowingPeopleFeedsList']
+      console.log(this.images)
     },
-    async getRandomImagesFromLocal() {
-      try {
-        const { default: localData } = await import('@/assets/test_data.json')
-        this.images = localData
-      } catch (err) {
-        console.error(err)
-      }
+
+    onFollow(data) {
+      this.followData = data
+      this.follow = !this.follow
+    },
+
+    onLike(data) {
+      this.likeData = data
+      this.like = !this.like
     }
+    
   },
 };
 </script>

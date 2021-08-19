@@ -11,31 +11,30 @@
     @mouseout="mouseOutCheck()"
   >
     <div class="image" @click="journalDetail()">
-      <img :src="image.urls.small" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
+      <img :src="`https://i5a404.p.ssafy.io/api/image/${image.imageOriginTitle}`" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
     </div>
-    <div class="profilePhotoDiv">
-          <img class="photo" src="https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/EKE66P73OGOHBUQ4TG5XP6JOTQ.jpg" alt="profile-photo">
+    <div class="profilePhotoDiv" @click="personalPage()">
+          <img class="photo" :src="`https://i5a404.p.ssafy.io/api/image/${image.profileOriginTitle}`" alt="profile-photo">
     </div>
     <div class="nickFollowDiv">
-      <p>{{ image.user.name }}</p>
+      <p>{{ image.userNickname }}</p>
       <!-- 들고있는 자료 쏴주는법 참고! -->
-      <button v-if="!image.liked_by_user" @click="toFollow(image.user.name)" class="followButton">follow</button>
-      <button v-else @click="toFollow(image.user.name)" class="unfollowButton">following</button>
+      <div v-if="(this.$store.getters['isSignedIn'] ) && (image.userId !== this.$store.getters['getUserProfile'].userId)">
+        <button v-if="!image.isFollow" @click="toFollow(image.userId)" class="followButton">follow</button>
+        <button v-if="image.isFollow" @click="toFollow(image.userId) " class="unfollowButton">following</button>
+      </div>
     </div>
-    <div class="likeBookMarkDiv">
+    <div class="likeBookMarkDiv" v-if="(this.$store.getters['isSignedIn']) && (image.userId !== this.$store.getters['getUserProfile'].userId)">
       <!-- v-bind는 false값도 true로 인식? -->
-      <i class="far fa-bookmark" :class="{ 'fas': scraped, 'fas-bookmark': scraped }" @click="scrapedJournal()" :v-show="imgHover" style="margin-right: 10px"></i>
-      <i class="far fa-heart" :class="{ 'fas': liked, 'fas-heart': liked }" @click="likedJournal([id, travelIdx])" :v-show="imgHover"></i>
+      <i class="far fa-bookmark" :class="{ 'fas': scraped, 'fas-bookmark': scraped }" @click="scrapedJournal()" v-show="imgHover" style="margin-right: 10px"></i>
+      <i class="far fa-heart" :class="{ 'fas': image.isLike, 'fas-heart': image.isLike }" @click="likedJournal(image.travelIdx)" v-show="imgHover"></i>
+    </div>
+    <div class="deleteDiv" v-if="(this.$store.getters['isSignedIn']) && (image.userId === this.$store.getters['getUserProfile'].userId)">
+      <i class="far fa-trash-alt" v-show="imgHover" @click="deleteTravel(travel.travelIdx)"></i>
     </div>
     <div class="textDiv" v-show="imgHover" @click="journalDetail()">
-      <h1>여행일지 제목</h1>
-      <p class="travelReview">한줄 요약 : 정말 아름다웠던 여행지! 내가 사랑하고 사랑했던 프랑크푸르트! 어언 떠나온 지 7년이라는 세월이 흘러 스타크래프트 립버전 1.16 다운로드 $지금 가입시 16종의 히어로 증정 %$</p>
-      <!-- 별점 -->
-      <span class="fa fa-star" :class="{ checked : checkRating(1) }"></span>
-      <span class="fa fa-star" :class="{ checked : checkRating(2) }"></span>
-      <span class="fa fa-star" :class="{ checked : checkRating(3) }"></span>
-      <span class="fa fa-star" :class="{ checked : checkRating(4) }" ></span>
-      <span class="fa fa-star" :class="{ checked : checkRating(5) }"></span>
+      <h1>{{ image.travelTitle }}</h1>
+      <p class="travelReview">{{ image.travelContent }}</p>
     </div>
     
   </div>
@@ -59,44 +58,17 @@ export default {
     imgHover: false,
     lt: 100,
 
-    liked: false,
     scraped: false,
-    isFollowing: false,
-
   }),
 
-  watch: {
-    image: {
-      deep: true,
-      immediate: true,
-      handler() {
-        console.log("하위 컴포넌트에서 watch체크")
-      }
-    }
-  },
-
   created() {
-    this.tH = Math.round(this.image.height / (this.image.width / 400));
+    this.tH = Math.round(this.image.imageHeight / (this.image.imageWidth / 400));
     const gap = Math.round(this.tH / 10);
     this.gap = `span ${gap}`;
+
   },
 
-  async updated() {
-    // // 팔로우한 사람 동시에 버튼 바꾸기 위해 사용
-    // this.$store.dispatch('followingPeopleList', this.$store.getters['getUserProfile'].userId)
-    // // 값 가져오기
-    // this.$store.getters['getFollowingPeopleList']
-    // // 팔로잉한 유저 정보를 확인해서 일치한다면 following 버튼을 토글하기.
-    // // followingUser목록을 돌면서, 현재 이미지 전체 목록도 돌아서 following 버튼을 동시에 토글해줘야 하는데..
-    // // v-for마다 v-if줘서, image에 새 항목을 하나 준 후, 새 항목이 true라면 보이게 하고 전체 이미지 for문 돌면서 이미지에 저장된 닉네임 in FollowingList면 그거 그대로 다른 버튼도 true될수있또록!
-    // for (var followingUser of this.$store.getters['getFollowingPeopleList']) {
-    //   // if (this.image.user.name === 'Bundo Kim')
-    //   console.log(this.image.user.name, '내가 마우스 올린 이미지 사용자')
-    //   console.log(followingUser.userNickname, '팔로잉하는 사용자 닉네임 for문돌며 하나씩 출력')
-    //   var followingButton = document.querySelector('.followButton')
-    //   console.log(followingButton)
-      
-    // }
+  mounted() {
   },
 
   methods: {
@@ -118,30 +90,47 @@ export default {
       else return 1
     },
     // 좋아요 버튼 토글 구현. 게시글 내에 좋아요 저장 구현해야 함.
-    likedJournal(idTravelIdx) {
-      this.liked = !this.liked
+    likedJournal(travelIdx) {
+      // this.liked = !this.liked
+      // if (this.image.isLike === 1) {
+      //   this.image.isLike = 0
+      // } else {
+      //   this.image.isLike = 1
+      // }
       // 데이터 보내서 수정해야 함.
-      this.$store.dispatch('like', idTravelIdx);
+      // this.$store.dispatch('like', [this.$store.getters['getUserProfile'].userId, travelIdx]);
+      this.$emit('onLike', [this.$store.getters['getUserProfile'].userId, travelIdx])
     },
+
+    // 일단 없는 기능
     scrapedJournal() {
       this.scraped = !this.scraped
     },
-    // 일지 디테일로 연결
+
+    // Okay !
     journalDetail() {
-      // this.$router.push('/')
       console.log(this.image)
-      // 멀티플 파라미터 쏘고 싶을 때
-      this.$store.dispatch('', [this.image])
+      this.$store.dispatch('travelDetail', this.image)
     },
 
     // 팔로우
     toFollow(userId) {
       this.isFollowing = !this.isFollowing;
       // 팔로우하기
-      this.$store.dispatch('follow',[this.$store.getters['getUserProfile'].userId, userId]);
-      // 상위로 데이터 쏘기
-      this.$emit('onFollow', userId);
+      // this.$store.dispatch('follow',[this.$store.getters['getUserProfile'].userId, userId]);
+      // console.log(this.$store)
+      this.$emit('onFollow', [this.$store.getters['getUserProfile'].userId, userId])
     },
+
+    // 내 일지는 삭제 가능하도록
+    deleteTravel(travelIdx) {
+      this.$store.dispatch('deleteTravel', travelIdx)
+    },
+
+    async personalPage() {
+      await this.$store.dispatch('personalTravelJournalList', this.image.userId)
+      await this.$router.push(`/travellist/${this.image.userId}`)
+    }
 
   }
 };
@@ -172,8 +161,9 @@ export default {
   left: 1rem;
 
   /* width: 100%; */
-
+  cursor: pointer;
   text-align: left;
+  z-index: 5;
 }
 
 .profilePhotoDiv > .photo {
@@ -259,8 +249,30 @@ export default {
 
 }
 
+.deleteDiv {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+
+  /* width: 100%; */
+  /* height: 60px; */
+
+  text-align: right;
+
+  font-size: 2ex;
+  color: white;
+
+  z-index: 1000;
+
+}
+
 i {
   cursor: pointer;
+}
+
+.fa-trash-alt:hover {
+  color: red;
+  text-shadow: rgb(209, 48, 48) 1px 0 10px;
 }
 
 .fas-heart {
@@ -304,9 +316,9 @@ i {
   opacity: .7;
 }
 
-h1::after {
+/* h1::after {
   content: "  ♥";
-}
+} */
 
 /* 여행글 */
 .travelReview {
@@ -335,11 +347,4 @@ h1::after {
   /* 기준 넘는 글자 숨기기 */
   overflow: hidden; 
 }
-
-/* 별점 */
-.checked {
-  color: orange;
-}
-
-
 </style>

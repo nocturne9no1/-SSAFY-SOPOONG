@@ -2,14 +2,23 @@ import axios from 'axios'
 import router from '@/router'
 
 const state = {
+  allFeedsList: null,
+  followingPeopleFeedsList: null,
   myTravelJournal: null,
+  personalTravelJournal: null,
   presentTravel: null,
   presentTravelIdx: null,
   travelDetailList: null,
 }
 const getters = {
+  // 뉴스피드 전체 여행일지
+  getAllFeedsList: state => state.allFeedsList,
+  // 팔로잉하는 사람들 전체 여행일지
+  getFollowingPeopleFeedsList: state => state.followingPeopleFeedsList,
   // 나의 전체 여행일지
   getMyTravelJournal: state => state.myTravelJournal,
+  // 개인의 전체 여행일지
+  getPersonalTravelJournal: state => state.personalTravelJournal,
   // 현재 보고있는 여행일지 총정보
   getTravel: state => state.presentTravel,
   // 현재 여행일지의 모든 위치일지
@@ -19,8 +28,17 @@ const getters = {
 }
 
 const mutations = {
+  SET_ALL_FEEDS_LIST(state, feedsList) {
+    state.allFeedsList = feedsList
+  },
+  SET_FOLLOWING_PEOPLE_FEEDS_LIST(state, feedsList) {
+    state.followingPeopleFeedsList = feedsList
+  },
   SET_MY_TRAVEL_JOURNAL(state, journals) {
     state.myTravelJournal = journals
+  },
+  SET_PERSONAL_TRAVEL_JOURNAL(state, journals) {
+    state.personalTravelJournal = journals
   },
   SET_TRAVEL_DETAIL(state, travelDetail) {
     state.presentTravel = travelDetail[0]
@@ -29,11 +47,37 @@ const mutations = {
   }
 }
 const actions = {
+  // 전체 여행일지 피드 가져오기
+  // 유저아이디는 팔로우, 좋아요 컨트롤 위함.
+  allFeedsList(context, userId){
+    axios.get('feed/all', { params: { page: 0, size: 30, userId: userId} })
+      .then(res => {
+        context.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
+      })
+  },
+
+  // 팔로우한 사람들 피드 리스트 가져오기
+  followingPeopleFeedsList(context, id) {
+    axios.get('feed/follow', { params: {page: 0, size: 30, userId: id }, headers: { 'X-AUTH-TOKEN' : context.rootGetters.getToken } })
+    .then(res => {
+      console.log('팔로잉한 사람들 피드 리스트 불러오기 성공', res.data)
+      context.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
+      })
+  },
+
   travelJournalList(context, userId) {
     axios.get('travel/travelList', { params: {userId : userId}, headers: { 'X-AUTH-TOKEN' : context.rootState.accounts.authToken, 'Access-Control-Allow-Origin': '*' } })
       .then(res => {
         context.commit("SET_MY_TRAVEL_JOURNAL", res.data.data)
       })
+  },
+
+  // 개인 여행일지
+  personalTravelJournalList(context, userId) {
+    axios.get('travel/travelList', { params: {userId : userId}, headers: { 'X-AUTH-TOKEN' : context.rootState.accounts.authToken, 'Access-Control-Allow-Origin': '*' } })
+      .then(res => {
+        context.commit("SET_PERSONAL_TRAVEL_JOURNAL", res.data.data)
+    })
   },
   
   travelDetail(context, travel) {
