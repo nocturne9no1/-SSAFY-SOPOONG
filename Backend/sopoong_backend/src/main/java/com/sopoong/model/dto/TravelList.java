@@ -29,7 +29,8 @@ public class TravelList {
 	private long totalLike;
 	private int imageWidth;
 	private int imageHeight;
-	
+	private String userId;
+	private String userNickname;
 	TravelList(Travel travel){
 		travelIdx = travel.getTravelIdx();
 		travelTitle = travel.getTravelTitle();
