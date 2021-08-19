@@ -3,11 +3,14 @@
     <div class="image">
       <img :src="nowImage" alt="" class="pic">
     </div>
+    <div class="image-2">
+      <img :src="nowImage" alt="" class="pic">
+    </div>
 
     <!-- 글 작성 부분 -->
     <div class="text">
       <!-- 제목 -->
-      <input v-model="this.nowPlace.title" type="text" placeholder="Title">
+      <input v-model="nowPlace.title" type="text" placeholder="Title">
       <!-- 대분류 -->
       <fieldset class="category">
         <legend>Category</legend>

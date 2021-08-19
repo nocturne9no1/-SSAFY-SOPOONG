@@ -3,19 +3,26 @@
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <h1>Masonry MainFeed</h1>
+          <!-- <h1>Masonry MainFeed</h1> -->
           <!-- <button class="filterButton">Filter</button> -->
         </div>
-        <div class="cards" v-if="images.length">
-          <main-feed-journal-card
+        <!-- <div class="cards" v-if="images.length"> -->
+        <div class="cards">
+          <MainFeedJournalCard
+            v-for="travel in travelList"
+            :key="travel.travelIdx"
+            :travel="travel"
+          />
+        </div>
+          <!-- <MainFeedJournalCard
             v-for="image in images"
             :key="image.id"
             :image="image"
-          />
-        </div>
-        <div class="cards-loading" v-else>
+          /> -->
+          
+        <!-- <div class="cards-loading" v-else>
           Loading image....
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -30,6 +37,11 @@ export default {
   components: {
     MainFeedJournalCard,
   },
+
+  props: {
+    travelList: [Object, Array],
+  },
+
   data() {
     return {
       sampleData: "",

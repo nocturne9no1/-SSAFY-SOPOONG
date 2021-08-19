@@ -35,10 +35,11 @@
 
 export default {
   props: {
-    image: {
-      type: Object,
-      required: true,
-    },
+    // image: {
+    //   type: Object,
+    //   required: true,
+    // },
+    travel: Object,
   },
 
   data: () => ({
@@ -50,11 +51,15 @@ export default {
   }),
 
   created() {
-    this.tH = Math.round(this.image.height / (this.image.width / 400));
-    const gap = Math.round(this.tH / 10);
-    this.gap = `span ${gap}`;
+    // this.tH = Math.round(this.image.height / (this.image.width / 400));
+    // const gap = Math.round(this.tH / 10);
+    // this.gap = `span ${gap}`;
   },
-
+  computed: {
+    imgSrc() {
+      return 'https://i5a404.p.ssafy.io/api/image/'+this.travel.imageOriginTitle
+    }
+  },
   methods: {
     imgHoverCheck() {
       this.imgHover = true;

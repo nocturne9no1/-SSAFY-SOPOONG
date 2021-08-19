@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nav-wrap">
     <nav>
       <ul class="nav-container">
         <div class="nav-left">
@@ -23,8 +23,16 @@
           </div>
           <div v-else class="nav-right">
             <li class="nav-item nav-login" @click="signOut">Logout</li>
-            <li class="nav-item">알람</li>
-            <li class="nav-item">프사</li>
+            <li class="alarm-wrap">
+              
+              <DropDown/>
+              <div class="if-there-alarm" v-if="isAlarm"/>
+            </li>
+            <li class="">
+              <div class="profile-image-box">
+                <img :src="imgSrc" alt="profile-image" class="profile-image">
+              </div>
+            </li>
           </div>
         </div>
       </ul>
@@ -36,8 +44,16 @@
 import "./css/navbar.scss"
 import { mapActions, mapGetters } from 'vuex'
 import router from '@/router'
+import DropDown from './Navbar/DropDown.vue'
 
 export default {
+
+  name: 'NavBar',
+
+  components: {
+    DropDown,
+  },
+  
   data() {
     return {
       // 향후 vuex에서 로그인 여부를 가져오는 것으로 바꿔야함
@@ -48,12 +64,14 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isSignedIn"])
+    ...mapGetters(["isSignedIn", "isAlarm"]),
+    
+    imgSrc() {
+      return 'https://i5a404.p.ssafy.io/api/image/'+this.$store.state.accounts.userProfile.imageOriginTitle
+    }
   },
-  
   methods: {
-    ...mapActions(["signOut"]),
-
+    ...mapActions(["signOut", "removeAlarmList"]),
 
     onEnter() {
       // 향후 검색 페이지로 이동

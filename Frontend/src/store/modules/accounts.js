@@ -24,6 +24,7 @@ const getters = {
 }
 const mutations = {
   SET_TOKEN(state, token) {
+    // console.log(token)
     state.authToken = token
   },
   SET_PROFILE(state, userData) {
@@ -52,8 +53,8 @@ const actions = {
       // this.$cookies.set('auth-token', res.data.key, "7d")  // 글로벌 설정으로 쿠키 가져올때(main.js).
       
       // 프로필 정보 기억
+      // console.log(signInData)
       context.dispatch('getProfile', signInData.id)
-      alert("로그인 성공!!>.<!!!!");
       router.push('/main')
     })
     .catch(err => {console.log(err), alert('아이디와 비밀번호를 확인하세요.')})
@@ -73,6 +74,7 @@ const actions = {
   signOut(context) {
     context.commit('SET_TOKEN', null)  // state에서
     cookies.remove('X-AUTH-TOKEN')  // cookie에서
+    context.commit('SET_ALARMLIST', null)  // 로그아웃 시 알람 리스트 초기화
     router.push({ name:'NewsFeed' })
   },
   

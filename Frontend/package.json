@@ -26,6 +26,7 @@
     "v-click-outside": "^3.1.2",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
+    "vue-easy-range-date-picker": "^1.0.3",
     "vue-filepond": "6",
     "vue-router": "^3.5.2",
     "vue-upload-drop-images": "^1.0.7",
