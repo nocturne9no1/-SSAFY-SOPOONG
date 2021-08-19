@@ -8,12 +8,14 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.sopoong.common.BaseMessage;
 import com.sopoong.model.dto.PlaceDto;
+import com.sopoong.model.dto.changePlaceRequest;
 import com.sopoong.model.entity.Image;
 import com.sopoong.model.entity.Place;
 import com.sopoong.model.entity.Travel;
@@ -123,6 +125,29 @@ public class PlaceService {
 			return new BaseMessage(HttpStatus.OK, resultMap);
 		} else {
 			resultMap.put("errors", "Place 삭제 실패 (존재하지 않는 placeIdx)");
+			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
+		}
+	}
+
+	public BaseMessage updatePlace(changePlaceRequest place) {
+		Map<String, Object> resultMap = new HashMap<>();
+		Optional<Place> updatePlace = placeRepository.findByplaceIdx(place.getPlaceIdx());
+		
+		if(updatePlace.isPresent()) {
+			updatePlace.get().setPlaceTitle(place.getTitle());
+			updatePlace.get().setPlaceComment(place.getComment());
+			updatePlace.get().setPlaceCategory(place.getCategory().getMain());
+			updatePlace.get().setPlaceCategory2(place.getCategory().getSub());
+			updatePlace.get().setPlaceRate1(place.getRates().getRate1());
+			updatePlace.get().setPlaceRate2(place.getRates().getRate2());
+			updatePlace.get().setPlaceRate3(place.getRates().getRate3());
+			updatePlace.get().setPlaceTransport(place.getTransport());
+			
+			placeRepository.save(updatePlace.get());
+			resultMap.put("success", "Place 수정 성공");
+			return new BaseMessage(HttpStatus.OK, resultMap);
+		} else {
+			resultMap.put("errors", "Place 수정 실패 (존재하지 않는 placeIdx)");
 			return new BaseMessage(HttpStatus.BAD_REQUEST, resultMap);
 		}
 	}

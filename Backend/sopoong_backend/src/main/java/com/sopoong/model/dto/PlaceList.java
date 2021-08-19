@@ -22,4 +22,6 @@ public class PlaceList {
 	private double placeLat;
 	private double placeLong;
 	private String imageOriginTitle;
+	private int imageWidth;
+	private int imageHeight;
 }

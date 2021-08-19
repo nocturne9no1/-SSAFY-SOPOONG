@@ -21,12 +21,15 @@ import com.sopoong.model.dto.FindIdRequest;
 import com.sopoong.model.dto.FindPasswordRequest;
 import com.sopoong.model.dto.SignupRequest;
 import com.sopoong.model.entity.User;
+import com.sopoong.repository.ImageRepository;
 import com.sopoong.repository.UserRepository;
 import com.sopoong.util.JwtTokenProvider;
 
 @Service
 public class AuthService {
 	public static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+	@Autowired
+	private ImageRepository imageRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -46,6 +49,7 @@ public class AuthService {
 				userNickname(requestUser.getNickname())// 최초.																									// 설정
 				.userIsVisible(1)
 				.userAlarm(7)
+				.image(imageRepository.findByImageIdx(2).get())
 				.build());
 		
 		resultMap.put("success", "회원가입 성공");
