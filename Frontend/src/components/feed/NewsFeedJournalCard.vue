@@ -2,7 +2,6 @@
   <!-- 클릭 div가 아닌 다른곳으로 옮겨줘야할듯. -->
 
   <div
-    v-if="this.$store.getters['isSignedIn']"
     class="card"
     :style="{
       height: tH + 'px',
