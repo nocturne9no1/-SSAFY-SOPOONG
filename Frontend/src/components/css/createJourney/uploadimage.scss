@@ -44,6 +44,7 @@
     color: #222222;
     border: 10px dashed $gray;
     border-radius: 50px;
+    overflow: hidden;
 
     .room-file-upload-wrapper {
       // margin: 20px;
@@ -140,7 +141,7 @@
 
         .file-preview-container {
           height: 100%;
-          display: flex;
+          // display: flex;
           flex-wrap: wrap;
         }
 
