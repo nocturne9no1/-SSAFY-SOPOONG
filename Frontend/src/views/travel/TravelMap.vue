@@ -5,7 +5,7 @@
         <h1>{{travel.travelTitle}}</h1>
       </div>
       <div>
-        <button class="btn" @click="clickEdit">Edit</button>
+        <button class="btn" @click="clickEdit" style="margin: 20px;">Edit</button>
       </div>
     </div>
 
@@ -145,7 +145,7 @@
         {{ travel.travelContent }}
       </div>
       <div class="date">
-        DATE : {{ travel.startDate}} - {{ travel.endDate }}
+        DATE : {{ travel.startDate.substr(0, 10)}} - {{ travel.endDate.substr(0, 10) }}
       </div>
     </div>
   </div>

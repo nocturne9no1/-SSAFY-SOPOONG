@@ -16,7 +16,7 @@
   $body: 'Roboto', sans-serif;
 
   position: absolute;
-  top: 47%;
+  top: 49%;
   left: 50%;
 
   transform: translateX(-50%) translateY(-50%);
@@ -83,6 +83,7 @@
       cursor: pointer;
       background-color: #f4eec8;
       border-radius: 10px;
+      
       .window-image {
         height: 100px;
       }
@@ -96,5 +97,8 @@
         flex-direction: column;
       }
     }
+    
+    box-shadow: 3px 3px 10px rgba($gray, .5);
+
   }
 }

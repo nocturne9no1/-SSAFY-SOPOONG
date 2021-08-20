@@ -13,16 +13,17 @@ $hulu: 'Nunito Sans', sans-serif;
 $heading: 'Montserrat', sans-serif;
 $body: 'Roboto', sans-serif;
 
-display: inline-block;
-margin-left: 24rem;
+// display: inline-block;
 
+display: flex;
+justify-content: center;
 .container {  // 위 아래 1.5배 , 마진탑 조정 원래 10%
   background: $white;
   width: 540px * 1.5;
   height: 420px * 1.5;
   margin: 0 auto;
   position: relative;
-  margin-top: 7.5% * 2;
+  margin-top: 6%;
   box-shadow: 2px 5px 20px rgba($gray, .5);
 }
 

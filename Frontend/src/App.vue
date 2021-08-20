@@ -24,38 +24,21 @@ export default ({
     '$route' () {
       console.log('주소 변경')
       // 로그인 했을 때만 불러옴
-      if ( this.isSignedIn === true ) {
+      if ( this.$store.getters['isSignedIn'] === true ) {
+        console.log('들어옴 알람')
         axios({
           method: 'get',
           url: '/alarm/list',
           params: {
             page: 0,
             size: 100,
-            userId: this.$store.state.accounts.userProfile.userId,
+            userId: this.$store.getters.getUserProfile.userId,
           },
           headers: {
             'X-AUTH-TOKEN' : this.$store.state.accounts.authToken
           },
         })
           .then(res => {
-            // const temp = [
-            //   {
-            //     "alarmIdx": 19,
-            //     "userNickname": "sense168",
-            //     "alarmCategory": 2,
-            //     "alarmCheck": 0,
-            //     "connectIdx": 41,
-            //     "travelTitle": null
-            //   },
-            //   {
-            //     "alarmIdx": 20,
-            //     "userNickname": "sense168",
-            //     "alarmCategory": 2,
-            //     "alarmCheck": 0,
-            //     "connectIdx": 39,
-            //     "travelTitle": null
-            //   }
-            // ]
             console.log(res)
             this.$store.dispatch('getAlarm', res.data.data.success)
             // this.$store.dispatch('getAlarm', temp)

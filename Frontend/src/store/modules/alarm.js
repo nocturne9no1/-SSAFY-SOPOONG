@@ -2,7 +2,7 @@
 // import router from '@/router'
 
 const state = {
-  alarmList: null,
+  alarmList: [],
 }
 
 const getters = {
