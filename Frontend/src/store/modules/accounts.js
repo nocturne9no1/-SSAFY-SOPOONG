@@ -96,7 +96,7 @@ const actions = {
     context.commit('SET_TRAVEL_DETAIL', [null, null, null])
     cookies.remove('X-AUTH-TOKEN')  // cookie에서
     context.commit('SET_ALARMLIST', null)  // 로그아웃 시 알람 리스트 초기화
-    router.push({ name:'NewsFeed' })
+    router.push('/intro')
   },
   
   // 회원가입
