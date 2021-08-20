@@ -27,7 +27,7 @@ const routes = [
   ...personal,
 
   {
-    path: '',
+    path: '/',
     redirect: '/intro',
     // component: test,
   },

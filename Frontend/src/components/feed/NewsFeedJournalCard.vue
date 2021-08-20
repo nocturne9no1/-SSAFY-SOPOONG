@@ -32,9 +32,9 @@
       <i class="far fa-bookmark" :class="{ 'fas': image.isScrap, 'fas-bookmark': image.isScrap }" @click="scrapedJournal(image.travelIdx)" v-show="imgHover" style="margin-right: 10px"></i>
       <i class="far fa-heart" :class="{ 'fas': image.isLike, 'fas-heart': image.isLike }" @click="likedJournal(image.travelIdx)" v-show="imgHover"></i>
     </div>
-    <div class="deleteDiv" v-if="(this.$store.getters['isSignedIn']) && (image.userId === this.$store.getters['getUserProfile'].userId)">
+    <!-- <div class="deleteDiv" v-if="(this.$store.getters['isSignedIn']) && (image.userId === this.$store.getters['getUserProfile'].userId)">
       <i class="far fa-trash-alt" v-show="imgHover" @click="deleteTravel(travel.travelIdx)"></i>
-    </div>
+    </div> -->
     <div class="textDiv" v-show="imgHover" @click="journalDetail()">
       <h1>{{ image.travelTitle }}</h1>
       <p class="travelReview">{{ image.travelContent }}</p>

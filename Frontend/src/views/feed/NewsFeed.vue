@@ -1,7 +1,6 @@
 <template>
 <div>
-    <profile-box />
-  
+  <profile-box />
   <div style="display: flex; justify-content: center;">
     <div class="journalCardList">
       <div class="wrapper">
@@ -151,9 +150,11 @@ export default {
   mounted() {
     // 팔로우 중인 사람의 게시글 내 'follow'버튼을 'following'으로 바꾸기 위해 추가.
     // 여기 필요없을듯
-    if (this.$store.getters['getUserProfile'].userId) {
-      this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
-    }
+    // if (this.$store.getters['isSignedIn']) {
+    //   this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
+    // } else {
+    //   this.$store.dispatch('guestAllFeedsList')
+    // }
   },
   beforeUpdate() {
   },
@@ -165,13 +166,15 @@ export default {
     // 전체 피드 가져와서 카드 적용
     getAllFeedsList() {
       // 로그인 유저
+      console.log(this.$store.getters['isSignedIn'])
       if (this.$store.getters['isSignedIn']) {
         this.$store.dispatch('allFeedsList', this.$store.getters['getUserProfile'].userId)
       } else {
-        this.$store.dispatch('allFeedsList', null)
+        this.$store.dispatch('guestAllFeedsList')
       }
       // setTimeout(() => this.images = this.$store.getters['getAllFeedsList'], 1000)
       this.images = this.$store.getters['getAllFeedsList']
+      console.log(this.images)
       // console.log(this.images)
     },
 

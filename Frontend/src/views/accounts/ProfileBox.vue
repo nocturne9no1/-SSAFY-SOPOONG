@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-box">
+  <div class="profile-box" v-if="this.$store.getters['isSignedIn']">
     <div class="setting-btn">
       <router-link to="/settings">
         <span class="setting-icon">
@@ -80,7 +80,7 @@ export default {
 
   computed: {
     imgSrc() {
-      return 'https://i5a404.p.ssafy.io/api/image/'+this.$store.state.accounts.userProfile.imageOriginTitle
+        return 'https://i5a404.p.ssafy.io/api/image/'+this.$store.state.accounts.userProfile.imageOriginTitle
     }
   },
 

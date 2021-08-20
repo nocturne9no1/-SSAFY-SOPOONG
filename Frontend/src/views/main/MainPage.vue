@@ -255,7 +255,7 @@ export default {
       console.log()
     }
     else {
-      this.$router.push('/feed')
+      this.$router.push('/intro')
     }
   },
   beforeUpdate() {},
