@@ -216,6 +216,7 @@ methods: {
           .then(res => {
             console.log(res)
             this.$emit('close-modal')
+            this.$router.go(-1)
           })
           .catch(err => console.log(err))
     },
