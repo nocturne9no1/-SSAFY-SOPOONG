@@ -26,7 +26,7 @@
             <li class="alarm-wrap">
               
               <DropDown class="dropdown"/>
-              <div class="if-there-alarm" v-if="isAlarm"/>
+              <div class="if-there-alarm"/>
             </li>
             <li class="">
               <div class="profile-image-box">

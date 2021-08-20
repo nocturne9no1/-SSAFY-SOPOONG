@@ -1,6 +1,7 @@
 <template>
-  <div style="display: flex;">
+<div>
     <ProfileBox/>
+  <div style="display: flex; justify-content: center;">
     <div class="main-wrap">
       <GmapMap
         ref="mapRef"
@@ -114,6 +115,7 @@
       />
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -154,7 +156,7 @@ export default {
       },
       icon: {
         url: require("../../assets/pins/tour-pin.png"),
-        scaledSize: {width: 28, height: 28},
+        scaledSize: {width: 30, height: 30},
         labelOrigin: {x: 16, y: -10}
       },
       // 다녀온 나라 좌표

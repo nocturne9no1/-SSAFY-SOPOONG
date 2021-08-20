@@ -44,6 +44,7 @@ const actions = {
   
   // 로그인
   signIn(context, signInData) {
+    // console.log('한다')
     console.log(signInData)
     // 로그인시도
     axios.get('auth/login', { params :{ id: signInData.id, password: signInData.password } })
@@ -55,6 +56,8 @@ const actions = {
       // 프로필 정보 기억
       // console.log(signInData)
       context.dispatch('getProfile', signInData.id)
+      // console.log('아 됐다고 ㅋㅋㅋ')
+      // router.push('/main')
     })
     .catch(err => {console.log(err), alert('아이디와 비밀번호를 확인하세요.')})
   },

@@ -1,6 +1,7 @@
 <template>
-  <div style="display: flex;">
+<div>
     <profile-box />
+  <div style="display: flex; justify-content: center;">
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
@@ -21,22 +22,23 @@
         </div>
       </div>
     </div>
-    <FeedFilter />
+    <!-- <FeedFilter /> -->
   </div>
+</div>
 </template>
 
 <script>
 import FollowingPeopleJournalCard from "@/components/feed/FollowingPeopleJournalCard.vue";
 import axios from "axios";
 import ProfileBox from '@/views/accounts/ProfileBox.vue';
-import FeedFilter from '@/components/FeedFilter.vue';
+// import FeedFilter from '@/components/FeedFilter.vue';
 
 export default {
   name: "",
   components: {
     FollowingPeopleJournalCard,
     ProfileBox,
-    FeedFilter,
+    // FeedFilter,
   },
   data() {
     return {
