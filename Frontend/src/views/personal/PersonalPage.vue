@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex;">
-    <ProfileBox/>
+    <PersonalProfileBox/>
     <div class="main-wrap">
       <GmapMap
         ref="mapRef"
@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import ProfileBox from '../accounts/ProfileBox.vue'
+import PersonalProfileBox from '@/components/personal/PersonalProfileBox.vue'
 import PersonalFeed from '@/components/personal/PersonalFeed.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Vue from 'vue'
@@ -137,7 +137,7 @@ Vue.use(VueGoogleMaps, {
 export default {
   name:'MainPage',
   components: {
-    ProfileBox,
+    PersonalProfileBox,
     PersonalFeed,
     // 'gmap-custom-marker': GmapCustomMarker,
   },
@@ -226,7 +226,7 @@ export default {
   },
   beforeCreate() {},
   created() {
-    const userId = this.$store.state.accounts.userProfile.userId
+    const userId = this.$store.getters['getPersonalUserProfile'].userId
     axios.get('/travel/travelList', { params : { userId: userId }, headers: { 'X-AUTH-TOKEN' : this.$store.state.accounts.authToken } })
       .then(res => {
         // 리스트 받아오기

@@ -1,6 +1,8 @@
 <template>
   <!-- 클릭 div가 아닌 다른곳으로 옮겨줘야할듯. -->
+
   <div
+    v-if="this.$store.getters['isSignedIn']"
     class="card"
     :style="{
       height: tH + 'px',
@@ -9,6 +11,7 @@
     }"
     @mouseover="imgHoverCheck()"
     @mouseout="mouseOutCheck()"
+
   >
     <div class="image" @click="journalDetail()">
       <img :src="`https://i5a404.p.ssafy.io/api/image/${image.imageOriginTitle}`" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
@@ -26,7 +29,7 @@
     </div>
     <div class="likeBookMarkDiv" v-if="(this.$store.getters['isSignedIn']) && (image.userId !== this.$store.getters['getUserProfile'].userId)">
       <!-- v-bind는 false값도 true로 인식? -->
-      <i class="far fa-bookmark" :class="{ 'fas': scraped, 'fas-bookmark': scraped }" @click="scrapedJournal()" v-show="imgHover" style="margin-right: 10px"></i>
+      <i class="far fa-bookmark" :class="{ 'fas': image.isScrap, 'fas-bookmark': image.isScrap }" @click="scrapedJournal(image.travelIdx)" v-show="imgHover" style="margin-right: 10px"></i>
       <i class="far fa-heart" :class="{ 'fas': image.isLike, 'fas-heart': image.isLike }" @click="likedJournal(image.travelIdx)" v-show="imgHover"></i>
     </div>
     <div class="deleteDiv" v-if="(this.$store.getters['isSignedIn']) && (image.userId === this.$store.getters['getUserProfile'].userId)">
@@ -38,11 +41,15 @@
     </div>
     
   </div>
+
+
+  
 </template>
 
 <script>
 // import { mapActions } from 'vuex';
-// import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex';
+import axios from 'axios';
 
 export default {
   props: {
@@ -103,8 +110,9 @@ export default {
     },
 
     // 일단 없는 기능
-    scrapedJournal() {
-      this.scraped = !this.scraped
+    scrapedJournal(travelIdx) {
+      // this.scraped = !this.scraped
+      this.$emit('onScrap', [this.$store.getters['getUserProfile'].userId, travelIdx])
     },
 
     // Okay !
@@ -128,11 +136,24 @@ export default {
     },
 
     async personalPage() {
-      await axios.get('travel/travelList', { params: {userId : userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'], 'Access-Control-Allow-Origin': '*' } })
+      await axios.get('travel/travelList', { params: {userId : this.image.userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'], 'Access-Control-Allow-Origin': '*' } })
       .then(res => {
-        context.commit("SET_PERSONAL_TRAVEL_JOURNAL", res.data.data)
+        this.$store.commit("SET_PERSONAL_TRAVEL_JOURNAL", res.data.data)
+        axios.get('user', { params: {id: this.image.userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'], 'Access-Control-Allow-Origin': '*' } })
+          .then(res => {
+            this.$store.commit("SET_PERSONAL_PROFILE", res.data.data.success);
+            if ( this.image.userId === this.$store.getters['getUserProfile'].userId ) {
+              this.$router.push('/main')
+            } else {
+              this.$router.push(`/travellist/${this.image.userId}`)
+            }
+          })
       })
-      await this.$router.push(`/travellist/${this.image.userId}`)
+    },
+
+    welcome() {
+      alert('회원가입 하시고 소풍의 컨텐츠를 즐겨보세요 ! ')
+      this.$router.push('/signup')
     }
 
   }

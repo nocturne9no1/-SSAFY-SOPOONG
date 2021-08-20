@@ -4,6 +4,7 @@ import router from '@/router'
 const state = {
   allFeedsList: null,
   followingPeopleFeedsList: null,
+  scrapFeedsList: null,
   myTravelJournal: null,
   personalTravelJournal: null,
   presentTravel: null,
@@ -15,6 +16,8 @@ const getters = {
   getAllFeedsList: state => state.allFeedsList,
   // 팔로잉하는 사람들 전체 여행일지
   getFollowingPeopleFeedsList: state => state.followingPeopleFeedsList,
+  // 스크랩 전체 여행일지
+  getScrapFeedsList: state => state.scrapFeedsList,
   // 나의 전체 여행일지
   getMyTravelJournal: state => state.myTravelJournal,
   // 개인의 전체 여행일지
@@ -33,6 +36,9 @@ const mutations = {
   },
   SET_FOLLOWING_PEOPLE_FEEDS_LIST(state, feedsList) {
     state.followingPeopleFeedsList = feedsList
+  },
+  SET_SCRAP_FEEDS_LIST(state, feedsList) {
+    state.scrapFeedsList = feedsList
   },
   SET_MY_TRAVEL_JOURNAL(state, journals) {
     state.myTravelJournal = journals
@@ -64,7 +70,14 @@ const actions = {
       context.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
       })
   },
-
+  // 스크랩 게시글 가져오기
+  scrapFeedsList(context, id) {
+    axios.get('scrap', { params : { page: 0, size: 30, id: id }, headers: { 'X-AUTH-TOKEN' : context.rootGetters.getToken }})
+      .then(res => {
+        context.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
+      })
+  },
+  // 내 여행일지
   travelJournalList(context, userId) {
     axios.get('travel/travelList', { params: {userId : userId}, headers: { 'X-AUTH-TOKEN' : context.rootState.accounts.authToken, 'Access-Control-Allow-Origin': '*' } })
       .then(res => {

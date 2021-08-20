@@ -4,7 +4,7 @@
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <h1>팔로우한 사람 뉴스피드</h1>
+          <h1>FollowFeed</h1>
           <!-- <button class="filterButton">Filter</button> -->
         </div>
         <div class="cards" v-if="images.length">
@@ -14,6 +14,7 @@
             :image="image"
             @onFollow="onFollow"
             @onLike="onLike"
+            @onScrap="onScrap"
           />
         </div>
         <div class="cards-loading" v-else>
@@ -46,6 +47,8 @@ export default {
       likeData: null,
       follow: false,
       followData: null,
+      scrap: false,
+      scrapData: null
     };
   },
 
@@ -69,6 +72,10 @@ export default {
             .then(res => {
                 this.$store.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
           })
+          await axios.get('scrap', { params : { page: 0, size: 30, id: this.$store.getters['getUserProfile'].userId }, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              this.$store.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
+            })
         }
       }
     },
@@ -86,6 +93,39 @@ export default {
               .then(res => {
                 this.images = res.data.data.success
                 this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
+            })
+            // 다른 페이지도 입히기
+          await axios.get('feed/all', { params: { page:0, size:30, userId: this.$store.getters['getUserProfile'].userId} })
+            .then(res => {
+                this.$store.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
+          })
+          await axios.get('scrap', { params : { page: 0, size: 30, id: this.$store.getters['getUserProfile'].userId }, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              this.$store.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
+            })
+        }
+      }
+    },
+
+    scrap: {
+      deep: true,
+      immediate: true,
+      async handler() {
+        if (this.scrapData !== null) {
+          console.log(this.scrapData)
+          await axios.post('scrap', { userId: this.scrapData[0], travelIdx: this.scrapData[1] }, { headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              console.log(res.data)
+            })
+          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+              .then(res => {
+                this.images = res.data.data.success
+                this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
+            })
+            // 스크랩 게시글 가져오기
+          await axios.get('scrap', { params : { page: 0, size: 30, id: this.$store.getters['getUserProfile'].userId }, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              this.$store.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
             })
             // 다른 페이지도 입히기
           await axios.get('feed/all', { params: { page:0, size:30, userId: this.$store.getters['getUserProfile'].userId} })
@@ -125,6 +165,11 @@ export default {
     onLike(data) {
       this.likeData = data
       this.like = !this.like
+    },
+
+    onScrap(data) {
+      this.scrapData = data
+      this.scrap = !this.scrap
     }
     
   },
