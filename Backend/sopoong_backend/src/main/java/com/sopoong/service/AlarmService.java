@@ -38,15 +38,18 @@ public class AlarmService {
 		for (int i=0; i<alarms.getContent().size(); i++) {
 			AlarmRequest alarm= new AlarmRequest();
 			alarm.setAlarmIdx(alarms.getContent().get(i).getAlarmIdx());
-			alarm.setUserNickname(userRepo.findByUserId(userId).get().getUserNickname());
+			//alarm.setUserNickname(userRepo.findByUserId(userId).get().getUserNickname());
 			alarm.setAlarmCategory(alarms.getContent().get(i).getAlarmCategory());
 			alarm.setAlarmCheck(alarms.getContent().get(i).getAlarmCheck());
 			if (alarms.getContent().get(i).getAlarmCategory()==1) {
+				alarm.setUserNickname(alarms.getContent().get(i).getGood().getUser().getUserNickname());
 				alarm.setConnectIdx(alarms.getContent().get(i).getGood().getTravel().getTravelIdx());
 				alarm.setTravelTitle(alarms.getContent().get(i).getGood().getTravel().getTravelTitle());
 			} else if (alarms.getContent().get(i).getAlarmCategory()==2) {
+				alarm.setUserNickname(alarms.getContent().get(i).getRelation().getRelationFollowing().getUserNickname());
 				alarm.setConnectIdx(alarms.getContent().get(i).getRelation().getRelationFollowing().getUserIdx());				
 			} else if (alarms.getContent().get(i).getAlarmCategory()==3) {
+				alarm.setUserNickname(alarms.getContent().get(i).getTravel().getUser().getUserNickname());
 				alarm.setConnectIdx(alarms.getContent().get(i).getTravel().getTravelIdx());
 				alarm.setTravelTitle(alarms.getContent().get(i).getTravel().getTravelTitle());
 			}
