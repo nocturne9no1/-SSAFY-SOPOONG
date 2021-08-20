@@ -29,6 +29,7 @@
 <script>
 // import { mapGetters } from 'vuex'
 // import router from '@/router'
+// import axios from 'axios'
 
 export default {
   props: {
@@ -79,7 +80,8 @@ export default {
 
     // 일지 디테일로 연결
     journalDetail() {
-      // 멀티플 파라미터 쏘고 싶을 때
+
+      // 원래 이코드만 있었음
       this.$store.dispatch('travelDetail', this.travel)
     },
 

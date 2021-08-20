@@ -60,7 +60,7 @@
               /> -->
               <img :src="file.preview"/>
             </div>
-            <div class="file-preview-wrapper-upload">
+            <!-- <div class="file-preview-wrapper-upload">
               <div class="image-box">
                 <label for="file">추가 사진 등록</label>
                 <input
@@ -72,9 +72,9 @@
                   @change="imageAddUpload"
                   multiple
                 />
-              </div>
+              </div> -->
               <!-- <div class="file-close-button" @click="fileDeleteButton" :name="file.number">x</div> -->
-            </div>
+            <!-- </div> -->
           </div>
         </div>
       </div>

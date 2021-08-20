@@ -26,7 +26,7 @@
     </div>
     <div class="likeBookMarkDiv" v-if="(this.$store.getters['isSignedIn']) && (image.userId !== this.$store.getters['getUserProfile'].userId)">
       <!-- v-bind는 false값도 true로 인식? -->
-      <i class="far fa-bookmark" :class="{ 'fas': image.isScrap, 'fas-bookmark': image.isScrap }" @click="scrapedJournal(image.travelIdx)" v-show="imgHover" style="margin-right: 10px"></i>
+      <i class="far fa-bookmark" :class="{ 'fas': image.isScrap, 'fas-bookmark': image.isScrap }" @click="scrapedJournal(image.travalIdx)" v-show="imgHover" style="margin-right: 10px"></i>
       <i class="far fa-heart" :class="{ 'fas': image.isLike, 'fas-heart': image.isLike }" @click="likedJournal(image.travelIdx)" v-show="imgHover"></i>
     </div>
     <div class="textDiv" v-show="imgHover" @click="journalDetail()">

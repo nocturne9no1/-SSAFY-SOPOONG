@@ -3,7 +3,7 @@
     <div class="setting-btn">
       <router-link to="/settings">
         <span class="setting-icon">
-          <i class="fas fa-lg fa-cog"></i>
+          <i class="fas fa-lg fa-cog" v-if="profile.userId === this.$store.getters['getUserProfile'].userId"></i>
         </span>
       </router-link>
     </div>
@@ -65,8 +65,8 @@ export default {
     //   this.profile = this.$store.getters['getUserProfile']
     // }
     if ( this.$store.getters['isSignedIn']) {
-      this.$store.dispatch('getProfile', this.$store.getters['getUserProfile'].userId)
-      this.profile = this.$store.getters['getUserProfile']
+      this.$store.dispatch('getPersonalUserProfile', this.$store.getters['getPersonalUserProfile'].userId)
+      this.profile = this.$store.getters['getPersonalUserProfile']
     }
   }, 
   beforeMount() {}, 
@@ -80,7 +80,7 @@ export default {
 
   computed: {
     imgSrc() {
-      return 'https://i5a404.p.ssafy.io/api/image/'+this.$store.state.accounts.userProfile.imageOriginTitle
+      return 'https://i5a404.p.ssafy.io/api/image/'+this.$store.state.accounts.personalUserProfile.imageOriginTitle
     }
   },
 

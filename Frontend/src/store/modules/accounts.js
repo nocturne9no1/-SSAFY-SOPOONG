@@ -5,6 +5,7 @@ import cookies from 'vue-cookies'
 const state = {
   authToken: cookies.get('X-AUTH-TOKEN'),
   userProfile: null,
+  personalUserProfile: null,
   emailAuthId: null,
   passwordResetInfo: null,
 }
@@ -18,6 +19,7 @@ const getters = {
   }),
   getToken: state => state.authToken,
   getUserProfile: state => state.userProfile,
+  getPersonalUserProfile: state => state.personalUserProfile,
   getEmailAuthId: state => state.emailAuthId,
   getPasswordResetInfo: state => state.passwordResetInfo,
 
@@ -29,6 +31,9 @@ const mutations = {
   },
   SET_PROFILE(state, userData) {
     state.userProfile = userData
+  },
+  SET_PERSONAL_PROFILE(state, userData) {
+    state.personalUserProfile = userData
   },
   SET_EMAIL_AUTH_ID(state, id) {
     state.emailAuthId = id
@@ -44,8 +49,6 @@ const actions = {
   
   // 로그인
   signIn(context, signInData) {
-    // console.log('한다')
-    console.log(signInData)
     // 로그인시도
     axios.get('auth/login', { params :{ id: signInData.id, password: signInData.password } })
     .then(res => {
@@ -73,6 +76,15 @@ const actions = {
         }
       })
       .catch(err => console.error(err))
+  },
+
+  getPersonalUserProfile(context, id) {
+    axios.get(`user`, { params: {id : id}, headers: { 'X-AUTH-TOKEN' : context.state.authToken, 'Access-Control-Allow-Origin': '*' } })
+      .then(res => {
+        context.commit("SET_PERSONAL_PROFILE", res.data.data.success);
+    //     if ( router.history.current.name === 'SignIn' ) {
+    //       router.push(`/travellist/${id}`)
+    })
   },
 
   // 로그아웃

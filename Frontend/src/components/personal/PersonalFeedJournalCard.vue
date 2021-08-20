@@ -13,9 +13,9 @@
     <div class="image" @click="journalDetail()">
       <img :src="imgSrc" class="image" :class="{ imgBlur : imgHover }" :style="{ width: `${imgSize()}%` }" @mouseover="imgHoverCheck()" @mouseout="mouseOutCheck()" />
     </div>
-    <div class="deleteDiv">
+    <!-- <div class="deleteDiv">
       <i class="far fa-trash-alt" v-show="imgHover" @click="deleteTravel(travel.travelIdx)"></i>
-    </div>
+    </div> -->
     <div class="textDiv" v-show="imgHover" @click="journalDetail()">
       <h1>{{ travel.travelTitle }}</h1>
       <p>

@@ -12,6 +12,7 @@
             </router-link>
           <li class="nav-item nav-newsfeed"><router-link to="/feed">NewsFeed</router-link></li>
           <li v-if="isSignedIn" class="nav-item nav-followfeed" @click="toFollowFeed()">FollowFeed</li>
+          <li v-if="isSignedIn" class="nav-item nav-scrapfeed" @click="toScrapFeed()">ScrapFeed</li>
         </div>
         <div class="nav-right">
           <div class="search-bar" id="search-bar">
@@ -81,6 +82,12 @@ export default {
     toFollowFeed() {
       if (this.$route.name != 'FollowingPeopleFeed') {
         router.push({name: 'FollowingPeopleFeed'})
+      }
+    },
+
+    toScrapFeed() {
+      if (this.$route.name != 'ScrapFeed') {
+        router.push({name: 'ScrapFeed'})
       }
     }
   },

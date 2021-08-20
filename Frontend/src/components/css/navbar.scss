@@ -27,6 +27,14 @@
     }
   }
 
+  .nav-scrapfeed {
+    color: #F7F8F4;
+    &:hover {
+      transition: 0.5s ease;
+      color: #ED7766;
+    }
+  }
+
   .nav-item {
     padding: 15px;
     cursor: pointer;
