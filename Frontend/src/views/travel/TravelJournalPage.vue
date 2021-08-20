@@ -15,9 +15,11 @@
 </template>
 
 <script>
+// import PersonalProfileBox from '../../components/personal/PersonalProfileBox.vue';
 import ProfileBox from '../../views/accounts/ProfileBox.vue';
 import EachPlaceJournalCardList from './EachPlaceJournalCardList.vue';
 import TravelMap from './TravelMap.vue';
+import router from '@/router';
 
 export default {
   name:'',
@@ -25,6 +27,7 @@ export default {
     ProfileBox,
     EachPlaceJournalCardList,
     TravelMap,
+    // PersonalProfileBox,
   },
   data() {
     return {
@@ -32,7 +35,9 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    console.log(router.history)
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -43,6 +48,7 @@ export default {
     test() {
       // 없어짐
       // return "" 
+      console.log(this.image)
       return "값이 있으니 생김."
     },
 

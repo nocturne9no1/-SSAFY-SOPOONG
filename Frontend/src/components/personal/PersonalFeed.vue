@@ -3,7 +3,7 @@
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <h1>{{ this.$store.getters['getUserProfile'].userNickname }}'s Journal</h1>
+          <h1>{{ this.$store.getters['getPersonalUserProfile'].userNickname }}'s Journal</h1>
           <!-- <button class="filterButton">Filter</button> -->
         </div>
         <!-- <div class="cards" v-if="images.length"> -->
@@ -60,8 +60,8 @@ export default {
 
   beforeCreate() {},
   async created() {
-    this.$store.dispatch('travelJournalList', this.$store.getters['getUserProfile'].userId)
-    this.images = this.$store.getters['getMyTravelJournal']
+    this.$store.dispatch('travelJournalList', this.$store.getters['getPersonalUserProfile'].userId)
+    this.images = this.$store.getters['getPersonalTravelJournal']
     console.log(this.images)
   },
   beforeMount() {},

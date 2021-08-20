@@ -1,11 +1,10 @@
 <template>
-<div>
+  <div style="display: flex;">
     <profile-box />
-  <div style="display: flex; justify-content: center;">
     <div class="journalCardList">
       <div class="wrapper">
         <div class="heading">
-          <h1>FollowFeed</h1>
+          <h1>ScrapFeed</h1>
           <!-- <button class="filterButton">Filter</button> -->
         </div>
         <div class="cards" v-if="images.length">
@@ -23,23 +22,22 @@
         </div>
       </div>
     </div>
-    <!-- <FeedFilter /> -->
+    <FeedFilter />
   </div>
-</div>
 </template>
 
 <script>
 import FollowingPeopleJournalCard from "@/components/feed/FollowingPeopleJournalCard.vue";
 import axios from "axios";
 import ProfileBox from '@/views/accounts/ProfileBox.vue';
-// import FeedFilter from '@/components/FeedFilter.vue';
+import FeedFilter from '@/components/FeedFilter.vue';
 
 export default {
   name: "",
   components: {
     FollowingPeopleJournalCard,
     ProfileBox,
-    // FeedFilter,
+    FeedFilter,
   },
   data() {
     return {
@@ -50,7 +48,7 @@ export default {
       follow: false,
       followData: null,
       scrap: false,
-      scrapData: null
+      scrapData: null,
     };
   },
 
@@ -64,9 +62,13 @@ export default {
               .then(res => {
               console.log(res.data)
           })
-          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+          await axios.get('scrap', { params : { page: 0, size: 30, id: this.$store.getters['getUserProfile'].userId }, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
             .then(res => {
               this.images = res.data.data.success
+              this.$store.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
+            })
+          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
               this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
           })
           // 다른 페이지도 입히기
@@ -74,10 +76,6 @@ export default {
             .then(res => {
                 this.$store.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
           })
-          await axios.get('scrap', { params : { page: 0, size: 30, id: this.$store.getters['getUserProfile'].userId }, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
-            .then(res => {
-              this.$store.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
-            })
         }
       }
     },
@@ -91,9 +89,13 @@ export default {
               .then(res => {
                 console.log(res.data)
           })
+          await axios.get('scrap', { params : { page: 0, size: 30, id: this.$store.getters['getUserProfile'].userId }, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+            .then(res => {
+              this.images = res.data.data.success
+              this.$store.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
+            })
           await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
               .then(res => {
-                this.images = res.data.data.success
                 this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
             })
             // 다른 페이지도 입히기
@@ -101,10 +103,6 @@ export default {
             .then(res => {
                 this.$store.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
           })
-          await axios.get('scrap', { params : { page: 0, size: 30, id: this.$store.getters['getUserProfile'].userId }, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
-            .then(res => {
-              this.$store.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
-            })
         }
       }
     },
@@ -114,20 +112,19 @@ export default {
       immediate: true,
       async handler() {
         if (this.scrapData !== null) {
-          console.log(this.scrapData)
           await axios.post('scrap', { userId: this.scrapData[0], travelIdx: this.scrapData[1] }, { headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
             .then(res => {
               console.log(res.data)
             })
-          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
-              .then(res => {
-                this.images = res.data.data.success
-                this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
-            })
             // 스크랩 게시글 가져오기
           await axios.get('scrap', { params : { page: 0, size: 30, id: this.$store.getters['getUserProfile'].userId }, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
             .then(res => {
+              this.images = res.data.data.success
               this.$store.commit('SET_SCRAP_FEEDS_LIST', res.data.data.success)
+            })
+          await axios.get('feed/follow', { params: {page: 0, size: 30, userId: this.$store.getters['getUserProfile'].userId}, headers: { 'X-AUTH-TOKEN' : this.$store.getters['getToken'] }})
+              .then(res => {
+                this.$store.commit('SET_FOLLOWING_PEOPLE_FEEDS_LIST', res.data.data.success)
             })
             // 다른 페이지도 입히기
           await axios.get('feed/all', { params: { page:0, size:30, userId: this.$store.getters['getUserProfile'].userId} })
@@ -141,21 +138,20 @@ export default {
 
   beforeCreate() {},
   created() {
-    this.getFollowingPeopleFeedsList();
+    this.getScrapFeedsList();
   },
   beforeMount() {},
   mounted() {
-    // Follow한 피드 리스트 불러오기
-    this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
+    this.$store.dispatch('scrapFeedsList', this.$store.getters['getUserProfile'].userId)
   },
   beforeUpdate() {},
   updated() {},
   beforeUnmount() {},
   unmounted() {},
   methods: {
-    async getFollowingPeopleFeedsList() {
-      this.$store.dispatch('followingPeopleFeedsList', this.$store.getters['getUserProfile'].userId)
-      this.images = this.$store.getters['getFollowingPeopleFeedsList']
+    async getScrapFeedsList() {
+      this.$store.dispatch('scrapFeedsList', this.$store.getters['getUserProfile'].userId)
+      this.images = this.$store.getters['getScrapFeedsList']
       console.log(this.images)
     },
 
