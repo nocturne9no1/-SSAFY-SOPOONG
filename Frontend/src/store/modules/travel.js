@@ -67,6 +67,14 @@ const actions = {
       })
   },
 
+  guestAllFeedsList(context) {
+    axios.get('feed/all', { params: { page: 0, size: 30} })
+      .then(res=> {
+        console.log(res)
+        context.commit('SET_ALL_FEEDS_LIST', res.data.data.success)
+      })
+  },
+
   // 팔로우한 사람들 피드 리스트 가져오기
   followingPeopleFeedsList(context, id) {
     axios.get('feed/follow', { params: {page: 0, size: 30, userId: id }, headers: { 'X-AUTH-TOKEN' : context.rootGetters.getToken } })

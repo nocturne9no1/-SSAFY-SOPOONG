@@ -1,6 +1,8 @@
 <template>
-  <div style="display: flex;">
-    <PersonalProfileBox/>
+<div>
+
+  <PersonalProfileBox/>
+  <div style="display: flex; justify-content:center">
     <div class="main-wrap">
       <GmapMap
         ref="mapRef"
@@ -114,6 +116,7 @@
       />
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -253,7 +256,7 @@ export default {
       console.log()
     }
     else {
-      this.$router.push('/feed')
+      // this.$router.push('/feed')
     }
   },
   beforeUpdate() {},

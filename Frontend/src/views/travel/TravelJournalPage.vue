@@ -1,6 +1,7 @@
 <template>
+
   <div style="display:flex;" v-if="test()">
-    <profile-box />
+  <profile-box />
     <TravelMap v-if="isMapSelected"/>
     <each-place-journal-card-list v-else/>
     <div class="toggle-btn">
@@ -12,6 +13,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
